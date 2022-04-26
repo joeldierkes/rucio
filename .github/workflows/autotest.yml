@@ -19,6 +19,17 @@ jobs:
         shell: bash
         run: |
           python3 tools/add_header --dry-run --disable-progress-bar
+  isort:
+    name: Check the import order
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check the import order
+        shell: bash
+        run: |
+          pip3 install isort
+          isort lib/rucio --check --diff
+          echo "If isort fails, run 'isort lib/rucio' to automatically sort the imports"
   setup:
     runs-on: ubuntu-latest
     steps:
