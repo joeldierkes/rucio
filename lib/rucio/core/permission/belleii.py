@@ -13,11 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from rucio.common.types import InternalScope
-from rucio.core.lifetime_exception import list_exceptions
 import rucio.core.scope
-from rucio.core.account import list_account_attributes, has_account_attribute
+from rucio.common.types import InternalScope
+from rucio.core.account import has_account_attribute, list_account_attributes
 from rucio.core.identity import exist_identity_account
+from rucio.core.lifetime_exception import list_exceptions
 from rucio.core.rse import list_rse_attributes
 from rucio.core.rse_expression_parser import parse_expression
 from rucio.db.sqla.constants import IdentityType

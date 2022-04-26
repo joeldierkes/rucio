@@ -27,14 +27,16 @@ from datetime import datetime
 from sqlalchemy.exc import DatabaseError
 
 import rucio.db.sqla.util
-from rucio.common.exception import UnsupportedOperation, DataIdentifierNotFound, ReplicaNotFound, DatabaseException
+from rucio.common.exception import (DatabaseException, DataIdentifierNotFound,
+                                    ReplicaNotFound, UnsupportedOperation)
 from rucio.common.logging import formatted_logger, setup_logging
 from rucio.common.utils import chunks, daemon_sleep
 from rucio.core import heartbeat
 from rucio.core.did import get_metadata
-from rucio.core.replica import (get_bad_pfns, get_pfn_to_rse, declare_bad_file_replicas,
-                                get_did_from_pfns, update_replicas_states, bulk_add_bad_replicas,
-                                bulk_delete_bad_pfns, get_replicas_state)
+from rucio.core.replica import (bulk_add_bad_replicas, bulk_delete_bad_pfns,
+                                declare_bad_file_replicas, get_bad_pfns,
+                                get_did_from_pfns, get_pfn_to_rse,
+                                get_replicas_state, update_replicas_states)
 from rucio.core.rse import get_rse_name
 from rucio.db.sqla.constants import BadFilesStatus, BadPFNStatus, ReplicaState
 from rucio.db.sqla.session import get_session

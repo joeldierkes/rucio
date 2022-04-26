@@ -18,7 +18,7 @@ import warnings
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import List, Dict, Any
+    from typing import Any, Dict, List
 
 
 def import_extras(module_list):

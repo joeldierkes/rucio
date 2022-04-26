@@ -17,11 +17,10 @@ from collections import namedtuple
 from json import dumps, loads
 
 from rucio.api.permission import has_permission
-from rucio.common.exception import InvalidObject, AccessDenied
+from rucio.common.exception import AccessDenied, InvalidObject
 from rucio.common.schema import validate_schema
 from rucio.common.types import InternalAccount, InternalScope
 from rucio.core import subscription
-
 
 SubscriptionRuleState = namedtuple('SubscriptionRuleState', ['account', 'name', 'state', 'count'])
 

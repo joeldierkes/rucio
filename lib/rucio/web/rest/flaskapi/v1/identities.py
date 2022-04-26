@@ -13,11 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from flask import Flask, Blueprint, request, jsonify
+from flask import Blueprint, Flask, jsonify, request
 
-from rucio.api.identity import add_identity, add_account_identity, list_accounts_for_identity
-from rucio.web.rest.flaskapi.v1.common import request_auth_env, response_headers, check_accept_header_wrapper_flask, \
-    ErrorHandlingMethodView
+from rucio.api.identity import (add_account_identity, add_identity,
+                                list_accounts_for_identity)
+from rucio.web.rest.flaskapi.v1.common import (
+    ErrorHandlingMethodView, check_accept_header_wrapper_flask,
+    request_auth_env, response_headers)
 
 
 class UserPass(ErrorHandlingMethodView):

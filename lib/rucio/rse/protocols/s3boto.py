@@ -14,12 +14,14 @@
 # limitations under the License.
 
 import os
+
 try:
     # PY2
     import urlparse
 except ImportError:
     # PY3
     import urllib.parse as urlparse
+
 import logging
 
 import boto
@@ -29,7 +31,6 @@ from boto.s3.key import Key
 
 from rucio.common import exception
 from rucio.common.config import get_rse_credentials
-
 from rucio.rse.protocols import protocol
 
 logging.getLogger('boto').setLevel(logging.INFO)

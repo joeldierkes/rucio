@@ -31,7 +31,10 @@ from rucio.common import exception
 from rucio.common.config import config_get, config_get_bool, config_get_int
 from rucio.common.logging import setup_logging
 from rucio.core.monitor import record_counter, record_timer
-from rucio.daemons.conveyor.common import submit_transfer, get_conveyor_rses, run_conveyor_daemon, next_transfers_to_submit
+from rucio.daemons.conveyor.common import (get_conveyor_rses,
+                                           next_transfers_to_submit,
+                                           run_conveyor_daemon,
+                                           submit_transfer)
 from rucio.db.sqla.constants import RequestType
 from rucio.transfertool.fts3 import FTS3Transfertool
 

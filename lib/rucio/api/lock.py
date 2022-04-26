@@ -21,7 +21,6 @@ from rucio.core import lock
 from rucio.core.rse import get_rse_id
 from rucio.db.sqla.constants import DIDType
 
-
 LOGGER = logging.getLogger('lock')
 LOGGER.setLevel(logging.DEBUG)
 

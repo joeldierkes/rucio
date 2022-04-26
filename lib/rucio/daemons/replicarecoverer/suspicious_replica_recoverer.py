@@ -22,6 +22,7 @@ Consequently, automatic replica recovery is triggered via necromancer daemon, wh
 
 from __future__ import print_function
 
+import json
 import logging
 import os
 import socket
@@ -32,23 +33,21 @@ from datetime import datetime, timedelta
 from re import match
 from sys import argv
 
-import json
-
 from sqlalchemy.exc import DatabaseError
 
 import rucio.db.sqla.util
 from rucio.common.config import config_get_bool
+from rucio.common.constants import SuspiciousAvailability
 from rucio.common.exception import DatabaseException, VONotFound
 from rucio.common.logging import formatted_logger, setup_logging
 from rucio.common.types import InternalAccount
 from rucio.common.utils import daemon_sleep
-from rucio.common.constants import SuspiciousAvailability
-from rucio.core.heartbeat import live, die, sanity_check
-from rucio.core.monitor import record_counter
 from rucio.core.did import get_metadata
-from rucio.core.replica import list_replicas, get_suspicious_files, add_bad_pfns, declare_bad_file_replicas
+from rucio.core.heartbeat import die, live, sanity_check
+from rucio.core.monitor import record_counter
+from rucio.core.replica import (add_bad_pfns, declare_bad_file_replicas,
+                                get_suspicious_files, list_replicas)
 from rucio.core.rse_expression_parser import parse_expression
-
 from rucio.core.vo import list_vos
 from rucio.db.sqla.util import get_db_time
 

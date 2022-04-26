@@ -17,22 +17,27 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from rucio.common.types import InternalScope, InternalAccount
+from rucio.common.types import InternalAccount, InternalScope
 from rucio.common.utils import generate_uuid
 from rucio.core import config as rucio_config
 from rucio.core.did import add_did, delete_dids
-from rucio.core.distance import get_distances, add_distance
+from rucio.core.distance import add_distance, get_distances
 from rucio.core.replica import add_replicas, delete_replicas
-from rucio.core.request import sort_requests_minimum_distance, get_transfertool_filter, get_supported_transfertools, list_transfer_requests_and_source_replicas
-from rucio.core.rse import set_rse_transfer_limits, add_rse, del_rse, add_rse_attribute
+from rucio.core.request import (get_supported_transfertools,
+                                get_transfertool_filter,
+                                list_transfer_requests_and_source_replicas,
+                                sort_requests_minimum_distance)
+from rucio.core.rse import (add_rse, add_rse_attribute, del_rse,
+                            set_rse_transfer_limits)
 from rucio.daemons.conveyor import preparer
 from rucio.db.sqla import models
-from rucio.db.sqla.constants import RequestState, DIDType
+from rucio.db.sqla.constants import DIDType, RequestState
 from rucio.db.sqla.session import get_session
 from rucio.tests.common import rse_name_generator
 
 if TYPE_CHECKING:
-    from typing import Set, Optional, Callable
+    from typing import Callable, Optional, Set
+
     from sqlalchemy.orm import Session
 
 

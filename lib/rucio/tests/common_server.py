@@ -15,9 +15,8 @@
 
 from rucio.core import config as config_db
 from rucio.core.vo import map_vo
-from rucio.db.sqla import session, models
+from rucio.db.sqla import models, session
 from rucio.tests.common import get_long_vo
-
 
 # Functions containing server-only includes that can't be included in client tests
 

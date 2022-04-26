@@ -14,10 +14,12 @@
 # limitations under the License.
 
 from re import match
-from sqlalchemy.exc import IntegrityError
 from traceback import format_exc
 
-from rucio.common.exception import AccountNotFound, Duplicate, RucioException, VONotFound
+from sqlalchemy.exc import IntegrityError
+
+from rucio.common.exception import (AccountNotFound, Duplicate, RucioException,
+                                    VONotFound)
 from rucio.core.vo import vo_exists
 from rucio.db.sqla import models
 from rucio.db.sqla.constants import AccountStatus, ScopeStatus

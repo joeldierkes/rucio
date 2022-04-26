@@ -16,7 +16,8 @@
 import errno
 import os
 
-from rucio.common.exception import FileAlreadyExists, ServiceUnavailable, SourceNotFound
+from rucio.common.exception import (FileAlreadyExists, ServiceUnavailable,
+                                    SourceNotFound)
 from rucio.rse.protocols import protocol
 
 try:

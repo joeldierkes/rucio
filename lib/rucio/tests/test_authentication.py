@@ -14,23 +14,24 @@
 # limitations under the License.
 
 import base64
+import datetime
+import time
 import unittest
 
-import datetime
 import pytest
 from requests import session
-import time
 
-from rucio.api.authentication import get_auth_token_user_pass, get_auth_token_ssh, get_ssh_challenge_token, \
-    get_auth_token_saml
+from rucio.api.authentication import (get_auth_token_saml, get_auth_token_ssh,
+                                      get_auth_token_user_pass,
+                                      get_ssh_challenge_token)
 from rucio.common.config import config_get_bool
-from rucio.common.exception import Duplicate, AccessDenied
+from rucio.common.exception import AccessDenied, Duplicate
 from rucio.common.types import InternalAccount
 from rucio.common.utils import ssh_sign
 from rucio.core.identity import add_account_identity, del_account_identity
 from rucio.db.sqla import models
 from rucio.db.sqla.constants import IdentityType
-from rucio.tests.common import headers, hdrdict, loginhdr, vohdr
+from rucio.tests.common import hdrdict, headers, loginhdr, vohdr
 from rucio.tests.common_server import get_vo
 
 PUBLIC_KEY = "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq5LySllrQFpPL"\

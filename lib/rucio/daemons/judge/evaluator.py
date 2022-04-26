@@ -32,13 +32,15 @@ from sqlalchemy.exc import DatabaseError
 from sqlalchemy.orm.exc import FlushError
 
 import rucio.db.sqla.util
-from rucio.common.exception import DatabaseException, DataIdentifierNotFound, ReplicationRuleCreationTemporaryFailed
+from rucio.common.exception import (DatabaseException, DataIdentifierNotFound,
+                                    ReplicationRuleCreationTemporaryFailed)
 from rucio.common.logging import setup_logging
 from rucio.common.types import InternalScope
 from rucio.common.utils import daemon_sleep
-from rucio.core.heartbeat import live, die, sanity_check
+from rucio.core.heartbeat import die, live, sanity_check
 from rucio.core.monitor import record_counter
-from rucio.core.rule import re_evaluate_did, get_updated_dids, delete_updated_did
+from rucio.core.rule import (delete_updated_did, get_updated_dids,
+                             re_evaluate_did)
 
 graceful_stop = threading.Event()
 

@@ -26,20 +26,27 @@ from sys import exc_info
 from traceback import format_exception
 
 import rucio.db.sqla.util
-from rucio.common.exception import (DatabaseException, DataIdentifierNotFound, InvalidReplicationRule, DuplicateRule,
-                                    RSEWriteBlocked, InvalidRSEExpression, InsufficientTargetRSEs,
-                                    InsufficientAccountLimit, InputValidationError, RSEOverQuota,
-                                    ReplicationRuleCreationTemporaryFailed, InvalidRuleWeight,
-                                    StagingAreaRuleRequiresLifetime, SubscriptionWrongParameter, SubscriptionNotFound)
-from rucio.common.logging import setup_logging, formatted_logger
+from rucio.common.exception import (DatabaseException, DataIdentifierNotFound,
+                                    DuplicateRule, InputValidationError,
+                                    InsufficientAccountLimit,
+                                    InsufficientTargetRSEs,
+                                    InvalidReplicationRule,
+                                    InvalidRSEExpression, InvalidRuleWeight,
+                                    ReplicationRuleCreationTemporaryFailed,
+                                    RSEOverQuota, RSEWriteBlocked,
+                                    StagingAreaRuleRequiresLifetime,
+                                    SubscriptionNotFound,
+                                    SubscriptionWrongParameter)
+from rucio.common.logging import formatted_logger, setup_logging
 from rucio.common.schema import validate_schema
 from rucio.common.utils import chunks, daemon_sleep
-from rucio.core import monitor, heartbeat
-from rucio.core.did import list_new_dids, set_new_dids, get_metadata
-from rucio.core.rse import list_rses, rse_exists, get_rse_id, list_rse_attributes
+from rucio.core import heartbeat, monitor
+from rucio.core.did import get_metadata, list_new_dids, set_new_dids
+from rucio.core.rse import (get_rse_id, list_rse_attributes, list_rses,
+                            rse_exists)
 from rucio.core.rse_expression_parser import parse_expression
 from rucio.core.rse_selector import resolve_rse_expression
-from rucio.core.rule import add_rule, list_rules, get_rule
+from rucio.core.rule import add_rule, get_rule, list_rules
 from rucio.core.subscription import list_subscriptions, update_subscription
 from rucio.db.sqla.constants import DIDType, SubscriptionState
 

@@ -24,8 +24,10 @@ from rucio.core.monitor import record_counter
 EXTRA_MODULES = import_extras(['globus_sdk'])
 
 if EXTRA_MODULES['globus_sdk']:
-    from globus_sdk import NativeAppAuthClient, RefreshTokenAuthorizer, TransferClient, TransferData, DeleteData  # pylint: disable=import-error
     import yaml  # pylint: disable=import-error
+    from globus_sdk import DeleteData  # pylint: disable=import-error
+    from globus_sdk import (NativeAppAuthClient, RefreshTokenAuthorizer,
+                            TransferClient, TransferData)
 
 GLOBUS_AUTH_APP = config_get('conveyor', 'globus_auth_app', False, None)
 

@@ -13,11 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from flask import Flask, Blueprint, request
+from flask import Blueprint, Flask, request
 
 from rucio.api.importer import import_data
 from rucio.common.utils import parse_response
-from rucio.web.rest.flaskapi.v1.common import request_auth_env, response_headers, ErrorHandlingMethodView, json_parameters
+from rucio.web.rest.flaskapi.v1.common import (ErrorHandlingMethodView,
+                                               json_parameters,
+                                               request_auth_env,
+                                               response_headers)
 
 
 class Import(ErrorHandlingMethodView):

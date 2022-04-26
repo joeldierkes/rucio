@@ -16,9 +16,11 @@
 import logging
 
 from rucio.common.utils import chunks
-from rucio.transfertool.transfertool import Transfertool, TransferToolBuilder, TransferStatusReport
 from rucio.db.sqla.constants import RequestState
-from .globus_library import bulk_submit_xfer, submit_xfer, bulk_check_xfers
+from rucio.transfertool.transfertool import (TransferStatusReport,
+                                             Transfertool, TransferToolBuilder)
+
+from .globus_library import bulk_check_xfers, bulk_submit_xfer, submit_xfer
 
 
 def bulk_group_transfers(transfer_paths, policy='single', group_bulk=200):

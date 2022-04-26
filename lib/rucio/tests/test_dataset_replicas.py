@@ -25,11 +25,13 @@ from rucio.common.config import config_get_bool
 from rucio.common.exception import InvalidObject
 from rucio.common.types import InternalAccount, InternalScope
 from rucio.common.utils import generate_uuid
-from rucio.core.did import attach_dids, add_dids
-from rucio.core.replica import list_datasets_per_rse, update_collection_replica, \
-    get_cleaned_updated_collection_replicas, delete_replicas, add_replicas
-from rucio.core.rse import add_rse, del_rse, add_protocol, get_rse_id
-from rucio.db.sqla import session, models, constants
+from rucio.core.did import add_dids, attach_dids
+from rucio.core.replica import (add_replicas, delete_replicas,
+                                get_cleaned_updated_collection_replicas,
+                                list_datasets_per_rse,
+                                update_collection_replica)
+from rucio.core.rse import add_protocol, add_rse, del_rse, get_rse_id
+from rucio.db.sqla import constants, models, session
 from rucio.db.sqla.constants import ReplicaState
 from rucio.tests.common import rse_name_generator
 from rucio.tests.common_server import get_vo

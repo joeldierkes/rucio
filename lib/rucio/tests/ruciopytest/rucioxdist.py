@@ -25,7 +25,8 @@ import xdist
 from xdist.scheduler import LoadScheduling
 
 if TYPE_CHECKING:
-    from typing import Union, Sequence
+    from typing import Sequence, Union
+
     import xdist.dsession
 
 

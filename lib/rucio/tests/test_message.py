@@ -16,7 +16,8 @@
 import pytest
 
 from rucio.common.exception import InvalidObject
-from rucio.core.message import add_message, retrieve_messages, delete_messages, truncate_messages
+from rucio.core.message import (add_message, delete_messages,
+                                retrieve_messages, truncate_messages)
 
 
 @pytest.mark.noparallel(reason='fails when run in parallel')

@@ -22,12 +22,14 @@ from rucio.common.config import config_get, config_get_int
 from rucio.common.exception import DataIdentifierNotFound
 from rucio.core.did import get_did
 from rucio.core.replica import list_dataset_replicas
-from rucio.core.rse import list_rse_attributes, get_rse, get_rse_name
+from rucio.core.rse import get_rse, get_rse_name, list_rse_attributes
 from rucio.core.rse_expression_parser import parse_expression
 from rucio.daemons.c3po.collectors.free_space import FreeSpaceCollector
-from rucio.daemons.c3po.collectors.network_metrics import NetworkMetricsCollector
+from rucio.daemons.c3po.collectors.network_metrics import \
+    NetworkMetricsCollector
 from rucio.daemons.c3po.utils.dataset_cache import DatasetCache
-from rucio.daemons.c3po.utils.expiring_dataset_cache import ExpiringDatasetCache
+from rucio.daemons.c3po.utils.expiring_dataset_cache import \
+    ExpiringDatasetCache
 from rucio.daemons.c3po.utils.popularity import get_popularity
 from rucio.daemons.c3po.utils.timeseries import RedisTimeSeries
 from rucio.db.sqla.constants import ReplicaState

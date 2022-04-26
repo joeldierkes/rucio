@@ -31,12 +31,13 @@ from re import match
 from sqlalchemy.exc import DatabaseError
 
 import rucio.db.sqla.util
-from rucio.common.exception import DatabaseException, UnsupportedOperation, RuleNotFound
-from rucio.common.logging import setup_logging, formatted_logger
+from rucio.common.exception import (DatabaseException, RuleNotFound,
+                                    UnsupportedOperation)
+from rucio.common.logging import formatted_logger, setup_logging
 from rucio.common.types import InternalAccount
 from rucio.common.utils import chunks, daemon_sleep
-from rucio.core.did import list_expired_dids, delete_dids
-from rucio.core.heartbeat import live, die, sanity_check
+from rucio.core.did import delete_dids, list_expired_dids
+from rucio.core.heartbeat import die, live, sanity_check
 from rucio.core.monitor import record_counter
 
 logging.getLogger("requests").setLevel(logging.CRITICAL)

@@ -16,12 +16,11 @@
 import rucio.api.permission
 import rucio.common.exception
 import rucio.core.identity
-
+from rucio.common.schema import validate_schema
+from rucio.common.types import InternalAccount
+from rucio.common.utils import api_update_return_dict
 from rucio.core import account as account_core
 from rucio.core.rse import get_rse_id
-from rucio.common.schema import validate_schema
-from rucio.common.utils import api_update_return_dict
-from rucio.common.types import InternalAccount
 from rucio.db.sqla.constants import AccountType
 
 

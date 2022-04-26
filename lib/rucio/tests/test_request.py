@@ -18,15 +18,18 @@ from datetime import datetime
 
 import pytest
 
-from rucio.common.config import config_get_bool, config_set, config_remove_option
+from rucio.common.config import (config_get_bool, config_remove_option,
+                                 config_set)
 from rucio.common.types import InternalAccount, InternalScope
 from rucio.common.utils import generate_uuid, parse_response
 from rucio.core.replica import add_replica
-from rucio.core.request import queue_requests, get_request_by_did, list_requests, list_requests_history
-from rucio.core.rse import get_rse_id, set_rse_transfer_limits, add_rse_attribute
-from rucio.db.sqla import session, models, constants
-from rucio.db.sqla.constants import RequestType, RequestState
-from rucio.tests.common import vohdr, hdrdict, headers, auth
+from rucio.core.request import (get_request_by_did, list_requests,
+                                list_requests_history, queue_requests)
+from rucio.core.rse import (add_rse_attribute, get_rse_id,
+                            set_rse_transfer_limits)
+from rucio.db.sqla import constants, models, session
+from rucio.db.sqla.constants import RequestState, RequestType
+from rucio.tests.common import auth, hdrdict, headers, vohdr
 from rucio.tests.common_server import get_vo, reset_config_table
 
 

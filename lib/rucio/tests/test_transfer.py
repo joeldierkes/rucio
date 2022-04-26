@@ -13,21 +13,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pytest
 from concurrent.futures import ThreadPoolExecutor
 
+import pytest
+
 from rucio.common.exception import NoDistance
+from rucio.common.utils import generate_uuid
+from rucio.core import request as request_core
+from rucio.core import rse as rse_core
+from rucio.core import rule as rule_core
 from rucio.core.distance import add_distance
 from rucio.core.replica import add_replicas
 from rucio.core.transfer import get_hops
-from rucio.core import rule as rule_core
-from rucio.core import request as request_core
-from rucio.core import rse as rse_core
-from rucio.db.sqla import models
-from rucio.db.sqla.constants import RSEType, RequestState
-from rucio.db.sqla.session import transactional_session
-from rucio.common.utils import generate_uuid
 from rucio.daemons.conveyor.common import next_transfers_to_submit
+from rucio.db.sqla import models
+from rucio.db.sqla.constants import RequestState, RSEType
+from rucio.db.sqla.session import transactional_session
 
 
 def test_get_hops(rse_factory):

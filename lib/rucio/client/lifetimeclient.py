@@ -16,10 +16,10 @@
 from __future__ import print_function
 
 from json import loads
+
 from requests.status_codes import codes
 
-from rucio.client.baseclient import BaseClient
-from rucio.client.baseclient import choice
+from rucio.client.baseclient import BaseClient, choice
 from rucio.common.utils import build_url, render_json
 
 

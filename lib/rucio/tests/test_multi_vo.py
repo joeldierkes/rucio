@@ -19,9 +19,9 @@ from logging import getLogger
 from os import remove
 from random import choice
 from re import search
-from string import ascii_uppercase, ascii_lowercase, ascii_letters, digits
+from string import ascii_letters, ascii_lowercase, ascii_uppercase, digits
 from unittest.mock import patch
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import parse_qs, urlparse
 
 import pytest
 from oic import rndstr
@@ -29,7 +29,8 @@ from oic import rndstr
 from rucio.api import vo as vo_api
 from rucio.api.account import add_account, list_accounts
 from rucio.api.account_limit import set_local_account_limit
-from rucio.api.authentication import get_auth_token_gss, get_auth_token_saml, get_auth_token_x509
+from rucio.api.authentication import (get_auth_token_gss, get_auth_token_saml,
+                                      get_auth_token_x509)
 from rucio.api.did import add_did, list_dids
 from rucio.api.identity import add_account_identity, list_accounts_for_identity
 from rucio.api.lock import get_replica_locks_for_rule_id
@@ -47,23 +48,30 @@ from rucio.client.rseclient import RSEClient
 from rucio.client.scopeclient import ScopeClient
 from rucio.client.subscriptionclient import SubscriptionClient
 from rucio.client.uploadclient import UploadClient
-from rucio.common.config import config_get_bool, config_remove_option, config_set
-from rucio.common.exception import AccessDenied, Duplicate, InvalidRSEExpression, UnsupportedAccountName, \
-    UnsupportedOperation, RucioException
+from rucio.common.config import (config_get_bool, config_remove_option,
+                                 config_set)
+from rucio.common.exception import (AccessDenied, Duplicate,
+                                    InvalidRSEExpression, RucioException,
+                                    UnsupportedAccountName,
+                                    UnsupportedOperation)
 from rucio.common.types import InternalAccount, InternalScope
-from rucio.common.utils import generate_uuid, get_tmp_dir, parse_response, ssh_sign
+from rucio.common.utils import (generate_uuid, get_tmp_dir, parse_response,
+                                ssh_sign)
 from rucio.core import config as config_db
 from rucio.core.replica import add_replica
-from rucio.core.rse import get_rses_with_attribute_value, get_rse_id, get_rse_vo
+from rucio.core.rse import (get_rse_id, get_rse_vo,
+                            get_rses_with_attribute_value)
 from rucio.core.rse_expression_parser import parse_expression
 from rucio.core.rule import add_rule
-from rucio.core.vo import add_vo, vo_exists, map_vo
+from rucio.core.vo import add_vo, map_vo, vo_exists
 from rucio.daemons.automatix.automatix import automatix
-from rucio.db.sqla import models, session as db_session
-from rucio.tests.common import execute, headers, hdrdict, vohdr, auth, loginhdr, get_long_vo
+from rucio.db.sqla import models
+from rucio.db.sqla import session as db_session
+from rucio.tests.common import (auth, execute, get_long_vo, hdrdict, headers,
+                                loginhdr, vohdr)
 from rucio.tests.common_server import get_vo
 from rucio.tests.test_authentication import PRIVATE_KEY, PUBLIC_KEY
-from rucio.tests.test_oidc import get_mock_oidc_client, NEW_TOKEN_DICT
+from rucio.tests.test_oidc import NEW_TOKEN_DICT, get_mock_oidc_client
 
 LOG = getLogger(__name__)
 

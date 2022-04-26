@@ -25,7 +25,8 @@ from rucio.common.types import InternalAccount, InternalScope
 from rucio.common.utils import generate_uuid
 from rucio.core.account import get_usage_history
 from rucio.core.account_counter import update_account_counter_history
-from rucio.core.account_limit import get_local_account_usage, set_local_account_limit
+from rucio.core.account_limit import (get_local_account_usage,
+                                      set_local_account_limit)
 from rucio.core.rse import get_rse_id
 from rucio.daemons.abacus import account
 from rucio.daemons.judge import cleaner

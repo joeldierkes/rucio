@@ -13,14 +13,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from flask import Flask, Blueprint, request
+from flask import Blueprint, Flask, request
 
 from rucio.api.dirac import add_files
-from rucio.common.exception import AccessDenied, DataIdentifierAlreadyExists, DatabaseException, \
-    Duplicate, InvalidPath, ResourceTemporaryUnavailable, RSENotFound, UnsupportedOperation
+from rucio.common.exception import (AccessDenied, DatabaseException,
+                                    DataIdentifierAlreadyExists, Duplicate,
+                                    InvalidPath, ResourceTemporaryUnavailable,
+                                    RSENotFound, UnsupportedOperation)
 from rucio.common.utils import parse_response
-from rucio.web.rest.flaskapi.v1.common import request_auth_env, response_headers, generate_http_error_flask, \
-    ErrorHandlingMethodView, json_parameters, param_get
+from rucio.web.rest.flaskapi.v1.common import (ErrorHandlingMethodView,
+                                               generate_http_error_flask,
+                                               json_parameters, param_get,
+                                               request_auth_env,
+                                               response_headers)
 
 
 class AddFiles(ErrorHandlingMethodView):

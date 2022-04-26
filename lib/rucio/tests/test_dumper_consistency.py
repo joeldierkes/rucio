@@ -23,12 +23,9 @@ from datetime import datetime
 
 from six import PY3
 
-from rucio.common.dumper.consistency import Consistency
-from rucio.common.dumper.consistency import _try_to_advance
-from rucio.common.dumper.consistency import compare3
-from rucio.common.dumper.consistency import gnu_sort
-from rucio.common.dumper.consistency import min3
-from rucio.common.dumper.consistency import parse_and_filter_file
+from rucio.common.dumper.consistency import (Consistency, _try_to_advance,
+                                             compare3, gnu_sort, min3,
+                                             parse_and_filter_file)
 from rucio.tests.common import make_temp_file
 
 if sys.version_info >= (3, 3):

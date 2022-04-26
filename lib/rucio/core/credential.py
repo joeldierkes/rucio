@@ -24,7 +24,7 @@ from botocore.client import Config
 from dogpile.cache.api import NO_VALUE
 from google.oauth2.service_account import Credentials
 from six import integer_types
-from six.moves.urllib.parse import urlparse, urlencode
+from six.moves.urllib.parse import urlencode, urlparse
 
 from rucio.common.cache import make_region_memcached
 from rucio.common.config import config_get, get_rse_credentials

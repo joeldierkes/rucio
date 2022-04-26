@@ -16,7 +16,7 @@
 from sqlalchemy.orm.exc import NoResultFound
 
 from rucio.common.exception import CounterNotFound
-from rucio.db.sqla import models, filter_thread_work
+from rucio.db.sqla import filter_thread_work, models
 from rucio.db.sqla.session import read_session, transactional_session
 
 

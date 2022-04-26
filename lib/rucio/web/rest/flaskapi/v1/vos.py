@@ -13,13 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from flask import Flask, Blueprint, request
+from flask import Blueprint, Flask, request
 
 from rucio.api.vo import add_vo, list_vos, recover_vo_root_identity, update_vo
-from rucio.common.exception import AccessDenied, AccountNotFound, Duplicate, VONotFound, UnsupportedOperation
+from rucio.common.exception import (AccessDenied, AccountNotFound, Duplicate,
+                                    UnsupportedOperation, VONotFound)
 from rucio.common.utils import render_json
-from rucio.web.rest.flaskapi.v1.common import request_auth_env, response_headers, check_accept_header_wrapper_flask, \
-    try_stream, generate_http_error_flask, ErrorHandlingMethodView, json_parameters, param_get
+from rucio.web.rest.flaskapi.v1.common import (
+    ErrorHandlingMethodView, check_accept_header_wrapper_flask,
+    generate_http_error_flask, json_parameters, param_get, request_auth_env,
+    response_headers, try_stream)
 
 
 class VOs(ErrorHandlingMethodView):

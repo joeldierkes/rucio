@@ -13,7 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from rucio.core import rse as rse_module, distance as distance_module
+from rucio.core import distance as distance_module
+from rucio.core import rse as rse_module
 from rucio.db.sqla.session import transactional_session
 
 

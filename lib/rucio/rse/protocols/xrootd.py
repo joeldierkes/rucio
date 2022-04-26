@@ -13,12 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 import logging
+import os
 
 from rucio.common import exception
+from rucio.common.utils import PREFERRED_CHECKSUM, execute
 from rucio.rse.protocols import protocol
-from rucio.common.utils import execute, PREFERRED_CHECKSUM
 
 
 class Default(protocol.RSEProtocol):

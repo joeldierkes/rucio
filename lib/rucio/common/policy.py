@@ -15,7 +15,6 @@
 
 import json
 import os
-
 from functools import wraps
 
 try:
@@ -24,6 +23,7 @@ try:
 except ImportError:
     # PY3
     from configparser import NoOptionError, NoSectionError
+
 from dogpile.cache import make_region
 from dogpile.cache.api import NoValue
 

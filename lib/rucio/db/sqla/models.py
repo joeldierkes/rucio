@@ -18,24 +18,31 @@ import sys
 import uuid
 
 from six import iteritems
-from sqlalchemy import BigInteger, Boolean, Column, DateTime, Enum, Float, Integer, SmallInteger, String as _String, Text, event, UniqueConstraint
+from sqlalchemy import (BigInteger, Boolean, Column, DateTime, Enum, Float,
+                        Integer, SmallInteger)
+from sqlalchemy import String as _String
+from sqlalchemy import Text, UniqueConstraint, event
 from sqlalchemy.engine import Engine
 from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import object_mapper, relationship
-from sqlalchemy.schema import Index, ForeignKeyConstraint, PrimaryKeyConstraint, CheckConstraint, Table
+from sqlalchemy.schema import (CheckConstraint, ForeignKeyConstraint, Index,
+                               PrimaryKeyConstraint, Table)
 from sqlalchemy.sql import Delete
 from sqlalchemy.types import LargeBinary
 
 from rucio.common import utils
 from rucio.common.schema import get_schema_value
-from rucio.db.sqla.constants import (AccountStatus, AccountType, DIDAvailability, DIDType, DIDReEvaluation,
-                                     KeyType, IdentityType, LockState, RuleGrouping, BadFilesStatus,
-                                     RuleState, ReplicaState, RequestState, RequestType, RSEType,
-                                     ScopeStatus, SubscriptionState, RuleNotification, LifetimeExceptionsState,
-                                     BadPFNStatus)
+from rucio.db.sqla.constants import (AccountStatus, AccountType,
+                                     BadFilesStatus, BadPFNStatus,
+                                     DIDAvailability, DIDReEvaluation, DIDType,
+                                     IdentityType, KeyType,
+                                     LifetimeExceptionsState, LockState,
+                                     ReplicaState, RequestState, RequestType,
+                                     RSEType, RuleGrouping, RuleNotification,
+                                     RuleState, ScopeStatus, SubscriptionState)
 from rucio.db.sqla.session import BASE
-from rucio.db.sqla.types import GUID, BooleanString, JSON
+from rucio.db.sqla.types import GUID, JSON, BooleanString
 from rucio.db.sqla.types import InternalAccountString as _InternalAccountString
 from rucio.db.sqla.types import InternalScopeString as _InternalScopeString
 

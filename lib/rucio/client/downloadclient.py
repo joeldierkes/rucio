@@ -25,21 +25,27 @@ import signal
 import time
 
 try:
-    from Queue import Queue, Empty, deque
+    from Queue import Empty, Queue, deque
 except ImportError:
     from queue import Queue, Empty, deque
+
 from threading import Thread
 
+from rucio import version
 from rucio.client.client import Client
 from rucio.common.config import config_get
-from rucio.common.exception import (InputValidationError, NoFilesDownloaded, NotAllFilesDownloaded, RucioException)
 from rucio.common.didtype import DIDType
+from rucio.common.exception import (InputValidationError, NoFilesDownloaded,
+                                    NotAllFilesDownloaded, RucioException)
 from rucio.common.pcache import Pcache
-from rucio.common.utils import adler32, detect_client_location, generate_uuid, parse_replicas_from_string, \
-    send_trace, sizefmt, execute, parse_replicas_from_file, extract_scope
-from rucio.common.utils import GLOBALLY_SUPPORTED_CHECKSUMS, CHECKSUM_ALGO_DICT, PREFERRED_CHECKSUM
+from rucio.common.utils import (CHECKSUM_ALGO_DICT,
+                                GLOBALLY_SUPPORTED_CHECKSUMS,
+                                PREFERRED_CHECKSUM, adler32,
+                                detect_client_location, execute, extract_scope,
+                                generate_uuid, parse_replicas_from_file,
+                                parse_replicas_from_string, send_trace,
+                                sizefmt)
 from rucio.rse import rsemanager as rsemgr
-from rucio import version
 
 
 class BaseExtractionTool:

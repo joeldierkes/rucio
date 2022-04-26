@@ -17,11 +17,10 @@
 Common utility functions for stomp connections
 """
 
+import logging
 import socket
 
 from stomp import Connection
-
-import logging
 
 
 def get_stomp_brokers(brokers, port, use_ssl, vhost, reconnect_attempts, ssl_key_file, ssl_cert_file, timeout,

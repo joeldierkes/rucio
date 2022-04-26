@@ -13,10 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from datetime import datetime, timedelta
 import operator
+from datetime import datetime, timedelta
 
-from sqlalchemy import update, inspect
+from sqlalchemy import inspect, update
 from sqlalchemy.exc import CompileError, InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql import func
@@ -28,7 +28,8 @@ from rucio.core.did_meta_plugins.did_meta_plugin_interface import DidMetaPlugin
 from rucio.core.did_meta_plugins.filter_engine import FilterEngine
 from rucio.db.sqla import models
 from rucio.db.sqla.constants import DIDType
-from rucio.db.sqla.session import stream_session, read_session, transactional_session
+from rucio.db.sqla.session import (read_session, stream_session,
+                                   transactional_session)
 
 
 class DidColumnMeta(DidMetaPlugin):

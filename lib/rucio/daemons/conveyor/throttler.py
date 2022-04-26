@@ -30,8 +30,12 @@ from rucio.common.logging import setup_logging
 from rucio.common.utils import get_parsed_throttler_mode
 from rucio.core import config as config_core
 from rucio.core.monitor import record_counter, record_gauge
-from rucio.core.request import get_stats_by_activity_direction_state, release_all_waiting_requests, release_waiting_requests_fifo, release_waiting_requests_grouped_fifo
-from rucio.core.rse import get_rse, set_rse_transfer_limits, delete_rse_transfer_limits, get_rse_transfer_limits
+from rucio.core.request import (get_stats_by_activity_direction_state,
+                                release_all_waiting_requests,
+                                release_waiting_requests_fifo,
+                                release_waiting_requests_grouped_fifo)
+from rucio.core.rse import (delete_rse_transfer_limits, get_rse,
+                            get_rse_transfer_limits, set_rse_transfer_limits)
 from rucio.daemons.conveyor.common import run_conveyor_daemon
 from rucio.db.sqla.constants import RequestState
 

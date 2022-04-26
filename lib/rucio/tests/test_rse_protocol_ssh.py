@@ -15,7 +15,6 @@
 
 from __future__ import print_function
 
-
 import os
 import shutil
 import tempfile
@@ -25,9 +24,11 @@ from uuid import uuid4 as uuid
 import pytest
 
 from rucio.common import exception
-from rucio.common.utils import execute, PREFERRED_CHECKSUM, set_preferred_checksum
+from rucio.common.utils import (PREFERRED_CHECKSUM, execute,
+                                set_preferred_checksum)
 from rucio.rse import rsemanager
-from rucio.tests.common import skip_rse_tests_with_accounts, load_test_conf_file
+from rucio.tests.common import (load_test_conf_file,
+                                skip_rse_tests_with_accounts)
 from rucio.tests.rsemgr_api_test import MgrTestCases
 
 

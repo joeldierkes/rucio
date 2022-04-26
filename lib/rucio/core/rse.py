@@ -13,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from datetime import datetime
 import json
+from datetime import datetime
 from io import StringIO
 from re import match
 from typing import TYPE_CHECKING
@@ -26,20 +26,23 @@ from six import string_types
 from sqlalchemy.exc import DatabaseError, IntegrityError, OperationalError
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm.exc import FlushError
-from sqlalchemy.sql.expression import or_, false, func, case
+from sqlalchemy.sql.expression import case, false, func, or_
 
 import rucio.core.account_counter
 from rucio.common import exception, utils
 from rucio.common.cache import make_region_memcached
 from rucio.common.config import get_lfn2pfn_algorithm_default
-from rucio.common.utils import CHECKSUM_KEY, is_checksum_valid, GLOBALLY_SUPPORTED_CHECKSUMS
+from rucio.common.utils import (CHECKSUM_KEY, GLOBALLY_SUPPORTED_CHECKSUMS,
+                                is_checksum_valid)
 from rucio.core.rse_counter import add_counter, get_counter
 from rucio.db.sqla import models
-from rucio.db.sqla.constants import (RSEType, ReplicaState)
-from rucio.db.sqla.session import read_session, transactional_session, stream_session
+from rucio.db.sqla.constants import ReplicaState, RSEType
+from rucio.db.sqla.session import (read_session, stream_session,
+                                   transactional_session)
 
 if TYPE_CHECKING:
     from typing import Dict, Optional
+
     from sqlalchemy.orm import Session
 
 REGION = make_region_memcached(expiration_time=900)

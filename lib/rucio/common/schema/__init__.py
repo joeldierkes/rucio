@@ -20,9 +20,9 @@ try:
 except ImportError:
     from configparser import NoOptionError, NoSectionError
 
-from rucio.common import config, exception
-
 import importlib
+
+from rucio.common import config, exception
 
 # dictionary of schema modules for each VO
 schema_modules = {}

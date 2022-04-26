@@ -42,15 +42,19 @@ from uuid import uuid4 as uuid
 from xml.etree import ElementTree
 
 import requests
-from six import string_types, text_type, binary_type, ensure_text, PY3
-from six.moves import StringIO, zip_longest as izip_longest
-from six.moves.urllib.parse import urlparse, urlencode, quote, parse_qsl, urlunparse
+from six import PY3, binary_type, ensure_text, string_types, text_type
+from six.moves import StringIO
+from six.moves import zip_longest as izip_longest
 from six.moves.configparser import NoOptionError, NoSectionError
+from six.moves.urllib.parse import (parse_qsl, quote, urlencode, urlparse,
+                                    urlunparse)
 
 from rucio.common.config import config_get, config_has_section
-from rucio.common.exception import MissingModuleException, InvalidType, InputValidationError, MetalinkJsonParsingError, RucioException, \
-    DuplicateCriteriaInDIDFilter, DIDFilterSyntaxError, InvalidAlgorithmName
-
+from rucio.common.exception import (DIDFilterSyntaxError,
+                                    DuplicateCriteriaInDIDFilter,
+                                    InputValidationError, InvalidAlgorithmName,
+                                    InvalidType, MetalinkJsonParsingError,
+                                    MissingModuleException, RucioException)
 from rucio.common.extra import import_extras
 from rucio.common.types import InternalAccount, InternalScope
 
@@ -1825,6 +1829,7 @@ def register_policy_package_algorithms(algorithm_type, dictionary):
         # on server, list all VOs and register their algorithms
         else:
             from rucio.core.vo import list_vos
+
             # policy package per VO
             vos = list_vos()
             for vo in vos:

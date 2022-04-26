@@ -19,7 +19,6 @@ import traceback
 
 import pytest
 
-
 # local imports in the fixtures to make this file loadable in e.g. client tests
 
 
@@ -32,7 +31,7 @@ def vo():
 @pytest.fixture(scope='session')
 def second_vo():
     from rucio.common.config import config_get_bool
-    from rucio.core.vo import vo_exists, add_vo
+    from rucio.core.vo import add_vo, vo_exists
     multi_vo = config_get_bool('common', 'multi_vo', raise_exception=False, default=False)
     if not multi_vo:
         pytest.skip('multi_vo mode is not enabled. Running multi_vo tests in single_vo mode would result in failures.')
@@ -71,9 +70,9 @@ def did_client():
 
 @pytest.fixture
 def rest_client():
-    from rucio.tests.common import print_response
-
     from flask.testing import FlaskClient
+
+    from rucio.tests.common import print_response
     from rucio.web.rest.flaskapi.v1.main import application
 
     class WrappedFlaskClient(FlaskClient):
@@ -100,7 +99,7 @@ def rest_client():
 
 @pytest.fixture
 def auth_token(rest_client, long_vo):
-    from rucio.tests.common import vohdr, headers, loginhdr
+    from rucio.tests.common import headers, loginhdr, vohdr
 
     auth_response = rest_client.get('/auth/userpass', headers=headers(loginhdr('root', 'ddmlab', 'secret'), vohdr(long_vo)))
     assert auth_response.status_code == 200
@@ -202,9 +201,9 @@ def file_factory(tmp_path_factory):
 
 @pytest.fixture
 def scope_factory():
+    from rucio.common.types import InternalAccount, InternalScope
     from rucio.common.utils import generate_uuid
     from rucio.core.scope import add_scope
-    from rucio.common.types import InternalAccount, InternalScope
 
     def create_scopes(vos, account_name=None):
         scope_uuid = str(generate_uuid()).lower()[:16]
@@ -253,10 +252,14 @@ def core_config_mock(request):
     Accesses to the "models.Config" table are then redirected to this temporary table via mock.patch().
     """
     from unittest import mock
-    from rucio.common.utils import generate_uuid
+
     from sqlalchemy.pool import StaticPool
-    from rucio.db.sqla.models import ModelBase, BASE, Column, String, PrimaryKeyConstraint
-    from rucio.db.sqla.session import get_session, get_maker, get_engine, create_engine, declarative_base
+
+    from rucio.common.utils import generate_uuid
+    from rucio.db.sqla.models import (BASE, Column, ModelBase,
+                                      PrimaryKeyConstraint, String)
+    from rucio.db.sqla.session import (create_engine, declarative_base,
+                                       get_engine, get_maker, get_session)
 
     # Get the fixture parameters
     table_content = []
@@ -304,7 +307,9 @@ def file_config_mock(request):
     via the API, as the server config is not changed.
     """
     from unittest import mock
-    from rucio.common.config import Config, config_set, config_has_section, config_add_section
+
+    from rucio.common.config import (Config, config_add_section,
+                                     config_has_section, config_set)
 
     # Get the fixture parameters
     overrides = []
@@ -333,8 +338,9 @@ def caches_mock(request):
     The fixture acts by by mock.patch the REGION object in the provided list of modules to mock.
     """
 
-    from unittest import mock
     from contextlib import ExitStack
+    from unittest import mock
+
     from dogpile.cache import make_region
 
     caches_to_mock = []
@@ -360,6 +366,7 @@ def metrics_mock():
     """
 
     from unittest import mock
+
     from prometheus_client import CollectorRegistry, values
 
     with mock.patch('rucio.core.monitor.REGISTRY', new=CollectorRegistry()) as registry, \

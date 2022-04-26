@@ -17,6 +17,7 @@ from __future__ import print_function
 
 import json
 import os
+
 import requests
 
 from rucio.common import exception

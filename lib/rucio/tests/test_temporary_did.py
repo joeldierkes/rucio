@@ -20,7 +20,8 @@ from rucio.common.config import config_get_bool
 from rucio.common.types import InternalAccount, InternalScope
 from rucio.common.utils import generate_uuid
 from rucio.core.rse import get_rse_id
-from rucio.core.temporary_did import (add_temporary_dids, compose, delete_temporary_dids,
+from rucio.core.temporary_did import (add_temporary_dids, compose,
+                                      delete_temporary_dids,
                                       list_expired_temporary_dids)
 from rucio.tests.common_server import get_vo
 

@@ -22,25 +22,27 @@ import re
 import socket
 from configparser import NoOptionError, NoSectionError
 from datetime import datetime
-from json import loads as jloads, dumps as jdumps
+from json import dumps as jdumps
+from json import loads as jloads
 from os import getpid
 from threading import Event, Thread, current_thread
 from time import sleep, time
 
 import rucio.db.sqla.util
 from rucio.common.config import config_get, config_get_bool, config_get_int
-from rucio.common.exception import RSENotFound, DatabaseException
-from rucio.common.logging import setup_logging, formatted_logger
+from rucio.common.exception import DatabaseException, RSENotFound
+from rucio.common.logging import formatted_logger, setup_logging
 from rucio.common.stomp_utils import get_stomp_brokers
 from rucio.common.types import InternalAccount, InternalScope
 from rucio.common.utils import daemon_sleep
-from rucio.core.did import touch_dids, list_parent_dids
-from rucio.core.heartbeat import live, die, sanity_check
+from rucio.core.did import list_parent_dids, touch_dids
+from rucio.core.heartbeat import die, live, sanity_check
 from rucio.core.lock import touch_dataset_locks
 from rucio.core.monitor import record_counter, record_timer
-from rucio.core.replica import touch_replica, touch_collection_replicas, declare_bad_file_replicas
+from rucio.core.replica import (declare_bad_file_replicas,
+                                touch_collection_replicas, touch_replica)
 from rucio.core.rse import get_rse_id
-from rucio.db.sqla.constants import DIDType, BadFilesStatus
+from rucio.db.sqla.constants import BadFilesStatus, DIDType
 
 try:
     from Queue import Queue  # py2

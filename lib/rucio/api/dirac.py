@@ -17,11 +17,10 @@ from __future__ import print_function
 
 from rucio.api.permission import has_permission
 from rucio.api.scope import list_scopes
-
-from rucio.core.rse import get_rse_id
-from rucio.core import dirac
 from rucio.common.exception import AccessDenied
 from rucio.common.utils import extract_scope
+from rucio.core import dirac
+from rucio.core.rse import get_rse_id
 
 
 def add_files(lfns, issuer, ignore_availability, vo='def'):

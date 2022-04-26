@@ -19,11 +19,10 @@ import hashlib
 from sqlalchemy import func
 from sqlalchemy.sql import distinct
 
-from rucio.db.sqla.models import Heartbeats
-from rucio.db.sqla.session import read_session, transactional_session
 from rucio.common.exception import DatabaseException
 from rucio.common.utils import pid_exists
-
+from rucio.db.sqla.models import Heartbeats
+from rucio.db.sqla.session import read_session, transactional_session
 
 DEFAULT_EXPIRATION_DELAY = datetime.timedelta(days=1).total_seconds()
 

@@ -13,17 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import print_function, division
+from __future__ import division, print_function
+
 import os
 import sys
-
 import xml.etree.ElementTree as ET
+from urllib.parse import urlparse
 from xml.parsers import expat
 
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.poolmanager import PoolManager
-from urllib.parse import urlparse
 
 from rucio.common import exception
 from rucio.rse.protocols import protocol

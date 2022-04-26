@@ -16,15 +16,17 @@
 import json
 
 import flask
-from flask import Flask, Blueprint, Response
+from flask import Blueprint, Flask, Response
 
 from rucio.api import request
 from rucio.common.exception import RequestNotFound
 from rucio.common.utils import APIEncoder, render_json
-from rucio.core.rse import get_rses_with_attribute_value, get_rse_name
+from rucio.core.rse import get_rse_name, get_rses_with_attribute_value
 from rucio.db.sqla.constants import RequestState
-from rucio.web.rest.flaskapi.v1.common import check_accept_header_wrapper_flask, parse_scope_name, try_stream, \
-    request_auth_env, response_headers, generate_http_error_flask, ErrorHandlingMethodView
+from rucio.web.rest.flaskapi.v1.common import (
+    ErrorHandlingMethodView, check_accept_header_wrapper_flask,
+    generate_http_error_flask, parse_scope_name, request_auth_env,
+    response_headers, try_stream)
 
 
 class RequestGet(ErrorHandlingMethodView):

@@ -23,7 +23,7 @@ from rucio.common.utils import generate_uuid as uuid
 from rucio.core.account import get_usage
 from rucio.core.account_limit import set_local_account_limit
 from rucio.core.did import add_did, attach_dids, detach_dids
-from rucio.core.lock import get_replica_locks, get_dataset_locks
+from rucio.core.lock import get_dataset_locks, get_replica_locks
 from rucio.core.rse import add_rse_attribute, get_rse_id
 from rucio.core.rule import add_rule, get_rule
 from rucio.daemons.abacus.account import account_update

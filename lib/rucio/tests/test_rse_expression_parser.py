@@ -15,15 +15,14 @@
 
 import unittest
 from random import choice
-from string import ascii_uppercase, digits, ascii_lowercase
+from string import ascii_lowercase, ascii_uppercase, digits
 
 import pytest
 
 from rucio.client.rseclient import RSEClient
 from rucio.common.config import config_get_bool
 from rucio.common.exception import InvalidRSEExpression, RSEWriteBlocked
-from rucio.core import rse
-from rucio.core import rse_expression_parser
+from rucio.core import rse, rse_expression_parser
 from rucio.tests.common_server import get_vo
 
 

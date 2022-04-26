@@ -25,15 +25,17 @@ import rucio.api.account_limit as api_acc_lim
 import rucio.api.rse as api_rse
 import rucio.core.account_counter as account_counter
 from rucio.api.account import add_account, get_account_info, list_accounts
-from rucio.api.did import add_did, add_did_to_followed, attach_dids_to_dids, get_users_following_did, scope_list
+from rucio.api.did import (add_did, add_did_to_followed, attach_dids_to_dids,
+                           get_users_following_did, scope_list)
 from rucio.api.exporter import export_data
 from rucio.api.identity import add_account_identity, list_accounts_for_identity
 from rucio.api.replica import add_replicas, get_did_from_pfns, list_replicas
 from rucio.api.request import get_request_by_did, list_requests, queue_requests
 from rucio.api.rule import add_replication_rule
-from rucio.api.scope import add_scope, list_scopes, get_scopes
-from rucio.api.subscription import add_subscription, list_subscriptions, list_subscription_rule_states, \
-    get_subscription_by_id
+from rucio.api.scope import add_scope, get_scopes, list_scopes
+from rucio.api.subscription import (add_subscription, get_subscription_by_id,
+                                    list_subscription_rule_states,
+                                    list_subscriptions)
 from rucio.common.config import config_get_bool
 from rucio.common.types import InternalAccount, InternalScope
 from rucio.common.utils import api_update_return_dict, generate_uuid

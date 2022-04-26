@@ -24,7 +24,7 @@ from configparser import NoOptionError, NoSectionError
 from datetime import datetime
 from json import load
 from math import exp
-from os import remove, rmdir, stat, getpid
+from os import getpid, remove, rmdir, stat
 from time import sleep, time
 
 import rucio.db.sqla.util
@@ -34,9 +34,8 @@ from rucio.common.config import config_get
 from rucio.common.exception import FileReplicaAlreadyExists
 from rucio.common.logging import formatted_logger, setup_logging
 from rucio.common.types import InternalScope
-from rucio.common.utils import adler32, daemon_sleep
-from rucio.common.utils import execute, generate_uuid
-from rucio.core import monitor, heartbeat
+from rucio.common.utils import adler32, daemon_sleep, execute, generate_uuid
+from rucio.core import heartbeat, monitor
 from rucio.core.scope import list_scopes
 from rucio.rse import rsemanager as rsemgr
 

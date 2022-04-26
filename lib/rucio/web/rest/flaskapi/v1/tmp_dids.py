@@ -13,10 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from flask import Flask, Blueprint, request
+from flask import Blueprint, Flask, request
 
 from rucio.api.temporary_did import add_temporary_dids
-from rucio.web.rest.flaskapi.v1.common import request_auth_env, response_headers, ErrorHandlingMethodView, json_list
+from rucio.web.rest.flaskapi.v1.common import (ErrorHandlingMethodView,
+                                               json_list, request_auth_env,
+                                               response_headers)
 
 
 class BulkDIDS(ErrorHandlingMethodView):

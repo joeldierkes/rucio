@@ -15,11 +15,12 @@
 
 from __future__ import print_function
 
-from os import remove, path
 import re
 import unittest
+from os import path, remove
 
-from rucio.common.utils import generate_uuid as uuid, execute
+from rucio.common.utils import execute
+from rucio.common.utils import generate_uuid as uuid
 from rucio.tests.common import skip_rse_tests_with_accounts
 
 

@@ -16,15 +16,17 @@
 import json
 import logging
 import os
-import pytest
 import shutil
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
+import pytest
+
 from rucio.client.downloadclient import DownloadClient
 from rucio.client.uploadclient import UploadClient
 from rucio.common.config import config_add_section, config_set
-from rucio.common.exception import InputValidationError, NoFilesUploaded, NotAllFilesUploaded
+from rucio.common.exception import (InputValidationError, NoFilesUploaded,
+                                    NotAllFilesUploaded)
 from rucio.common.utils import adler32, generate_uuid
 from rucio.core.rse import add_protocol, add_rse_attribute
 

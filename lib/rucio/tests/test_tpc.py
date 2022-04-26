@@ -13,21 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import time
 import datetime
-import pytest
 import hashlib
 import re
+import time
 
-from rucio.core.request import get_request_by_did
-from rucio.core.rule import add_rule
-from rucio.common.utils import generate_uuid
-from rucio.daemons.judge.evaluator import re_evaluator
-from rucio.daemons.conveyor import submitter, poller, finisher
-from rucio.daemons.conveyor.common import next_transfers_to_submit
+import pytest
+
 from rucio.client.rseclient import RSEClient
 from rucio.client.ruleclient import RuleClient
-from rucio.common.utils import run_cmd_process
+from rucio.common.utils import generate_uuid, run_cmd_process
+from rucio.core.request import get_request_by_did
+from rucio.core.rule import add_rule
+from rucio.daemons.conveyor import finisher, poller, submitter
+from rucio.daemons.conveyor.common import next_transfers_to_submit
+from rucio.daemons.judge.evaluator import re_evaluator
 
 MAX_POLL_WAIT_SECONDS = 60
 

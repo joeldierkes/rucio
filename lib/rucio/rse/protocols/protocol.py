@@ -29,6 +29,7 @@ except ImportError:
     # PY3
     from configparser import NoOptionError, NoSectionError
     from urllib.parse import urlparse
+
 from six import string_types
 
 from rucio.common import config, exception
@@ -181,7 +182,8 @@ class RSEDeterministicTranslation(object):
         del rse
         del rse_attrs
         del protocol_attrs
-        from ligo_rucio import lfn2pfn as ligo_lfn2pfn  # pylint: disable=import-error
+        from ligo_rucio import \
+            lfn2pfn as ligo_lfn2pfn  # pylint: disable=import-error
         return ligo_lfn2pfn.ligo_lab(scope, name, None, None, None)
 
     @staticmethod

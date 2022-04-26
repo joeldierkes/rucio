@@ -24,9 +24,10 @@ from rucio.common.policy import get_policy
 from rucio.common.types import InternalAccount, InternalScope
 from rucio.common.utils import generate_uuid
 from rucio.core.account_limit import set_local_account_limit
-from rucio.core.did import add_dids, attach_dids, list_expired_dids, get_did, set_metadata
+from rucio.core.did import (add_dids, attach_dids, get_did, list_expired_dids,
+                            set_metadata)
 from rucio.core.replica import add_replicas, get_replica
-from rucio.core.rse import get_rse_id, add_rse
+from rucio.core.rse import add_rse, get_rse_id
 from rucio.core.rule import add_rules, list_rules
 from rucio.daemons.judge.cleaner import rule_cleaner
 from rucio.daemons.undertaker.undertaker import undertaker

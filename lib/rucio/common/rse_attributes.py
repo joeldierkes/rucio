@@ -22,8 +22,8 @@ import traceback
 
 from dogpile.cache.api import NoValue
 
-from rucio.core import rse as rse_core
 from rucio.common.cache import make_region_memcached
+from rucio.core import rse as rse_core
 from rucio.db.sqla.constants import RSEType
 from rucio.db.sqla.session import read_session
 from rucio.rse import rsemanager as rsemgr

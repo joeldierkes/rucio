@@ -24,7 +24,7 @@ from rucio.core.account import get_usage
 from rucio.core.rse import get_rse_id
 from rucio.daemons.abacus.account import account_update
 from rucio.daemons.abacus.rse import rse_update
-from rucio.db.sqla import session, models
+from rucio.db.sqla import models, session
 from rucio.tests.common_server import get_vo
 
 

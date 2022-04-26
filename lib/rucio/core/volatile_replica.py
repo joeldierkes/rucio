@@ -16,7 +16,7 @@
 
 from datetime import datetime
 
-from sqlalchemy import and_, or_, exists, update
+from sqlalchemy import and_, exists, or_, update
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import select
 

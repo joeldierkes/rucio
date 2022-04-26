@@ -14,10 +14,10 @@
 # limitations under the License.
 
 from json import dumps
+
 from requests import post
 
-from rucio.client.baseclient import BaseClient
-from rucio.client.baseclient import choice
+from rucio.client.baseclient import BaseClient, choice
 from rucio.common.exception import RucioException, UnsupportedDIDType
 
 

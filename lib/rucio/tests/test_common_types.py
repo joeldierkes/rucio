@@ -16,7 +16,7 @@
 import unittest
 
 from rucio.common.config import config_get_bool
-from rucio.common.types import InternalScope, InternalAccount, InternalType
+from rucio.common.types import InternalAccount, InternalScope, InternalType
 from rucio.tests.common_server import get_vo
 
 

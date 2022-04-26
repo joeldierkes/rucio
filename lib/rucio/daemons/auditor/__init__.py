@@ -19,27 +19,25 @@ try:
     import Queue
 except ImportError:
     import queue as Queue
+
 import bz2
 import glob
 import logging
 import os
 import select
 import sys
+from datetime import datetime, timedelta
 
-from datetime import datetime
-from datetime import timedelta
 from rucio.common import config
-from rucio.common.dumper import LogPipeHandler
-from rucio.common.dumper import mkdir
-from rucio.common.dumper import temp_file
+from rucio.common.dumper import LogPipeHandler, mkdir, temp_file
 from rucio.common.dumper.consistency import Consistency
 from rucio.common.types import InternalAccount, InternalScope
 from rucio.common.utils import chunks
 from rucio.core.quarantined_replica import add_quarantined_replicas
 from rucio.core.replica import declare_bad_file_replicas, list_replicas
-from rucio.core.rse import get_rse_usage, get_rse_id
-from rucio.daemons.auditor.hdfs import ReplicaFromHDFS
+from rucio.core.rse import get_rse_id, get_rse_usage
 from rucio.daemons.auditor import srmdumps
+from rucio.daemons.auditor.hdfs import ReplicaFromHDFS
 from rucio.db.sqla.constants import BadFilesStatus
 
 

@@ -18,16 +18,19 @@ from json import loads
 
 import pytest
 
-from rucio.api.account import add_account, account_exists, del_account, update_account, get_account_info
+from rucio.api.account import (account_exists, add_account, del_account,
+                               get_account_info, update_account)
 from rucio.client.accountclient import AccountClient
 from rucio.common.config import config_get, config_get_bool
 from rucio.common.exception import AccountNotFound, Duplicate, InvalidObject
 from rucio.common.types import InternalAccount
 from rucio.common.utils import generate_uuid as uuid
-from rucio.core.account import list_identities, add_account_attribute, list_account_attributes
+from rucio.core.account import (add_account_attribute, list_account_attributes,
+                                list_identities)
 from rucio.core.identity import add_account_identity, add_identity
 from rucio.db.sqla.constants import AccountStatus, IdentityType
-from rucio.tests.common import account_name_generator, headers, auth, vohdr, loginhdr
+from rucio.tests.common import (account_name_generator, auth, headers,
+                                loginhdr, vohdr)
 from rucio.tests.common_server import get_vo
 
 

@@ -24,11 +24,12 @@ from rucio.client.ruleclient import RuleClient
 from rucio.client.uploadclient import UploadClient
 from rucio.common.config import config_get_bool
 from rucio.common.exception import DataIdentifierNotFound
-from rucio.common.types import InternalScope, InternalAccount
+from rucio.common.types import InternalAccount, InternalScope
 from rucio.common.utils import generate_uuid
 from rucio.core.did import add_did, get_did
-from rucio.core.replica import delete_replicas, get_cleaned_updated_collection_replicas
-from rucio.core.rse import get_rse_id, add_rse
+from rucio.core.replica import (delete_replicas,
+                                get_cleaned_updated_collection_replicas)
+from rucio.core.rse import add_rse, get_rse_id
 from rucio.daemons.abacus import collection_replica
 from rucio.daemons.judge import cleaner
 from rucio.daemons.reaper import reaper

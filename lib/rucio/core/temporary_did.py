@@ -15,13 +15,14 @@
 
 from datetime import datetime
 
-from sqlalchemy import and_, or_, func, delete
+from sqlalchemy import and_, delete, func, or_
 from sqlalchemy.sql.expression import case
 
 from rucio.core.did import attach_dids
 from rucio.core.replica import add_replica
-from rucio.db.sqla import models, filter_thread_work
+from rucio.db.sqla import filter_thread_work, models
 from rucio.db.sqla.session import read_session, transactional_session
+
 # from rucio.rse import rsemanager as rsemgr
 
 

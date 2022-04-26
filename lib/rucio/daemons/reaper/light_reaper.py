@@ -29,15 +29,19 @@ import traceback
 
 import rucio.db.sqla.util
 from rucio.common.config import config_get_bool
-from rucio.common.exception import (SourceNotFound, DatabaseException, ServiceUnavailable,
-                                    RSEAccessDenied, RSENotFound, ResourceTemporaryUnavailable, VONotFound)
-from rucio.common.logging import setup_logging, formatted_logger
+from rucio.common.exception import (DatabaseException,
+                                    ResourceTemporaryUnavailable,
+                                    RSEAccessDenied, RSENotFound,
+                                    ServiceUnavailable, SourceNotFound,
+                                    VONotFound)
+from rucio.common.logging import formatted_logger, setup_logging
 from rucio.common.utils import daemon_sleep
 from rucio.core import rse as rse_core
-from rucio.core.heartbeat import live, die, sanity_check
+from rucio.core.heartbeat import die, live, sanity_check
 from rucio.core.message import add_message
 from rucio.core.rse_expression_parser import parse_expression
-from rucio.core.temporary_did import (list_expired_temporary_dids, delete_temporary_dids)
+from rucio.core.temporary_did import (delete_temporary_dids,
+                                      list_expired_temporary_dids)
 from rucio.core.vo import list_vos
 from rucio.rse import rsemanager as rsemgr
 

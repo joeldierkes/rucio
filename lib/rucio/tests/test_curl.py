@@ -22,7 +22,8 @@ import unittest
 import pytest
 
 from rucio.common.config import config_get, config_get_bool
-from rucio.tests.common import account_name_generator, rse_name_generator, execute, get_long_vo
+from rucio.tests.common import (account_name_generator, execute, get_long_vo,
+                                rse_name_generator)
 
 
 class TestCurlRucio(unittest.TestCase):

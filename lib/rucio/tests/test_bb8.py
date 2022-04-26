@@ -18,17 +18,18 @@ from datetime import datetime, timedelta
 import pytest
 
 from rucio.common.exception import RuleNotFound, UnsupportedOperation
-from rucio.core.account_limit import set_local_account_limit
 from rucio.core import config as config_core
-from rucio.core.did import attach_dids, set_status, set_metadata
+from rucio.core.account_limit import set_local_account_limit
+from rucio.core.did import attach_dids, set_metadata, set_status
 from rucio.core.lock import successful_transfer
 from rucio.core.replica import add_replicas
-from rucio.core.rse import add_rse_attribute, fill_rse_expired, get_rse_usage, set_rse_usage
-from rucio.core.rule import add_rule, get_rule, delete_rule, update_rule
+from rucio.core.rse import (add_rse_attribute, fill_rse_expired, get_rse_usage,
+                            set_rse_usage)
 from rucio.core.rse_expression_parser import REGION
+from rucio.core.rule import add_rule, delete_rule, get_rule, update_rule
 from rucio.daemons.abacus.rse import run as run_abacus
-from rucio.daemons.bb8.common import rebalance_rule
 from rucio.daemons.bb8.bb8 import run as bb8_run
+from rucio.daemons.bb8.common import rebalance_rule
 from rucio.daemons.judge.cleaner import rule_cleaner
 from rucio.daemons.judge.evaluator import re_evaluator
 from rucio.daemons.undertaker import undertaker

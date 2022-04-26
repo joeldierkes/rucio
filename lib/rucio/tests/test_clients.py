@@ -26,6 +26,7 @@ try:
     from SocketServer import TCPServer as HTTPServer
 except ImportError:
     from http.server import HTTPServer
+
 from os import remove
 from threading import Thread
 
@@ -34,7 +35,8 @@ import pytest
 from rucio.client.baseclient import BaseClient
 from rucio.client.client import Client
 from rucio.common.config import config_get, config_get_bool
-from rucio.common.exception import CannotAuthenticate, ClientProtocolNotSupported, RucioException
+from rucio.common.exception import (CannotAuthenticate,
+                                    ClientProtocolNotSupported, RucioException)
 from rucio.common.utils import get_tmp_dir
 from rucio.tests.common import get_long_vo
 

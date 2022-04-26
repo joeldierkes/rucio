@@ -21,6 +21,9 @@ from pathlib import Path
 from random import choice
 from string import ascii_uppercase
 
+from six import PY3
+from sqlalchemy import and_, or_
+
 from rucio.client.client import Client
 from rucio.client.uploadclient import UploadClient
 from rucio.common.types import InternalScope
@@ -32,8 +35,6 @@ from rucio.db.sqla import models
 from rucio.db.sqla.constants import DIDType
 from rucio.db.sqla.session import transactional_session
 from rucio.tests.common import file_generator, rse_name_generator
-from six import PY3
-from sqlalchemy import and_, or_
 
 
 class TemporaryRSEFactory:

@@ -13,20 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import bz2
 import json
 import os
 import sys
 import tempfile
 from datetime import datetime
 
-import bz2
 import pytest
 import requests
 
-from rucio.common import config
-from rucio.common import dumper
-from rucio.tests.common import make_temp_file
-from rucio.tests.common import mock_open
+from rucio.common import config, dumper
+from rucio.tests.common import make_temp_file, mock_open
 from rucio.tests.mocks import gfal2
 
 try:

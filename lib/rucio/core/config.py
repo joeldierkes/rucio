@@ -21,7 +21,6 @@ from rucio.common.exception import ConfigNotFound
 from rucio.db.sqla import models
 from rucio.db.sqla.session import read_session, transactional_session
 
-
 REGION = make_region_memcached(expiration_time=900)
 
 SECTIONS_CACHE_KEY = 'sections'

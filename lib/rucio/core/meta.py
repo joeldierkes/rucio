@@ -14,16 +14,18 @@
 # limitations under the License.
 
 from __future__ import print_function
-from re import match
-from six import string_types
 
+from re import match
+
+from six import string_types
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 
 from rucio.common.constraints import AUTHORIZED_VALUE_TYPES
-from rucio.common.exception import (Duplicate, RucioException,
-                                    KeyNotFound, InvalidValueForKey, UnsupportedValueType,
-                                    InvalidObject, UnsupportedKeyType)
+from rucio.common.exception import (Duplicate, InvalidObject,
+                                    InvalidValueForKey, KeyNotFound,
+                                    RucioException, UnsupportedKeyType,
+                                    UnsupportedValueType)
 from rucio.db.sqla import models
 from rucio.db.sqla.constants import DIDType, KeyType
 from rucio.db.sqla.session import read_session, transactional_session

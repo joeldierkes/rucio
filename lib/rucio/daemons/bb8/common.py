@@ -13,30 +13,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import print_function, division
+from __future__ import division, print_function
 
 import logging
-
-from datetime import datetime, date, timedelta
+from datetime import date, datetime, timedelta
 from string import Template
+
+from requests import get
+from sqlalchemy import BigInteger, and_, cast, func, or_
 from sqlalchemy.orm import aliased
-from sqlalchemy import func, and_, or_, cast, BigInteger
 from sqlalchemy.sql.expression import case, select
 
-from rucio.core.lock import get_dataset_locks
-from rucio.core.rule import get_rule, add_rule, update_rule
-from rucio.core.rse_expression_parser import parse_expression
-from rucio.core.rse import list_rse_attributes, get_rse_name, get_rse_vo
-from rucio.core.rse_selector import RSESelector
-from rucio.common.config import config_get, config_get_int, config_get_bool
-from rucio.common.exception import (InsufficientTargetRSEs, RuleNotFound, DuplicateRule,
-                                    InsufficientAccountLimit)
+from rucio.common.config import config_get, config_get_bool, config_get_int
+from rucio.common.exception import (DuplicateRule, InsufficientAccountLimit,
+                                    InsufficientTargetRSEs, RuleNotFound)
 from rucio.common.types import InternalAccount
-
-from rucio.db.sqla.session import transactional_session, read_session
+from rucio.core.lock import get_dataset_locks
+from rucio.core.rse import get_rse_name, get_rse_vo, list_rse_attributes
+from rucio.core.rse_expression_parser import parse_expression
+from rucio.core.rse_selector import RSESelector
+from rucio.core.rule import add_rule, get_rule, update_rule
 from rucio.db.sqla import models
-from rucio.db.sqla.constants import (DIDType, RuleState, RuleGrouping)
-from requests import get
+from rucio.db.sqla.constants import DIDType, RuleGrouping, RuleState
+from rucio.db.sqla.session import read_session, transactional_session
 
 
 @transactional_session

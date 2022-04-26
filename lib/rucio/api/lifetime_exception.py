@@ -14,10 +14,10 @@
 # limitations under the License.
 
 from rucio.api import permission
-from rucio.core import lifetime_exception
 from rucio.common import exception
 from rucio.common.types import InternalAccount, InternalScope
 from rucio.common.utils import api_update_return_dict
+from rucio.core import lifetime_exception
 
 
 def list_exceptions(exception_id=None, states=None, vo='def'):

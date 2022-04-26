@@ -18,16 +18,22 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from rucio.common.config import config_get_bool, config_set, config_remove_option
+from rucio.common.config import (config_get_bool, config_remove_option,
+                                 config_set)
 from rucio.common.types import InternalAccount, InternalScope
 from rucio.common.utils import generate_uuid
-from rucio.core.did import attach_dids, add_did
+from rucio.core.did import add_did, attach_dids
 from rucio.core.replica import add_replica
-from rucio.core.request import queue_requests, get_request_by_did, release_waiting_requests_per_deadline, release_all_waiting_requests, release_waiting_requests_fifo, release_waiting_requests_grouped_fifo, release_waiting_requests_per_free_volume
+from rucio.core.request import (get_request_by_did, queue_requests,
+                                release_all_waiting_requests,
+                                release_waiting_requests_fifo,
+                                release_waiting_requests_grouped_fifo,
+                                release_waiting_requests_per_deadline,
+                                release_waiting_requests_per_free_volume)
 from rucio.core.rse import get_rse_id, set_rse_transfer_limits
-from rucio.daemons.conveyor import throttler, preparer
-from rucio.db.sqla import session, models
-from rucio.db.sqla.constants import DIDType, RequestType, RequestState
+from rucio.daemons.conveyor import preparer, throttler
+from rucio.db.sqla import models, session
+from rucio.db.sqla.constants import DIDType, RequestState, RequestType
 from rucio.tests.common import skiplimitedsql
 from rucio.tests.common_server import get_vo
 

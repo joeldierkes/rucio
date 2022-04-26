@@ -15,24 +15,30 @@
 
 import copy
 import json
+import logging
 import os
 import os.path
-import socket
-
-import logging
-import time
 import random
+import socket
+import time
 
-from rucio.client.client import Client
-from rucio.common.config import config_get_int, config_get
-from rucio.common.exception import (RucioException, RSEWriteBlocked, DataIdentifierAlreadyExists, RSEOperationNotSupported,
-                                    DataIdentifierNotFound, NoFilesUploaded, NotAllFilesUploaded, FileReplicaAlreadyExists,
-                                    ResourceTemporaryUnavailable, ServiceUnavailable, InputValidationError, RSEChecksumUnavailable,
-                                    ScopeNotFound)
-from rucio.common.utils import (adler32, detect_client_location, execute, generate_uuid, make_valid_did, md5, send_trace,
-                                retry, GLOBALLY_SUPPORTED_CHECKSUMS)
-from rucio.rse import rsemanager as rsemgr
 from rucio import version
+from rucio.client.client import Client
+from rucio.common.config import config_get, config_get_int
+from rucio.common.exception import (DataIdentifierAlreadyExists,
+                                    DataIdentifierNotFound,
+                                    FileReplicaAlreadyExists,
+                                    InputValidationError, NoFilesUploaded,
+                                    NotAllFilesUploaded,
+                                    ResourceTemporaryUnavailable,
+                                    RSEChecksumUnavailable,
+                                    RSEOperationNotSupported, RSEWriteBlocked,
+                                    RucioException, ScopeNotFound,
+                                    ServiceUnavailable)
+from rucio.common.utils import (GLOBALLY_SUPPORTED_CHECKSUMS, adler32,
+                                detect_client_location, execute, generate_uuid,
+                                make_valid_did, md5, retry, send_trace)
+from rucio.rse import rsemanager as rsemgr
 
 
 class UploadClient:

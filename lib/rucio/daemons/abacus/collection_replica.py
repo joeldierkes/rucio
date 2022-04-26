@@ -26,10 +26,11 @@ import traceback
 
 import rucio.db.sqla.util
 from rucio.common import exception
-from rucio.common.logging import setup_logging, formatted_logger
+from rucio.common.logging import formatted_logger, setup_logging
 from rucio.common.utils import daemon_sleep
-from rucio.core.heartbeat import live, die, sanity_check
-from rucio.core.replica import get_cleaned_updated_collection_replicas, update_collection_replica
+from rucio.core.heartbeat import die, live, sanity_check
+from rucio.core.replica import (get_cleaned_updated_collection_replicas,
+                                update_collection_replica)
 
 graceful_stop = threading.Event()
 

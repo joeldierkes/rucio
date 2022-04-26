@@ -16,10 +16,9 @@
 import json
 from configparser import NoOptionError, NoSectionError
 
-from sqlalchemy import or_, delete, update
-from sqlalchemy.exc import IntegrityError
-
 from dogpile.cache.api import NO_VALUE
+from sqlalchemy import delete, or_, update
+from sqlalchemy.exc import IntegrityError
 
 from rucio.common.cache import make_region_memcached
 from rucio.common.config import config_get

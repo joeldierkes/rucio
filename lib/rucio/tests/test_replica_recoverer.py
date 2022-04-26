@@ -18,7 +18,7 @@ from __future__ import print_function
 
 import unittest
 from datetime import datetime, timedelta
-from os import remove, path
+from os import path, remove
 from time import sleep
 
 import pytest
@@ -26,11 +26,13 @@ import pytest
 from rucio.client.replicaclient import ReplicaClient
 from rucio.common.config import config_get_bool
 from rucio.common.types import InternalScope
-from rucio.core.replica import (update_replica_state, list_replicas, list_bad_replicas_status)
-from rucio.core.rse import get_rse_id, add_rse_attribute
 from rucio.core.did import set_metadata
-from rucio.daemons.replicarecoverer.suspicious_replica_recoverer import run, stop
-from rucio.db.sqla.constants import DIDType, BadFilesStatus, ReplicaState
+from rucio.core.replica import (list_bad_replicas_status, list_replicas,
+                                update_replica_state)
+from rucio.core.rse import add_rse_attribute, get_rse_id
+from rucio.daemons.replicarecoverer.suspicious_replica_recoverer import (run,
+                                                                         stop)
+from rucio.db.sqla.constants import BadFilesStatus, DIDType, ReplicaState
 from rucio.tests.common import execute, file_generator
 from rucio.tests.common_server import get_vo
 

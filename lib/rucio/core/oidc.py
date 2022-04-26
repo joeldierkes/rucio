@@ -20,13 +20,13 @@ import time
 import traceback
 from datetime import datetime, timedelta
 from math import floor
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import parse_qs, urlparse
 
 from jwkest.jws import JWS
 from jwkest.jwt import JWT
 from oic import rndstr
 from oic.oauth2.message import CCAccessTokenRequest
-from oic.oic import Client, Grant, Token, REQUEST2ENDPOINT
+from oic.oic import REQUEST2ENDPOINT, Client, Grant, Token
 from oic.oic.message import (AccessTokenResponse, AuthorizationResponse,
                              Message, RegistrationResponse)
 from oic.utils import time_util
@@ -37,12 +37,12 @@ from sqlalchemy.sql.expression import true
 from rucio.common.config import config_get, config_get_int
 from rucio.common.exception import (CannotAuthenticate, CannotAuthorize,
                                     RucioException)
-from rucio.common.utils import all_oidc_req_claims_present, build_url, val_to_space_sep_str
+from rucio.common.utils import (all_oidc_req_claims_present, build_url,
+                                val_to_space_sep_str)
 from rucio.core.account import account_exists
 from rucio.core.identity import exist_identity_account, get_default_account
 from rucio.core.monitor import record_counter, record_timer
-from rucio.db.sqla import filter_thread_work
-from rucio.db.sqla import models
+from rucio.db.sqla import filter_thread_work, models
 from rucio.db.sqla.constants import IdentityType
 from rucio.db.sqla.session import read_session, transactional_session
 

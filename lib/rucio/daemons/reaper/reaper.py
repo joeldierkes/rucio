@@ -37,20 +37,25 @@ from prometheus_client import Gauge
 from sqlalchemy.exc import DatabaseError, IntegrityError
 
 import rucio.db.sqla.util
-from rucio.common.config import config_get, config_get_bool
 from rucio.common.cache import make_region_memcached
-from rucio.common.exception import (DatabaseException, RSENotFound,
-                                    ReplicaUnAvailable, ReplicaNotFound, ServiceUnavailable,
-                                    RSEAccessDenied, ResourceTemporaryUnavailable, SourceNotFound,
+from rucio.common.config import config_get, config_get_bool
+from rucio.common.exception import (DatabaseException, ReplicaNotFound,
+                                    ReplicaUnAvailable,
+                                    ResourceTemporaryUnavailable,
+                                    RSEAccessDenied, RSENotFound,
+                                    ServiceUnavailable, SourceNotFound,
                                     VONotFound)
 from rucio.common.logging import formatted_logger, setup_logging
 from rucio.common.utils import chunks, daemon_sleep
 from rucio.core import monitor
 from rucio.core.credential import get_signed_url
-from rucio.core.heartbeat import live, die, sanity_check, list_payload_counts
+from rucio.core.heartbeat import die, list_payload_counts, live, sanity_check
 from rucio.core.message import add_message
-from rucio.core.replica import list_and_mark_unlocked_replicas, list_and_mark_unlocked_replicas_no_temp_table, delete_replicas
-from rucio.core.rse import list_rses, get_rse_limits, get_rse_usage, list_rse_attributes, get_rse_protocols
+from rucio.core.replica import (delete_replicas,
+                                list_and_mark_unlocked_replicas,
+                                list_and_mark_unlocked_replicas_no_temp_table)
+from rucio.core.rse import (get_rse_limits, get_rse_protocols, get_rse_usage,
+                            list_rse_attributes, list_rses)
 from rucio.core.rse_expression_parser import parse_expression
 from rucio.core.rule import get_evaluation_backlog
 from rucio.core.vo import list_vos

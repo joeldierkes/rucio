@@ -17,18 +17,18 @@
 Core tracer module
 """
 
+import ipaddress
 import json
 import logging.handlers
 import random
 import socket
 
 import stomp
-import ipaddress
-from jsonschema import validate, ValidationError, draft7_format_checker
+from jsonschema import ValidationError, draft7_format_checker, validate
 
 from rucio.common.config import config_get, config_get_int
 from rucio.common.exception import InvalidObject
-from rucio.common.schema.generic import UUID, TIME_ENTRY, IPv4orIPv6
+from rucio.common.schema.generic import TIME_ENTRY, UUID, IPv4orIPv6
 from rucio.core.monitor import record_counter
 
 CONFIG_COMMON_LOGLEVEL = getattr(logging, config_get('common', 'loglevel', raise_exception=False, default='DEBUG').upper())

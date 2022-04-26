@@ -17,7 +17,7 @@ import unittest
 
 from rucio.client.rseclient import RSEClient
 from rucio.common.config import config_get_bool
-from rucio.core.rse import update_rse, get_rse
+from rucio.core.rse import get_rse, update_rse
 from rucio.tests.common import rse_name_generator
 from rucio.tests.common_server import get_vo
 

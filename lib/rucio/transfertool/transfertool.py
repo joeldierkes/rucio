@@ -14,8 +14,8 @@
 # limitations under the License.
 
 import logging
-
 from abc import ABCMeta, abstractmethod
+
 from six import add_metaclass
 
 from rucio.core.request import get_request

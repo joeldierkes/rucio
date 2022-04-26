@@ -27,48 +27,61 @@ from copy import deepcopy
 from datetime import datetime, timedelta
 from re import match
 from string import Template
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 from dogpile.cache.api import NO_VALUE
 from six import string_types
-
 from sqlalchemy.exc import IntegrityError, StatementError
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql import func
-from sqlalchemy.sql.expression import and_, or_, text, true, null, tuple_, false
+from sqlalchemy.sql.expression import (and_, false, null, or_, text, true,
+                                       tuple_)
 
-from rucio.core.account import has_account_attribute
 import rucio.core.did
 import rucio.core.lock  # import get_replica_locks, get_files_and_replica_locks_of_dataset
 import rucio.core.replica  # import get_and_lock_file_replicas, get_and_lock_file_replicas_for_dataset
-from rucio.common.policy import policy_filter, get_scratchdisk_lifetime
-
 from rucio.common.cache import make_region_memcached
 from rucio.common.config import config_get
-from rucio.common.exception import (InvalidRSEExpression, InvalidReplicationRule, InsufficientAccountLimit,
-                                    DataIdentifierNotFound, RuleNotFound, InputValidationError, RSEOverQuota,
-                                    ReplicationRuleCreationTemporaryFailed, InsufficientTargetRSEs, RucioException,
-                                    InvalidRuleWeight, StagingAreaRuleRequiresLifetime, DuplicateRule,
-                                    InvalidObject, RSEWriteBlocked, RuleReplaceFailed, RequestNotFound,
-                                    ManualRuleApprovalBlocked, UnsupportedOperation, UndefinedPolicy, InvalidValueForKey)
+from rucio.common.exception import (DataIdentifierNotFound, DuplicateRule,
+                                    InputValidationError,
+                                    InsufficientAccountLimit,
+                                    InsufficientTargetRSEs, InvalidObject,
+                                    InvalidReplicationRule,
+                                    InvalidRSEExpression, InvalidRuleWeight,
+                                    InvalidValueForKey,
+                                    ManualRuleApprovalBlocked,
+                                    ReplicationRuleCreationTemporaryFailed,
+                                    RequestNotFound, RSEOverQuota,
+                                    RSEWriteBlocked, RucioException,
+                                    RuleNotFound, RuleReplaceFailed,
+                                    StagingAreaRuleRequiresLifetime,
+                                    UndefinedPolicy, UnsupportedOperation)
+from rucio.common.policy import get_scratchdisk_lifetime, policy_filter
 from rucio.common.schema import validate_schema
-from rucio.common.types import InternalScope, InternalAccount
-from rucio.common.utils import str_to_date, sizefmt, chunks
-from rucio.core import account_counter, rse_counter, request as request_core, transfer as transfer_core
-from rucio.core.account import get_account
+from rucio.common.types import InternalAccount, InternalScope
+from rucio.common.utils import chunks, sizefmt, str_to_date
+from rucio.core import account_counter
+from rucio.core import request as request_core
+from rucio.core import rse_counter
+from rucio.core import transfer as transfer_core
+from rucio.core.account import get_account, has_account_attribute
 from rucio.core.lifetime_exception import define_eol
 from rucio.core.message import add_message
 from rucio.core.monitor import record_timer_block
-from rucio.core.rse import get_rse_name, list_rse_attributes, get_rse, get_rse_usage
+from rucio.core.rse import (get_rse, get_rse_name, get_rse_usage,
+                            list_rse_attributes)
 from rucio.core.rse_expression_parser import parse_expression
 from rucio.core.rse_selector import RSESelector
-from rucio.core.rule_grouping import apply_rule_grouping, repair_stuck_locks_and_apply_rule_grouping, create_transfer_dict, apply_rule
-from rucio.db.sqla import models, filter_thread_work
-from rucio.db.sqla.constants import (LockState, ReplicaState, RuleState, RuleGrouping,
-                                     DIDAvailability, DIDReEvaluation, DIDType, BadFilesStatus,
-                                     RequestType, RuleNotification, OBSOLETE, RSEType)
-from rucio.db.sqla.session import read_session, transactional_session, stream_session
-
+from rucio.core.rule_grouping import (
+    apply_rule, apply_rule_grouping, create_transfer_dict,
+    repair_stuck_locks_and_apply_rule_grouping)
+from rucio.db.sqla import filter_thread_work, models
+from rucio.db.sqla.constants import (OBSOLETE, BadFilesStatus, DIDAvailability,
+                                     DIDReEvaluation, DIDType, LockState,
+                                     ReplicaState, RequestType, RSEType,
+                                     RuleGrouping, RuleNotification, RuleState)
+from rucio.db.sqla.session import (read_session, stream_session,
+                                   transactional_session)
 
 REGION = make_region_memcached(expiration_time=900)
 

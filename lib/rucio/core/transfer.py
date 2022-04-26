@@ -21,7 +21,6 @@ import logging
 import re
 import time
 import traceback
-from rucio.common.utils import PriorityQueue
 from typing import TYPE_CHECKING
 
 from dogpile.cache import make_region
@@ -38,12 +37,15 @@ from rucio.common.exception import (InvalidRSEExpression, NoDistance,
                                     RequestNotFound, RSEProtocolNotSupported,
                                     RucioException, UnsupportedOperation)
 from rucio.common.rse_attributes import RseData
-from rucio.common.utils import construct_surl
-from rucio.core import did, message as message_core, request as request_core
+from rucio.common.utils import PriorityQueue, construct_surl
+from rucio.core import did
+from rucio.core import message as message_core
+from rucio.core import request as request_core
 from rucio.core.account import list_accounts
 from rucio.core.config import get as core_config_get
 from rucio.core.monitor import record_counter
-from rucio.core.request import set_request_state, RequestWithSources, RequestSource
+from rucio.core.request import (RequestSource, RequestWithSources,
+                                set_request_state)
 from rucio.core.rse import list_rses
 from rucio.core.rse_expression_parser import parse_expression
 from rucio.db.sqla import models
@@ -53,8 +55,11 @@ from rucio.rse import rsemanager as rsemgr
 from rucio.transfertool.fts3 import FTS3Transfertool
 
 if TYPE_CHECKING:
-    from typing import Any, Callable, Dict, Generator, Iterable, List, Optional, Set, Union
+    from typing import (Any, Callable, Dict, Generator, Iterable, List,
+                        Optional, Set, Union)
+
     from sqlalchemy.orm import Session
+
     from rucio.common.types import InternalAccount
 
 """

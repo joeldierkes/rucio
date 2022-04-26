@@ -33,11 +33,11 @@ from sqlalchemy.exc import DatabaseError
 import rucio.db.sqla.util
 from rucio.common import exception
 from rucio.common.exception import DatabaseException
-from rucio.common.logging import setup_logging, formatted_logger
+from rucio.common.logging import formatted_logger, setup_logging
 from rucio.common.utils import daemon_sleep
-from rucio.core.heartbeat import live, die, sanity_check
+from rucio.core.heartbeat import die, live, sanity_check
 from rucio.core.monitor import record_counter
-from rucio.core.rule import repair_rule, get_stuck_rules
+from rucio.core.rule import get_stuck_rules, repair_rule
 
 graceful_stop = threading.Event()
 

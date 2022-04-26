@@ -14,8 +14,10 @@
 # limitations under the License.
 
 from __future__ import absolute_import, division
+
 import datetime
 import json
+
 try:
     from json.decoder import JSONDecodeError
 except ImportError:
@@ -24,31 +26,36 @@ import functools
 import logging
 import time
 import traceback
+
 try:
     from urlparse import urlparse  # py2
 except ImportError:
     from urllib.parse import urlparse  # py3
-import uuid
 
-import requests
+import uuid
 from configparser import NoOptionError, NoSectionError
 from json import loads
-from requests.adapters import ReadTimeout
-from requests.packages.urllib3 import disable_warnings  # pylint: disable=import-error
 
+import requests
 from dogpile.cache.api import NoValue
+from requests.adapters import ReadTimeout
+from requests.packages.urllib3 import \
+    disable_warnings  # pylint: disable=import-error
 
 from rucio.common.cache import make_region_memcached
 from rucio.common.config import config_get, config_get_bool
-from rucio.common.constants import FTS_JOB_TYPE, FTS_STATE, FTS_COMPLETE_STATE
-from rucio.common.exception import TransferToolTimeout, TransferToolWrongAnswer, DuplicateFileTransferSubmission
+from rucio.common.constants import FTS_COMPLETE_STATE, FTS_JOB_TYPE, FTS_STATE
+from rucio.common.exception import (DuplicateFileTransferSubmission,
+                                    TransferToolTimeout,
+                                    TransferToolWrongAnswer)
 from rucio.common.utils import APIEncoder, chunks, set_checksum_value
+from rucio.core.monitor import MultiCounter, record_counter, record_timer
+from rucio.core.oidc import get_token_for_account_operation
 from rucio.core.request import get_source_rse, get_transfer_error
 from rucio.core.rse import get_rse_supported_checksums_from_attributes
-from rucio.core.oidc import get_token_for_account_operation
-from rucio.core.monitor import record_counter, record_timer, MultiCounter
-from rucio.transfertool.transfertool import Transfertool, TransferToolBuilder, TransferStatusReport
 from rucio.db.sqla.constants import RequestState
+from rucio.transfertool.transfertool import (TransferStatusReport,
+                                             Transfertool, TransferToolBuilder)
 
 logging.getLogger("requests").setLevel(logging.CRITICAL)
 disable_warnings()

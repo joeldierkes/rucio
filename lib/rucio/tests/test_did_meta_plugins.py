@@ -13,9 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from copy import deepcopy
-
 import unittest
+from copy import deepcopy
 
 import pytest
 
@@ -24,8 +23,9 @@ from rucio.common.config import config_get_bool
 from rucio.common.exception import KeyNotFound
 from rucio.common.types import InternalAccount, InternalScope
 from rucio.common.utils import generate_uuid
-from rucio.core.did import add_did, delete_dids, set_metadata_bulk, set_dids_metadata_bulk
-from rucio.core.did_meta_plugins import list_dids, get_metadata, set_metadata
+from rucio.core.did import (add_did, delete_dids, set_dids_metadata_bulk,
+                            set_metadata_bulk)
+from rucio.core.did_meta_plugins import get_metadata, list_dids, set_metadata
 from rucio.core.did_meta_plugins.mongo_meta import MongoDidMeta
 from rucio.db.sqla.session import get_session
 from rucio.db.sqla.util import json_implemented

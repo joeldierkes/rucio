@@ -23,28 +23,34 @@ from itertools import filterfalse
 from typing import TYPE_CHECKING
 
 from six import string_types
-from sqlalchemy import and_, or_, func, update, select
+from sqlalchemy import and_, func, or_, select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import aliased
-from sqlalchemy.sql.expression import asc, true, false, null
+from sqlalchemy.sql.expression import asc, false, null, true
 
-from rucio.common.config import config_get_bool, config_get
-from rucio.common.exception import RequestNotFound, RucioException, UnsupportedOperation
+from rucio.common.config import config_get, config_get_bool
+from rucio.common.exception import (RequestNotFound, RucioException,
+                                    UnsupportedOperation)
 from rucio.common.rse_attributes import RseData
 from rucio.common.types import InternalAccount, InternalScope
-from rucio.common.utils import generate_uuid, chunks, get_parsed_throttler_mode
+from rucio.common.utils import chunks, generate_uuid, get_parsed_throttler_mode
 from rucio.core.message import add_message
 from rucio.core.monitor import record_counter, record_timer
-from rucio.core.rse import get_rse_name, get_rse_vo, get_rse_transfer_limits, get_rse_attribute
-from rucio.db.sqla import models, filter_thread_work
-from rucio.db.sqla.constants import RequestState, RequestType, LockState, RequestErrMsg, ReplicaState
-from rucio.db.sqla.session import read_session, transactional_session, stream_session
+from rucio.core.rse import (get_rse_attribute, get_rse_name,
+                            get_rse_transfer_limits, get_rse_vo)
+from rucio.db.sqla import filter_thread_work, models
+from rucio.db.sqla.constants import (LockState, ReplicaState, RequestErrMsg,
+                                     RequestState, RequestType)
+from rucio.db.sqla.session import (read_session, stream_session,
+                                   transactional_session)
 from rucio.db.sqla.util import create_temp_table
 
 RequestAndState = namedtuple('RequestAndState', ['request_id', 'request_state'])
 
 if TYPE_CHECKING:
-    from typing import Any, Dict, Iterable, Iterator, List, Optional, Callable, Set, Union
+    from typing import (Any, Callable, Dict, Iterable, Iterator, List,
+                        Optional, Set, Union)
+
     from sqlalchemy.orm import Session
 
     RequestResult = Dict[str, Any]

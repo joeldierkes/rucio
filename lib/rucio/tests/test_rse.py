@@ -23,19 +23,22 @@ from rucio.client.replicaclient import ReplicaClient
 from rucio.client.rseclient import RSEClient
 from rucio.common import exception
 from rucio.common.config import config_get_bool
-from rucio.common.exception import (Duplicate, RSENotFound, RSEProtocolNotSupported,
-                                    InvalidObject, ResourceTemporaryUnavailable,
-                                    RSEAttributeNotFound, RSEOperationNotSupported)
+from rucio.common.exception import (Duplicate, InvalidObject,
+                                    ResourceTemporaryUnavailable,
+                                    RSEAttributeNotFound, RSENotFound,
+                                    RSEOperationNotSupported,
+                                    RSEProtocolNotSupported)
 from rucio.common.utils import generate_uuid
-from rucio.core.rse import (add_rse, get_rse_id, del_rse, restore_rse, list_rses,
-                            rse_exists, add_rse_attribute, list_rse_attributes,
-                            set_rse_transfer_limits, get_rse_transfer_limits,
-                            delete_rse_transfer_limits, get_rse_protocols,
-                            del_rse_attribute, get_rse_attribute, get_rse, rse_is_empty)
-from rucio.db.sqla import session, models
+from rucio.core.rse import (add_rse, add_rse_attribute, del_rse,
+                            del_rse_attribute, delete_rse_transfer_limits,
+                            get_rse, get_rse_attribute, get_rse_id,
+                            get_rse_protocols, get_rse_transfer_limits,
+                            list_rse_attributes, list_rses, restore_rse,
+                            rse_exists, rse_is_empty, set_rse_transfer_limits)
+from rucio.db.sqla import models, session
 from rucio.db.sqla.constants import RSEType
 from rucio.rse import rsemanager as mgr
-from rucio.tests.common import rse_name_generator, hdrdict, auth, headers
+from rucio.tests.common import auth, hdrdict, headers, rse_name_generator
 from rucio.tests.common_server import get_vo
 
 

@@ -23,11 +23,16 @@ from __future__ import print_function
 import copy
 import hashlib
 import re
-
 from datetime import datetime, timedelta
+
 from rucio.client.client import Client
-from rucio.common.exception import (AccountNotFound, DataIdentifierNotFound, Duplicate, InvalidMetadata, RSENotFound, NameTypeError,
-                                    InputValidationError, UnsupportedOperation, ScopeNotFound, ReplicaNotFound, RuleNotFound, FileAlreadyExists, FileConsistencyMismatch)
+from rucio.common.exception import (AccountNotFound, DataIdentifierNotFound,
+                                    Duplicate, FileAlreadyExists,
+                                    FileConsistencyMismatch,
+                                    InputValidationError, InvalidMetadata,
+                                    NameTypeError, ReplicaNotFound,
+                                    RSENotFound, RuleNotFound, ScopeNotFound,
+                                    UnsupportedOperation)
 
 
 def validate_time_formats(time_string):

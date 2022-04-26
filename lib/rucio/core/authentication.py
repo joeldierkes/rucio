@@ -21,9 +21,9 @@ import traceback
 from base64 import b64decode
 
 import paramiko
-from dogpile.cache.api import NO_VALUE
 from dogpile.cache import make_region
-from sqlalchemy import and_, or_, select, delete
+from dogpile.cache.api import NO_VALUE
+from sqlalchemy import and_, delete, or_, select
 
 from rucio.common.cache import make_region_memcached
 from rucio.common.config import config_get_bool
@@ -31,8 +31,7 @@ from rucio.common.exception import CannotAuthenticate, RucioException
 from rucio.common.utils import chunks, generate_uuid
 from rucio.core.account import account_exists
 from rucio.core.oidc import validate_jwt
-from rucio.db.sqla import filter_thread_work
-from rucio.db.sqla import models
+from rucio.db.sqla import filter_thread_work, models
 from rucio.db.sqla.constants import IdentityType
 from rucio.db.sqla.session import read_session, transactional_session
 

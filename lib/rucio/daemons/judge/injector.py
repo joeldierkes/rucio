@@ -30,13 +30,15 @@ from re import match
 from sqlalchemy.exc import DatabaseError
 
 import rucio.db.sqla.util
+from rucio.common.exception import (DatabaseException,
+                                    InsufficientAccountLimit,
+                                    ReplicationRuleCreationTemporaryFailed,
+                                    RSEWriteBlocked, RuleNotFound)
 from rucio.common.logging import formatted_logger, setup_logging
-from rucio.common.exception import (DatabaseException, RuleNotFound, RSEWriteBlocked,
-                                    ReplicationRuleCreationTemporaryFailed, InsufficientAccountLimit)
 from rucio.common.utils import daemon_sleep
-from rucio.core.heartbeat import live, die, sanity_check
+from rucio.core.heartbeat import die, live, sanity_check
 from rucio.core.monitor import record_counter
-from rucio.core.rule import inject_rule, get_injected_rules, update_rule
+from rucio.core.rule import get_injected_rules, inject_rule, update_rule
 
 graceful_stop = threading.Event()
 

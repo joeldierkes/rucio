@@ -26,10 +26,13 @@ import traceback
 
 import rucio.db.sqla.util
 from rucio.common import exception
-from rucio.common.logging import setup_logging, formatted_logger
-from rucio.common.utils import get_thread_with_periodic_running_function, daemon_sleep
-from rucio.core.account_counter import get_updated_account_counters, update_account_counter, fill_account_counter_history_table
-from rucio.core.heartbeat import live, die, sanity_check
+from rucio.common.logging import formatted_logger, setup_logging
+from rucio.common.utils import (daemon_sleep,
+                                get_thread_with_periodic_running_function)
+from rucio.core.account_counter import (fill_account_counter_history_table,
+                                        get_updated_account_counters,
+                                        update_account_counter)
+from rucio.core.heartbeat import die, live, sanity_check
 
 graceful_stop = threading.Event()
 

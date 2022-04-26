@@ -18,10 +18,11 @@ import unittest
 import pytest
 
 from rucio.client.metaclient import MetaClient
-from rucio.common.exception import InvalidValueForKey, KeyNotFound, UnsupportedValueType, UnsupportedKeyType
+from rucio.common.exception import (InvalidValueForKey, KeyNotFound,
+                                    UnsupportedKeyType, UnsupportedValueType)
 from rucio.common.utils import generate_uuid as uuid
 from rucio.core.meta import add_key
-from rucio.db.sqla import session, models
+from rucio.db.sqla import models, session
 from rucio.db.sqla.constants import DIDType, KeyType
 
 

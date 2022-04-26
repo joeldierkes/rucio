@@ -13,8 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from six import string_types
 from subprocess import call
+
+from six import string_types
+
 try:
     # PY2
     from urlparse import urlparse
@@ -22,9 +24,9 @@ except ImportError:
     # PY3
     from urllib.parse import urlparse
 # IMPORTANT: If the order of the S3 imports is changed, they fail!
-from S3.Exceptions import S3Error, InvalidFileError
-from S3.S3 import S3
 from S3.Config import Config
+from S3.Exceptions import InvalidFileError, S3Error
+from S3.S3 import S3
 from S3.S3Uri import S3Uri
 
 from rucio.common import exception

@@ -20,9 +20,7 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from rucio.api import did
-from rucio.api import scope
-from rucio.db.sqla.util import json_implemented
+from rucio.api import did, scope
 from rucio.client.accountclient import AccountClient
 from rucio.client.didclient import DIDClient
 from rucio.client.metaclient import MetaClient
@@ -31,18 +29,24 @@ from rucio.client.rseclient import RSEClient
 from rucio.client.scopeclient import ScopeClient
 from rucio.common import exception
 from rucio.common.config import config_get_bool
-from rucio.common.exception import (DataIdentifierNotFound, DataIdentifierAlreadyExists,
-                                    InvalidPath, KeyNotFound, UnsupportedOperation,
-                                    UnsupportedStatus, ScopeNotFound, FileAlreadyExists, FileConsistencyMismatch)
+from rucio.common.exception import (DataIdentifierAlreadyExists,
+                                    DataIdentifierNotFound, FileAlreadyExists,
+                                    FileConsistencyMismatch, InvalidPath,
+                                    KeyNotFound, ScopeNotFound,
+                                    UnsupportedOperation, UnsupportedStatus)
 from rucio.common.types import InternalAccount, InternalScope
 from rucio.common.utils import generate_uuid
 from rucio.core.account_limit import set_local_account_limit
-from rucio.core.did import (list_dids, add_did, delete_dids, get_did_atime, touch_dids, attach_dids, detach_dids,
-                            get_metadata, set_metadata, get_did, get_did_access_cnt, add_did_to_followed,
-                            get_users_following_did, remove_did_from_followed, set_status)
+from rucio.core.did import (add_did, add_did_to_followed, attach_dids,
+                            delete_dids, detach_dids, get_did,
+                            get_did_access_cnt, get_did_atime, get_metadata,
+                            get_users_following_did, list_dids,
+                            remove_did_from_followed, set_metadata, set_status,
+                            touch_dids)
 from rucio.core.replica import add_replica
 from rucio.core.rse import get_rse_id
 from rucio.db.sqla.constants import DIDType
+from rucio.db.sqla.util import json_implemented
 from rucio.tests.common import rse_name_generator, scope_name_generator
 from rucio.tests.common_server import get_vo
 

@@ -25,13 +25,14 @@ from traceback import format_exc
 
 import rucio.db.sqla.util
 from rucio.common import exception
-from rucio.common.config import config_get, config_get_int, config_get_bool
-from rucio.common.logging import setup_logging, formatted_logger
+from rucio.common.config import config_get, config_get_bool, config_get_int
+from rucio.common.logging import formatted_logger, setup_logging
 from rucio.common.stomp_utils import get_stomp_brokers
 from rucio.common.types import InternalScope
 from rucio.core.monitor import record_counter
 from rucio.core.rse import get_rse_id
-from rucio.core.volatile_replica import add_volatile_replicas, delete_volatile_replicas
+from rucio.core.volatile_replica import (add_volatile_replicas,
+                                         delete_volatile_replicas)
 
 logging.getLogger("stomp").setLevel(logging.CRITICAL)
 

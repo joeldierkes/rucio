@@ -20,7 +20,8 @@ from rucio.common.schema import validate_schema
 from rucio.common.types import InternalAccount, InternalScope
 from rucio.common.utils import api_update_return_dict
 from rucio.core import rule
-from rucio.db.sqla.session import read_session, stream_session, transactional_session
+from rucio.db.sqla.session import (read_session, stream_session,
+                                   transactional_session)
 
 
 @read_session

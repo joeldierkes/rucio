@@ -27,10 +27,12 @@ import time
 from abc import abstractmethod
 from datetime import datetime, timedelta
 from pathlib import Path
-from retrying import retry
 from threading import Lock
 
-from prometheus_client import start_http_server, Counter, Gauge, Histogram, REGISTRY, CollectorRegistry, generate_latest, values, multiprocess
+from prometheus_client import (REGISTRY, CollectorRegistry, Counter, Gauge,
+                               Histogram, generate_latest, multiprocess,
+                               start_http_server, values)
+from retrying import retry
 from statsd import StatsClient
 
 from rucio.common.config import config_get, config_get_bool, config_get_int

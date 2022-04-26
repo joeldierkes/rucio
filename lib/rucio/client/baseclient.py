@@ -25,12 +25,12 @@ import os
 import random
 import sys
 import time
-from os import environ, fdopen, path, makedirs, geteuid
+from os import environ, fdopen, geteuid, makedirs, path
 from shutil import move
 from tempfile import mkstemp
 
 from dogpile.cache import make_region
-from requests import Session, Response
+from requests import Response, Session
 from requests.exceptions import ConnectionError
 from requests.status_codes import codes
 from six.moves.configparser import NoOptionError, NoSectionError
@@ -39,16 +39,20 @@ from six.moves.urllib.parse import urlparse
 from rucio import version
 from rucio.common import exception
 from rucio.common.config import config_get, config_get_bool, config_get_int
-from rucio.common.exception import (CannotAuthenticate, ClientProtocolNotSupported,
-                                    NoAuthInformation, MissingClientParameter,
-                                    MissingModuleException, ServerConnectionException)
+from rucio.common.exception import (CannotAuthenticate,
+                                    ClientProtocolNotSupported,
+                                    MissingClientParameter,
+                                    MissingModuleException, NoAuthInformation,
+                                    ServerConnectionException)
 from rucio.common.extra import import_extras
-from rucio.common.utils import build_url, get_tmp_dir, my_key_generator, parse_response, ssh_sign, setup_logger
+from rucio.common.utils import (build_url, get_tmp_dir, my_key_generator,
+                                parse_response, setup_logger, ssh_sign)
 
 EXTRA_MODULES = import_extras(['requests_kerberos'])
 
 if EXTRA_MODULES['requests_kerberos']:
-    from requests_kerberos import HTTPKerberosAuth  # pylint: disable=import-error
+    from requests_kerberos import \
+        HTTPKerberosAuth  # pylint: disable=import-error
 
 LOG = setup_logger(module_name=__name__)
 

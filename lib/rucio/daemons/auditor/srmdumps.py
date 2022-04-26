@@ -14,8 +14,9 @@
 # limitations under the License.
 
 from rucio.common.config import get_config_dirs
-from rucio.common.dumper import DUMPS_CACHE_DIR
-from rucio.common.dumper import http_download_to_file, gfal_download_to_file, ddmendpoint_url, temp_file
+from rucio.common.dumper import (DUMPS_CACHE_DIR, ddmendpoint_url,
+                                 gfal_download_to_file, http_download_to_file,
+                                 temp_file)
 
 try:
     import ConfigParser
@@ -25,6 +26,7 @@ try:
     import HTMLParser
 except ImportError:
     import html.parser as HTMLParser
+
 import datetime
 import glob
 import hashlib
@@ -32,9 +34,9 @@ import logging
 import operator
 import os
 import re
-import requests
 
 import gfal2
+import requests
 
 CHUNK_SIZE = 10485760
 

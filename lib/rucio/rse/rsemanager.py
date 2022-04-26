@@ -25,11 +25,11 @@ try:
 except ImportError:
     from urllib.parse import urlparse
 
-from rucio.common import exception, utils, constants
+from rucio.common import constants, exception, utils
 from rucio.common.config import config_get_int
 from rucio.common.constraints import STRING_TYPES
 from rucio.common.logging import formatted_logger
-from rucio.common.utils import make_valid_did, GLOBALLY_SUPPORTED_CHECKSUMS
+from rucio.common.utils import GLOBALLY_SUPPORTED_CHECKSUMS, make_valid_did
 
 
 def get_rse_info(rse=None, vo='def', rse_id=None, session=None):

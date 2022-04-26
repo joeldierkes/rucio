@@ -15,8 +15,8 @@
 
 """Provides functions to access the local configuration. The configuration locations are provided by get_config_dirs."""
 
-import os
 import json
+import os
 import sys
 
 from rucio.common.exception import ConfigNotFound, DatabaseException

@@ -23,9 +23,9 @@ from rucio.common.exception import InvalidObject
 from rucio.common.types import InternalScope
 from rucio.common.utils import generate_uuid
 from rucio.core.naming_convention import (add_naming_convention,
-                                          validate_name,
+                                          delete_naming_convention,
                                           list_naming_conventions,
-                                          delete_naming_convention)
+                                          validate_name)
 from rucio.db.sqla.constants import KeyType
 from rucio.tests.common_server import get_vo
 

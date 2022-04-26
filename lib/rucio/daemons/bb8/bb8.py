@@ -18,24 +18,23 @@ BB8 is a daemon the re-balance data between RSEs.
 """
 
 import logging
+import os
 import socket
 import threading
 import time
-import os
 
-from sqlalchemy import func, or_, and_
-from rucio.db.sqla.session import read_session
+from sqlalchemy import and_, func, or_
 
-from rucio.db.sqla import models
-from rucio.db.sqla.constants import RuleState, LockState
 from rucio.common.exception import InvalidRSEExpression
 from rucio.common.logging import formatted_logger, setup_logging
 from rucio.core import config as config_core
-from rucio.core.rse_expression_parser import parse_expression
-from rucio.core.heartbeat import live, die, sanity_check, list_payload_counts
+from rucio.core.heartbeat import die, list_payload_counts, live, sanity_check
 from rucio.core.rse import get_rse_usage
+from rucio.core.rse_expression_parser import parse_expression
 from rucio.daemons.bb8.common import rebalance_rse
-
+from rucio.db.sqla import models
+from rucio.db.sqla.constants import LockState, RuleState
+from rucio.db.sqla.session import read_session
 
 GRACEFUL_STOP = threading.Event()
 

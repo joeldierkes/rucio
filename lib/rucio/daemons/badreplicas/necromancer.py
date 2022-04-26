@@ -37,10 +37,12 @@ from rucio.common.cache import make_region_memcached
 from rucio.common.config import config_get, config_get_int
 from rucio.common.exception import DatabaseException
 from rucio.common.logging import formatted_logger, setup_logging
-from rucio.core import monitor, heartbeat
-from rucio.core.replica import list_bad_replicas, get_replicas_state, get_bad_replicas_backlog
-from rucio.core.rule import (update_rules_for_lost_replica, update_rules_for_bad_replica,
-                             get_evaluation_backlog)
+from rucio.core import heartbeat, monitor
+from rucio.core.replica import (get_bad_replicas_backlog, get_replicas_state,
+                                list_bad_replicas)
+from rucio.core.rule import (get_evaluation_backlog,
+                             update_rules_for_bad_replica,
+                             update_rules_for_lost_replica)
 from rucio.db.sqla.constants import ReplicaState
 
 GRACEFUL_STOP = threading.Event()

@@ -27,7 +27,8 @@ from boto.s3.key import Key
 
 from rucio.common import exception
 from rucio.rse import rsemanager as mgr
-from rucio.tests.common import skip_rse_tests_with_accounts, load_test_conf_file
+from rucio.tests.common import (load_test_conf_file,
+                                skip_rse_tests_with_accounts)
 from rucio.tests.rsemgr_api_test import MgrTestCases
 
 try:

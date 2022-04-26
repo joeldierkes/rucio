@@ -26,7 +26,7 @@ from rucio.common.types import InternalAccount
 from rucio.core import account_limit
 from rucio.core.account import add_account
 from rucio.core.rse import get_rse_id
-from rucio.db.sqla import session, models
+from rucio.db.sqla import models, session
 from rucio.db.sqla.constants import AccountType
 from rucio.tests.common_server import get_vo
 

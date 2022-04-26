@@ -35,13 +35,15 @@ from sqlalchemy.exc import DatabaseError
 
 import rucio.db.sqla.util
 from rucio.common.config import config_get, config_get_bool
-from rucio.common.exception import DatabaseException, TransferToolTimeout, TransferToolWrongAnswer
+from rucio.common.exception import (DatabaseException, TransferToolTimeout,
+                                    TransferToolWrongAnswer)
 from rucio.common.logging import setup_logging
 from rucio.common.utils import dict_chunks
-from rucio.core import transfer as transfer_core, request as request_core
-from rucio.core.monitor import record_timer, record_counter
-from rucio.db.sqla.constants import RequestState, RequestType
+from rucio.core import request as request_core
+from rucio.core import transfer as transfer_core
+from rucio.core.monitor import record_counter, record_timer
 from rucio.daemons.conveyor.common import run_conveyor_daemon
+from rucio.db.sqla.constants import RequestState, RequestType
 from rucio.transfertool.fts3 import FTS3Transfertool
 from rucio.transfertool.globus import GlobusTransferTool
 

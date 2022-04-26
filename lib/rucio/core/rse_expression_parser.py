@@ -15,16 +15,16 @@
 
 import abc
 import re
+from hashlib import sha256
 
 from dogpile.cache.api import NoValue
-from hashlib import sha256
 from six import add_metaclass
 
 from rucio.common.cache import make_region_memcached
 from rucio.common.exception import InvalidRSEExpression, RSEWriteBlocked
-from rucio.core.rse import list_rses, get_rses_with_attribute, get_rse_attribute
+from rucio.core.rse import (get_rse_attribute, get_rses_with_attribute,
+                            list_rses)
 from rucio.db.sqla.session import transactional_session
-
 
 DEFAULT_RSE_ATTRIBUTE = r'([A-Za-z0-9]+([_-][A-Za-z0-9]+)*)'
 RSE_ATTRIBUTE = r'([A-Za-z0-9\._-]+[=<>][A-Za-z0-9_-]+)'

@@ -28,13 +28,15 @@ from werkzeug.datastructures import Headers
 from werkzeug.exceptions import HTTPException
 
 from rucio.api.authentication import validate_auth_token
-from rucio.common.exception import RucioException, CannotAuthenticate, UnsupportedRequestedContentType
+from rucio.common.exception import (CannotAuthenticate, RucioException,
+                                    UnsupportedRequestedContentType)
 from rucio.common.schema import get_schema_value
 from rucio.common.utils import generate_uuid, render_json
 from rucio.core.vo import map_vo
 
 if TYPE_CHECKING:
-    from typing import Optional, Union, Dict, Sequence, Tuple, Callable, Any, List
+    from typing import (Any, Callable, Dict, List, Optional, Sequence, Tuple,
+                        Union)
 
     HeadersType = Union[Headers, Dict[str, str], Sequence[Tuple[str, str]]]
 

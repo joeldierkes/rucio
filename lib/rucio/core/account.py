@@ -18,21 +18,20 @@ from enum import Enum
 from re import match
 from traceback import format_exc
 
+from six import string_types
 from sqlalchemy import and_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import exc
 
 import rucio.core.account_counter
 import rucio.core.rse
-
 from rucio.common import exception
 from rucio.common.config import config_get_bool
 from rucio.core.vo import vo_exists
 from rucio.db.sqla import models
 from rucio.db.sqla.constants import AccountStatus, AccountType
-from rucio.db.sqla.session import read_session, transactional_session, stream_session
-
-from six import string_types
+from rucio.db.sqla.session import (read_session, stream_session,
+                                   transactional_session)
 
 
 @transactional_session

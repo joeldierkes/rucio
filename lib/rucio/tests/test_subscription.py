@@ -20,12 +20,14 @@ from json import loads
 
 import pytest
 
-from rucio.api.subscription import list_subscriptions, add_subscription, update_subscription, \
-    list_subscription_rule_states, get_subscription_by_id
+from rucio.api.subscription import (add_subscription, get_subscription_by_id,
+                                    list_subscription_rule_states,
+                                    list_subscriptions, update_subscription)
 from rucio.client.didclient import DIDClient
 from rucio.client.subscriptionclient import SubscriptionClient
 from rucio.common.config import config_get_bool
-from rucio.common.exception import InvalidObject, SubscriptionNotFound, SubscriptionDuplicate
+from rucio.common.exception import (InvalidObject, SubscriptionDuplicate,
+                                    SubscriptionNotFound)
 from rucio.common.types import InternalAccount, InternalScope
 from rucio.common.utils import generate_uuid as uuid
 from rucio.core.account import add_account
@@ -36,7 +38,7 @@ from rucio.core.rule import add_rule
 from rucio.core.scope import add_scope
 from rucio.daemons.transmogrifier.transmogrifier import run
 from rucio.db.sqla.constants import AccountType, DIDType
-from rucio.tests.common import headers, auth
+from rucio.tests.common import auth, headers
 from rucio.tests.common_server import get_vo
 
 

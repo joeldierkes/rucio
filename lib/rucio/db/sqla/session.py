@@ -17,20 +17,20 @@ from __future__ import print_function
 
 import os
 import sys
-
 from functools import wraps
 from inspect import isgeneratorfunction
-from retrying import retry
-from threading import Lock
 from os.path import basename
+from threading import Lock
 
+from retrying import retry
 from sqlalchemy import create_engine, event
-from sqlalchemy.exc import DatabaseError, DisconnectionError, OperationalError, TimeoutError
+from sqlalchemy.exc import (DatabaseError, DisconnectionError,
+                            OperationalError, TimeoutError)
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 from rucio.common.config import config_get
-from rucio.common.exception import RucioException, DatabaseException
+from rucio.common.exception import DatabaseException, RucioException
 from rucio.common.extra import import_extras
 
 EXTRA_MODULES = import_extras(['MySQLdb', 'pymysql'])
@@ -115,7 +115,8 @@ def mysql_convert_decimal_to_float(pymysql=False):
             converter = pymysql_converter()
     elif EXTRA_MODULES['MySQLdb']:
         import MySQLdb.converters  # pylint: disable=import-error
-        from MySQLdb.constants import FIELD_TYPE  # pylint: disable=import-error
+        from MySQLdb.constants import \
+            FIELD_TYPE  # pylint: disable=import-error
         converter = MySQLdb.converters.conversions.copy()
         converter[FIELD_TYPE.DECIMAL] = float
         converter[FIELD_TYPE.NEWDECIMAL] = float

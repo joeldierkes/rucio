@@ -19,9 +19,10 @@ try:
     from ConfigParser import NoOptionError, NoSectionError
 except ImportError:
     from configparser import NoOptionError, NoSectionError
-from rucio.common import config, exception
 
 import importlib
+
+from rucio.common import config, exception
 
 # dictionary of permission modules for each VO
 permission_modules = {}

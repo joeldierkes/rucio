@@ -23,14 +23,20 @@ import rucio.db.sqla.util
 from rucio.common import exception
 from rucio.common.exception import RucioException
 from rucio.common.logging import setup_logging
-from rucio.core.request import preparer_update_requests, reduce_requests, sort_requests_minimum_distance, \
-    get_transfertool_filter, get_supported_transfertools, rse_lookup_filter, list_transfer_requests_and_source_replicas
+from rucio.core.request import (get_supported_transfertools,
+                                get_transfertool_filter,
+                                list_transfer_requests_and_source_replicas,
+                                preparer_update_requests, reduce_requests,
+                                rse_lookup_filter,
+                                sort_requests_minimum_distance)
 from rucio.daemons.conveyor.common import run_conveyor_daemon
 from rucio.db.sqla.constants import RequestState
 
 if TYPE_CHECKING:
     from typing import Optional
+
     from sqlalchemy.orm import Session
+
     from rucio.daemons.conveyor.common import HeartbeatHandler
 
 graceful_stop = threading.Event()

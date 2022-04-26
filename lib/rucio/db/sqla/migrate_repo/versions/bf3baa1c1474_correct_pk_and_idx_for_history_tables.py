@@ -16,13 +16,11 @@
 ''' correct PK and IDX for history tables '''
 
 import sqlalchemy as sa
-
 from alembic import context
-from alembic.op import (create_primary_key, drop_constraint,
-                        drop_index, drop_column, add_column)
+from alembic.op import (add_column, create_primary_key, drop_column,
+                        drop_constraint, drop_index)
 
 from rucio.db.sqla.types import GUID
-
 
 # Alembic revision identifiers
 revision = 'bf3baa1c1474'

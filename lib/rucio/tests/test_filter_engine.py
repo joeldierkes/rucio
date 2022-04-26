@@ -14,19 +14,19 @@
 # limitations under the License.
 
 import operator
-from datetime import datetime, timedelta
 import unittest
+from datetime import datetime, timedelta
 
-from rucio.common.exception import DuplicateCriteriaInDIDFilter
 from rucio.common.config import config_get_bool
+from rucio.common.exception import DuplicateCriteriaInDIDFilter
 from rucio.common.types import InternalAccount, InternalScope
 from rucio.common.utils import generate_uuid
 from rucio.core.did import add_did
 from rucio.core.did_meta_plugins import set_metadata
+from rucio.core.did_meta_plugins.filter_engine import FilterEngine
 from rucio.db.sqla import models
 from rucio.db.sqla.session import read_session
 from rucio.db.sqla.util import json_implemented
-from rucio.core.did_meta_plugins.filter_engine import FilterEngine
 from rucio.tests.common_server import get_vo
 
 

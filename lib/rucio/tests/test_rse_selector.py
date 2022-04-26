@@ -18,13 +18,15 @@ import unittest
 import pytest
 
 from rucio.common.config import config_get_bool
-from rucio.common.exception import InsufficientAccountLimit, InsufficientTargetRSEs
+from rucio.common.exception import (InsufficientAccountLimit,
+                                    InsufficientTargetRSEs)
 from rucio.common.types import InternalAccount
-from rucio.core.account_counter import update_account_counter, increase
-from rucio.core.account_limit import set_local_account_limit, set_global_account_limit
+from rucio.core.account_counter import increase, update_account_counter
+from rucio.core.account_limit import (set_global_account_limit,
+                                      set_local_account_limit)
 from rucio.core.rse import get_rse_id
 from rucio.core.rse_selector import RSESelector
-from rucio.db.sqla import session, models
+from rucio.db.sqla import models, session
 from rucio.tests.common_server import get_vo
 
 

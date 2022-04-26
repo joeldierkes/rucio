@@ -19,22 +19,34 @@ from json import dumps, loads
 from urllib.parse import parse_qs, unquote
 from xml.sax.saxutils import escape
 
-from flask import Flask, Blueprint, Response, request
+from flask import Blueprint, Flask, Response, request
 from six import string_types
 
-from rucio.api.replica import add_replicas, list_replicas, list_dataset_replicas, list_dataset_replicas_bulk, \
-    delete_replicas, get_did_from_pfns, update_replicas_states, declare_bad_file_replicas, add_bad_dids, add_bad_pfns, \
-    get_suspicious_files, declare_suspicious_file_replicas, list_bad_replicas_status, get_bad_replicas_summary, \
-    list_datasets_per_rse, set_tombstone, list_dataset_replicas_vp
+from rucio.api.replica import (add_bad_dids, add_bad_pfns, add_replicas,
+                               declare_bad_file_replicas,
+                               declare_suspicious_file_replicas,
+                               delete_replicas, get_bad_replicas_summary,
+                               get_did_from_pfns, get_suspicious_files,
+                               list_bad_replicas_status, list_dataset_replicas,
+                               list_dataset_replicas_bulk,
+                               list_dataset_replicas_vp, list_datasets_per_rse,
+                               list_replicas, set_tombstone,
+                               update_replicas_states)
 from rucio.common.config import config_get
 from rucio.common.constants import SUPPORTED_PROTOCOLS
-from rucio.common.exception import AccessDenied, DataIdentifierAlreadyExists, InvalidType, DataIdentifierNotFound, \
-    Duplicate, InvalidPath, ResourceTemporaryUnavailable, RSENotFound, ReplicaNotFound, InvalidObject, ScopeNotFound, ReplicaIsLocked
-from rucio.common.utils import parse_response, APIEncoder, render_json_list
+from rucio.common.exception import (AccessDenied, DataIdentifierAlreadyExists,
+                                    DataIdentifierNotFound, Duplicate,
+                                    InvalidObject, InvalidPath, InvalidType,
+                                    ReplicaIsLocked, ReplicaNotFound,
+                                    ResourceTemporaryUnavailable, RSENotFound,
+                                    ScopeNotFound)
+from rucio.common.utils import APIEncoder, parse_response, render_json_list
 from rucio.core.replica_sorter import sort_replicas
 from rucio.db.sqla.constants import BadFilesStatus
-from rucio.web.rest.flaskapi.v1.common import check_accept_header_wrapper_flask, try_stream, parse_scope_name, \
-    request_auth_env, response_headers, generate_http_error_flask, ErrorHandlingMethodView, json_parameters, param_get
+from rucio.web.rest.flaskapi.v1.common import (
+    ErrorHandlingMethodView, check_accept_header_wrapper_flask,
+    generate_http_error_flask, json_parameters, param_get, parse_scope_name,
+    request_auth_env, response_headers, try_stream)
 
 
 def _sorted_with_priorities(replicas, sorted_pfns, limit=None):

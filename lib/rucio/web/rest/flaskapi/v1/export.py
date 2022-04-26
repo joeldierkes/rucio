@@ -13,12 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from flask import Flask, Blueprint, request, Response
+from flask import Blueprint, Flask, Response, request
 
 from rucio.api.exporter import export_data
 from rucio.common.utils import render_json
-from rucio.web.rest.flaskapi.v1.common import request_auth_env, response_headers, check_accept_header_wrapper_flask, \
-    ErrorHandlingMethodView
+from rucio.web.rest.flaskapi.v1.common import (
+    ErrorHandlingMethodView, check_accept_header_wrapper_flask,
+    request_auth_env, response_headers)
 
 
 class Export(ErrorHandlingMethodView):

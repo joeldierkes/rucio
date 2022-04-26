@@ -15,14 +15,19 @@
 
 from json import dumps
 
-from flask import Flask, Blueprint, Response, request
+from flask import Blueprint, Flask, Response, request
 
-from rucio.api.lifetime_exception import list_exceptions, add_exception, update_exception
-from rucio.common.exception import LifetimeExceptionNotFound, UnsupportedOperation, InvalidObject, AccessDenied, \
-    LifetimeExceptionDuplicate
+from rucio.api.lifetime_exception import (add_exception, list_exceptions,
+                                          update_exception)
+from rucio.common.exception import (AccessDenied, InvalidObject,
+                                    LifetimeExceptionDuplicate,
+                                    LifetimeExceptionNotFound,
+                                    UnsupportedOperation)
 from rucio.common.utils import APIEncoder
-from rucio.web.rest.flaskapi.v1.common import request_auth_env, response_headers, check_accept_header_wrapper_flask, \
-    try_stream, generate_http_error_flask, ErrorHandlingMethodView, json_parameters, param_get
+from rucio.web.rest.flaskapi.v1.common import (
+    ErrorHandlingMethodView, check_accept_header_wrapper_flask,
+    generate_http_error_flask, json_parameters, param_get, request_auth_env,
+    response_headers, try_stream)
 
 
 class LifetimeException(ErrorHandlingMethodView):

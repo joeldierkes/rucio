@@ -28,27 +28,35 @@ import time
 from typing import TYPE_CHECKING
 
 from rucio.common.config import config_get, config_get_int
-from rucio.common.exception import (InvalidRSEExpression, TransferToolTimeout, TransferToolWrongAnswer, RequestNotFound,
-                                    DuplicateFileTransferSubmission, VONotFound)
+from rucio.common.exception import (DuplicateFileTransferSubmission,
+                                    InvalidRSEExpression, RequestNotFound,
+                                    TransferToolTimeout,
+                                    TransferToolWrongAnswer, VONotFound)
 from rucio.common.logging import formatted_logger
 from rucio.common.utils import PriorityQueue
-from rucio.core import heartbeat, request as request_core, transfer as transfer_core
+from rucio.core import heartbeat
+from rucio.core import request as request_core
+from rucio.core import transfer as transfer_core
 from rucio.core.monitor import record_counter, record_timer
-from rucio.core.replica import add_replicas, tombstone_from_delay, update_replica_state
-from rucio.core.request import set_request_state, queue_requests
+from rucio.core.replica import (add_replicas, tombstone_from_delay,
+                                update_replica_state)
+from rucio.core.request import queue_requests, set_request_state
 from rucio.core.rse import list_rses
 from rucio.core.rse_expression_parser import parse_expression
 from rucio.core.vo import list_vos
 from rucio.db.sqla import models
-from rucio.db.sqla.constants import RequestState, RequestType, ReplicaState
+from rucio.db.sqla.constants import ReplicaState, RequestState, RequestType
 from rucio.db.sqla.session import transactional_session
 from rucio.rse import rsemanager as rsemgr
 
 if TYPE_CHECKING:
     from typing import Callable, Dict, List, Optional, Set, Tuple, Type
-    from rucio.core.transfer import DirectTransferDefinition
-    from rucio.transfertool.transfertool import Transfertool, TransferToolBuilder
+
     from sqlalchemy.orm import Session
+
+    from rucio.core.transfer import DirectTransferDefinition
+    from rucio.transfertool.transfertool import (Transfertool,
+                                                 TransferToolBuilder)
 
 
 class HeartbeatHandler:

@@ -24,30 +24,29 @@ import logging
 import os
 import re
 import socket
-import time
 import threading
+import time
 import traceback
-
 from datetime import datetime
+
+from sqlalchemy.exc import DatabaseError, IntegrityError
+from sqlalchemy.orm.exc import FlushError
 
 from rucio.common import exception
 from rucio.common.logging import formatted_logger, setup_logging
 from rucio.common.types import InternalAccount, InternalScope
 from rucio.common.utils import daemon_sleep
-from rucio.core.heartbeat import live, die, sanity_check
-from rucio.core.monitor import record_gauge, record_counter
+from rucio.core.heartbeat import die, live, sanity_check
+from rucio.core.monitor import record_counter, record_gauge
 from rucio.core.quarantined_replica import add_quarantined_replicas
 from rucio.core.replica import __exist_replicas, update_replicas_states
-from rucio.core.rse import list_rses, get_rse_id
-from rucio.rse.rsemanager import lfns2pfns, get_rse_info, parse_pfns
-
+from rucio.core.rse import get_rse_id, list_rses
 # FIXME: these are needed by local version of declare_bad_file_replicas()
 # TODO: remove after move of this code to core/replica.py - see https://github.com/rucio/rucio/pull/5068
 from rucio.db.sqla import models
+from rucio.db.sqla.constants import BadFilesStatus, ReplicaState
 from rucio.db.sqla.session import transactional_session
-from rucio.db.sqla.constants import (ReplicaState, BadFilesStatus)
-from sqlalchemy.exc import DatabaseError, IntegrityError
-from sqlalchemy.orm.exc import FlushError
+from rucio.rse.rsemanager import get_rse_info, lfns2pfns, parse_pfns
 
 graceful_stop = threading.Event()
 

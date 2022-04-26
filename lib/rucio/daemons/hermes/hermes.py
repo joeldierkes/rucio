@@ -34,11 +34,11 @@ from sqlalchemy.orm.exc import NoResultFound
 
 import rucio.db.sqla.util
 from rucio.common import exception
-from rucio.common.config import config_get, config_get_int, config_get_bool
-from rucio.common.logging import setup_logging, formatted_logger
+from rucio.common.config import config_get, config_get_bool, config_get_int
+from rucio.common.logging import formatted_logger, setup_logging
 from rucio.common.utils import daemon_sleep
-from rucio.core.heartbeat import live, die, sanity_check
-from rucio.core.message import retrieve_messages, delete_messages
+from rucio.core.heartbeat import die, live, sanity_check
+from rucio.core.message import delete_messages, retrieve_messages
 from rucio.core.monitor import MultiCounter
 
 logging.getLogger('requests').setLevel(logging.CRITICAL)

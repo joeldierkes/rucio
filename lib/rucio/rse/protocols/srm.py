@@ -15,6 +15,7 @@
 
 import os
 import re
+
 try:
     # PY2
     import urlparse
@@ -28,6 +29,7 @@ try:
 except ImportError:
     # PY3
     from subprocess import getstatusoutput
+
 from six import string_types
 
 from rucio.common import exception

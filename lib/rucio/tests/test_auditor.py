@@ -22,8 +22,7 @@ import os
 import sys
 import tempfile
 import unittest
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 import pytest
 

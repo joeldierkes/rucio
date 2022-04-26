@@ -31,10 +31,11 @@ from sqlalchemy.exc import DatabaseError
 
 import rucio.db.sqla.util
 from rucio.common import exception
+from rucio.common.exception import (DatabaseException, RuleNotFound,
+                                    UnsupportedOperation)
 from rucio.common.logging import formatted_logger, setup_logging
-from rucio.common.exception import DatabaseException, UnsupportedOperation, RuleNotFound
 from rucio.common.utils import daemon_sleep
-from rucio.core.heartbeat import live, die, sanity_check
+from rucio.core.heartbeat import die, live, sanity_check
 from rucio.core.monitor import record_counter
 from rucio.core.rule import delete_rule, get_expired_rules
 from rucio.db.sqla.util import get_db_time

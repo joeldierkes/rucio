@@ -17,14 +17,14 @@ import threading
 import time
 from datetime import datetime, timedelta
 from unittest.mock import patch
-from urllib.parse import urlencode, urlparse, parse_qsl, urlunparse
+from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
 import pytest
 
 import rucio.daemons.reaper.reaper
+from rucio.common.exception import ReplicaNotFound, RequestNotFound
 from rucio.common.types import InternalAccount
 from rucio.common.utils import generate_uuid
-from rucio.common.exception import ReplicaNotFound, RequestNotFound
 from rucio.core import config as core_config
 from rucio.core import distance as distance_core
 from rucio.core import replica as replica_core
@@ -34,13 +34,16 @@ from rucio.core import rule as rule_core
 from rucio.daemons.conveyor.finisher import finisher
 from rucio.daemons.conveyor.poller import poller
 from rucio.daemons.conveyor.preparer import preparer
-from rucio.daemons.conveyor.submitter import submitter
+from rucio.daemons.conveyor.receiver import \
+    graceful_stop as receiver_graceful_stop
+from rucio.daemons.conveyor.receiver import receiver
 from rucio.daemons.conveyor.stager import stager
+from rucio.daemons.conveyor.submitter import submitter
 from rucio.daemons.conveyor.throttler import throttler
-from rucio.daemons.conveyor.receiver import receiver, graceful_stop as receiver_graceful_stop
 from rucio.daemons.reaper.reaper import reaper
 from rucio.db.sqla import models
-from rucio.db.sqla.constants import RequestState, RequestType, ReplicaState, RSEType
+from rucio.db.sqla.constants import (ReplicaState, RequestState, RequestType,
+                                     RSEType)
 from rucio.db.sqla.session import read_session, transactional_session
 from rucio.tests.common import skip_rse_tests_with_accounts
 from rucio.transfertool.fts3 import FTS3Transfertool

@@ -18,9 +18,9 @@ import datetime
 from sqlalchemy import and_, or_
 from sqlalchemy.sql.expression import false
 
-from rucio.db.sqla import models, filter_thread_work
-from rucio.db.sqla.session import read_session, transactional_session
 from rucio.common.utils import chunks
+from rucio.db.sqla import filter_thread_work, models
+from rucio.db.sqla.session import read_session, transactional_session
 
 
 @transactional_session

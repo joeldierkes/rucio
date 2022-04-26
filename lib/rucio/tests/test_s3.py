@@ -22,7 +22,7 @@ from rucio.common.config import config_get_bool
 from rucio.common.types import InternalAccount, InternalScope
 from rucio.core.distance import add_distance
 from rucio.core.replica import add_replicas, delete_replicas
-from rucio.core.rse import add_rse, del_rse, add_protocol, add_rse_attribute
+from rucio.core.rse import add_protocol, add_rse, add_rse_attribute, del_rse
 from rucio.core.rule import add_rule
 from rucio.daemons.conveyor.common import next_transfers_to_submit
 from rucio.tests.common import rse_name_generator

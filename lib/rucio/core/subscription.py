@@ -17,7 +17,6 @@ import datetime
 import logging
 import re
 from configparser import NoOptionError, NoSectionError
-
 from json import dumps
 
 from sqlalchemy import func
@@ -26,10 +25,12 @@ from sqlalchemy.orm import aliased
 from sqlalchemy.orm.exc import NoResultFound
 
 from rucio.common.config import config_get
-from rucio.common.exception import SubscriptionNotFound, SubscriptionDuplicate, RucioException
+from rucio.common.exception import (RucioException, SubscriptionDuplicate,
+                                    SubscriptionNotFound)
 from rucio.db.sqla import models
 from rucio.db.sqla.constants import SubscriptionState
-from rucio.db.sqla.session import transactional_session, stream_session, read_session
+from rucio.db.sqla.session import (read_session, stream_session,
+                                   transactional_session)
 
 
 @transactional_session
