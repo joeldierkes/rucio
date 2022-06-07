@@ -15,9 +15,12 @@
 
 """Provides functions to access the local configuration. The configuration locations are provided by get_config_dirs."""
 
-import os
 import json
+import os
 import sys
+from typing import Any
+
+from sqlalchemy.orm import Session
 
 from rucio.common.exception import ConfigNotFound, DatabaseException
 
@@ -29,8 +32,15 @@ except ImportError:
 from rucio.common import exception
 
 
-def config_get(section, option, raise_exception=True, default=None, clean_cached=False, check_config_table=True,
-               session=None, use_cache=True, expiration_time=900):
+def config_get(section: str,
+               option: str,
+               raise_exception: bool = True,
+               default: Any = None,
+               clean_cached: bool = False,
+               check_config_table: bool = True,
+               session: Session = None,
+               use_cache: bool = True,
+               expiration_time: int = 900):
     """
     Return the string value for a given option in a section
 
@@ -52,9 +62,9 @@ def config_get(section, option, raise_exception=True, default=None, clean_cached
 
     :returns: the configuration value.
 
-    :raises NoOptionError
-    :raises NoSectionError
-    :raises RuntimeError
+    :raises: NoOptionError
+    :raises: NoSectionError
+    :raises: RuntimeError
     """
     try:
         return get_config().get(section, option)
