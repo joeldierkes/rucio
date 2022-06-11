@@ -33,7 +33,7 @@ from rucio.common.config import config_get, config_get_bool
 from rucio.common.types import InternalScope, InternalAccount
 from rucio.common.utils import generate_uuid, get_tmp_dir, md5, render_json
 from rucio.rse import rsemanager as rsemgr
-from rucio.tests.common import execute, account_name_generator, rse_name_generator, file_generator, scope_name_generator, get_long_vo
+from rucio.tests.common import execute, account_name_generator, rse_name_generator, file_generator, scope_name_generator, get_long_vo, make_temp_file
 
 
 class TestBinRucio(unittest.TestCase):
@@ -2151,9 +2151,7 @@ class TestBinRucio(unittest.TestCase):
         dataset = 'dataset_%s' % generate_uuid()
         self.did_client.add_container(scope=self.user, name=container)
         self.did_client.add_dataset(scope=self.user, name=dataset)
-        filename = get_tmp_dir() + 'lifetime_exception.txt'
-        with open(filename, 'w') as file_:
-            file_.write('%s:%s\n' % (self.user, dataset))
+        filename = make_temp_file(None, f'{self.user}:{dataset}\n')
 
         # Try adding an exception
         cmd = 'rucio add-lifetime-exception --inputfile %s --reason "%s" --expiration %s' % (filename, 'Needed for analysis', '2015-10-30')
@@ -2163,9 +2161,7 @@ class TestBinRucio(unittest.TestCase):
         assert exitcode == 0
         assert "Nothing to submit" in err
 
-        with open(filename, 'w') as file_:
-            file_.write('%s:%s\n' % (self.user, dataset))
-            file_.write('%s:%s' % (self.user, container))
+        filename = make_temp_file(None, f'{self.user}:{dataset}\n{self.user}:{container}')
 
         # Try adding an exception
         cmd = 'rucio add-lifetime-exception --inputfile %s --reason "%s" --expiration %s' % (filename, 'Needed for analysis', '2015-10-30')
