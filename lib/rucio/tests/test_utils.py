@@ -87,6 +87,12 @@ class TestUtils(unittest.TestCase):
     def test_availability_data_class(self):
         Availability
 
+        availability = Availability()
+
+        assert availability.read is None
+        assert availability.write is None
+        assert availability.delete is None
+
         availability = Availability(True, False, True)
 
         assert availability.read
@@ -102,6 +108,29 @@ class TestUtils(unittest.TestCase):
 
     def test_availability_hash(self):
         hash(Availability(True, True, True))
+
+    def test_availability_with_none(self):
+        assert Availability(write=False).integer == 5
+
+    def test_availability_from_integer_None(self):
+        assert Availability.from_integer(None) == Availability(None, None, None)
+
+
+@pytest.mark.parametrize(
+    "integer,tuple_values",
+    [
+        #   (read,  write, delete)
+        (7, (None, None, None)),
+        (6, (True, None, False)),
+        (5, (None, False, None)),
+    ],
+)
+def test_availability_convert_with_none(integer, tuple_values):
+    """
+    This tests the conversion to an integer with missing values. Missing values
+    should be interpreted as `True`, since this is the default value.
+    """
+    assert integer == Availability(*tuple_values).integer
 
 
 @pytest.mark.parametrize(

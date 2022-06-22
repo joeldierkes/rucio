@@ -1835,13 +1835,17 @@ class Availability:
     """
     This util class acts as a translator between the availability stored as
     integer and as boolen values.
+
+    `None` represents a missing value. This lets a user update a specific value
+    without altering the other ones. If it needs to be evaluated, it will
+    correspond to `True`.
     """
 
-    read = True
-    write = True
-    delete = True
+    read = None
+    write = None
+    delete = None
 
-    def __init__(self, read, write, delete):
+    def __init__(self, read=None, write=None, delete=None):
         self.read = read
         self.write = write
         self.delete = delete
@@ -1850,7 +1854,9 @@ class Availability:
         """
         The iterator provides the feature to unpack the values of this class.
 
-        e.g. `read, write, delete = Availability(True, True, True)`
+        e.g. `read, write, delete = Availability(True, False, True)`
+
+        :returns: An iterator over the values `read`, `write`, `delete`.
         """
         return iter((self.read, self.write, self.delete))
 
@@ -1868,7 +1874,13 @@ class Availability:
         """
         Returns a new Availability instance where the values are set to the
         corresponding bit values in the integer.
+
+        :param n: The integer value to get the availabilities from.
+        :returns: The corresponding Availability instance.
         """
+        if n is None:
+            return cls(None, None, None)
+
         return cls(
             (n >> 2) % 2 == 1,
             (n >> 1) % 2 == 1,
@@ -1880,5 +1892,10 @@ class Availability:
         """
         Returns the corresponding integer for the instance values. The three
         least-significant bits correspond to the availability values.
+
+        :returns: An integer corresponding to the availability values. `None`
+            gets treated as `True`.
         """
-        return (self.read * 4) + (self.write * 2) + (self.delete * 1)
+        return (self.read or self.read is None) * 4 \
+            + (self.write or self.write is None) * 2 \
+            + (self.delete or self.delete is None) * 1
