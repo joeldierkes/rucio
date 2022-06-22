@@ -1829,3 +1829,56 @@ def register_policy_package_algorithms(algorithm_type, dictionary):
             vos = list_vos()
             for vo in vos:
                 try_importing_policy(algorithm_type, dictionary, vo['vo'])
+
+
+class Availability:
+    """
+    This util class acts as a translator between the availability stored as
+    integer and as boolen values.
+    """
+
+    read = True
+    write = True
+    delete = True
+
+    def __init__(self, read, write, delete):
+        self.read = read
+        self.write = write
+        self.delete = delete
+
+    def __iter__(self):
+        """
+        The iterator provides the feature to unpack the values of this class.
+
+        e.g. `read, write, delete = Availability(True, True, True)`
+        """
+        return iter((self.read, self.write, self.delete))
+
+    def __repr__(self):
+        return f"Availability({self.read}, {self.write}, {self.delete})"
+
+    def __eq__(self, other):
+        return self.read == other.read and self.write == other.write and self.delete == other.delete
+
+    def __hash__(self):
+        return hash(self.integer)
+
+    @classmethod
+    def from_integer(cls, n):
+        """
+        Returns a new Availability instance where the values are set to the
+        corresponding bit values in the integer.
+        """
+        return cls(
+            (n >> 2) % 2 == 1,
+            (n >> 1) % 2 == 1,
+            (n >> 0) % 2 == 1
+        )
+
+    @property
+    def integer(self):
+        """
+        Returns the corresponding integer for the instance values. The three
+        least-significant bits correspond to the availability values.
+        """
+        return (self.read * 4) + (self.write * 2) + (self.delete * 1)

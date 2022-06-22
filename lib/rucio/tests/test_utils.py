@@ -22,7 +22,7 @@ from re import match
 import pytest
 
 from rucio.common.exception import InvalidType
-from rucio.common.utils import md5, adler32, parse_did_filter_from_string
+from rucio.common.utils import md5, adler32, parse_did_filter_from_string, Availability
 from rucio.common.logging import formatted_logger
 
 
@@ -83,6 +83,47 @@ class TestUtils(unittest.TestCase):
         with pytest.raises(InvalidType):
             input_ = 'type=g'
             parse_did_filter_from_string(input_)
+
+    def test_availability_data_class(self):
+        Availability
+
+        availability = Availability(True, False, True)
+
+        assert availability.read
+        assert not availability.write
+        assert availability.delete
+
+    def test_availability_tuple_unpacking(self):
+        read, write, delete = Availability(True, False, True)
+
+        assert read
+        assert not write
+        assert delete
+
+    def test_availability_hash(self):
+        hash(Availability(True, True, True))
+
+
+@pytest.mark.parametrize(
+    "before,after",
+    [
+        #   (read,  write, delete)
+        (7, (True, True, True)),
+        (6, (True, True, False)),
+        (5, (True, False, True)),
+        (4, (True, False, False)),
+        (3, (False, True, True)),
+        (2, (False, True, False)),
+        (1, (False, False, True)),
+        (0, (False, False, False)),
+    ],
+)
+def test_availability_translation(before, after):
+    assert Availability.from_integer(before) == Availability(*after)
+    assert tuple(Availability.from_integer(before)) == after
+
+    assert Availability.from_integer(before).integer == before
+    assert Availability(*after).integer == before
 
 
 def test_formatted_logger():
