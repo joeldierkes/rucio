@@ -31,7 +31,7 @@ from sqlalchemy.sql.expression import or_, false, func, case
 
 import rucio.core.account_counter
 from rucio.common import exception, utils
-from rucio.common.cache import make_region_memcached
+from rucio.common.cache import ignore_arguments_key_generator, make_region_memcached
 from rucio.common.config import get_lfn2pfn_algorithm_default
 from rucio.common.utils import CHECKSUM_KEY, is_checksum_valid, GLOBALLY_SUPPORTED_CHECKSUMS
 from rucio.core.rse_counter import add_counter, get_counter
@@ -657,8 +657,17 @@ def get_rses_with_attribute_value(key, value, lookup_key, vo='def', session=None
     return result
 
 
+"""
+Double inlining, star is important:
+- DogPile.cache.cache_on_arguments.cache_decorator uses decorate to decorate the function
+- decorate uses inspect.signature to get the signature and apply_defaults to apply the arguments
+- apply_defaults
+"""
+
+
+@REGION.cache_on_arguments(function_key_generator=ignore_arguments_key_generator(["session"]))
 @read_session
-def _get_rse_attribute_without_cache(rse_id: str, key: str, session: Optional[Session] = None) -> Optional[Union[str, bool]]:
+def get_rse_attribute(rse_id: str, key: str, session: Optional[Session] = None) -> Optional[Union[str, bool]]:
     """
     Retrieve RSE attribute value from the database.
 
@@ -675,34 +684,6 @@ def _get_rse_attribute_without_cache(rse_id: str, key: str, session: Optional[Se
         return None
 
     return value.value
-
-
-@read_session
-def get_rse_attribute(rse_id: str, key: str, use_cache: bool = True, session: Optional[Session] = None) -> Optional[Union[str, bool]]:
-    """
-    Retrieve RSE attribute value. If it is not cached, look it up in the
-    database. If the value exists and is not cached, it will be added to the
-    cache.
-
-    :param rse_id: The RSE id.
-    :param key: The key for the attribute.
-    :param session: The database session in use.
-
-    :returns: The value for the rse attribute, None if it does not exist.
-    """
-    cache_key = f'rse_attributes_{rse_id}_{key}'
-    if use_cache:
-        value = REGION.get(cache_key)
-
-        if value is not NO_VALUE:
-            return value
-
-    value = _get_rse_attribute_without_cache(rse_id, key, session=session)
-
-    if use_cache:
-        REGION.set(cache_key, value)
-
-    return value
 
 
 def get_rse_attributes(rse_id, session=None):

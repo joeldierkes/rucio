@@ -15,6 +15,9 @@
 from __future__ import absolute_import
 
 import logging
+from itertools import chain
+from typing import Callable, List
+
 from dogpile.cache import make_region
 
 from rucio.common.config import config_get
@@ -65,3 +68,38 @@ def make_region_memcached(expiration_time, function_key_generator=None):
         region.configure('dogpile.cache.null')
 
     return region
+
+
+def ignore_arguments_key_generator(ignore_arguments: List[str]) -> Callable[..., str]:
+    """
+    Construct a :py:func:`dogpile.cache.FunctionKeyGenerator` function to
+    generate cache-keys which ignores the specified keyword arguments.
+    """
+
+    def function_key_generator(namespace, fn):
+        """
+        This function is an argument for
+        :py:func:`dogpile.cache.region.CacheRegion` and
+        :py:func:`dogpile.cache.region.CacheRegion.cache_on_arguments`.
+        """
+
+        fname = fn.__name__
+
+        def generate_key(*args, **kwargs):
+            """
+            Construct a cache-key wihtout the specified keyword arguments in
+            `ignore_arguments`.
+
+            Only keyword-arguments can be excluded, since `arg` does not specify
+            the argument name. This is not a problem, since positional arguments
+            should be in the cache key, to avoid big unstructured functions.
+            """
+            values_to_use = [kwargs[k] for k in kwargs if k not in ignore_arguments]
+
+            return (namespace + "_") if namespace else "" + \
+                fname + "_" + \
+                "_".join(str(s) for s in chain(args, values_to_use))
+
+        return generate_key
+
+    return function_key_generator

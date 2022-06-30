@@ -1483,7 +1483,7 @@ class TestRSEClient(unittest.TestCase):
 
 @pytest.mark.parametrize("use_cache", [
     False,
-    pytest.param(True, marks=pytest.mark.xfail(reason='FIXME: Calling functions which cachange the rse attribute should invalidate the cache.')),
+    True
 ])
 def test_get_rse_attribute(use_cache, rse_factory):
     _, rse_id = rse_factory.make_mock_rse()
@@ -1491,13 +1491,13 @@ def test_get_rse_attribute(use_cache, rse_factory):
     assert get_rse_attribute(rse_id, "test") is None
 
     add_rse_attribute(rse_id, "test", "test")
-    assert get_rse_attribute(rse_id, "test", use_cache=use_cache) == "test"
+    assert get_rse_attribute(rse_id, "test") == "test"
 
     add_rse_attribute(rse_id, "test", True)
-    assert get_rse_attribute(rse_id, "test", use_cache=use_cache) is True
+    assert get_rse_attribute(rse_id, "test") is True
 
     add_rse_attribute(rse_id, "test", False)
-    assert get_rse_attribute(rse_id, "test", use_cache=use_cache) is False
+    assert get_rse_attribute(rse_id, "test") is False
 
     del_rse_attribute(rse_id, "test")
-    assert get_rse_attribute(rse_id, "test", use_cache=use_cache) is None
+    assert get_rse_attribute(rse_id, "test") is None
