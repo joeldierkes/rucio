@@ -28,6 +28,8 @@ def pytest_configure(config):
     for marker, marker_description in MARKERS.items():
         config.addinivalue_line('markers', f"{marker}: {marker_description}")
 
+    config.addinivalue_line('addopts', '--strict-markers')
+
     if config.pluginmanager.hasplugin('xdist'):
         from rucio.tests.ruciopytest.rucioxdist import NoParallelXDist
 
