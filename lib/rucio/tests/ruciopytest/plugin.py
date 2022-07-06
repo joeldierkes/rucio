@@ -18,12 +18,15 @@ import os
 import pytest
 
 
+MARKERS = {
+    "dirty": "marks test as dirty, i.e. tests are leaving structures behind",
+    "noparallel(reason)": "marks test being unable to run in parallel to other tests, i.e. changing global state",
+}
+
+
 def pytest_configure(config):
-    config.addinivalue_line('markers', 'dirty: marks test as dirty, i.e. tests are leaving structures behind')
-    config.addinivalue_line(
-        'markers',
-        'noparallel(reason): marks test being unable to run in parallel to other tests, i.e. changing global state',
-    )
+    for marker, marker_description in MARKERS.items():
+        config.addinivalue_line('markers', f"{marker}: {marker_description}")
 
     if config.pluginmanager.hasplugin('xdist'):
         from rucio.tests.ruciopytest.rucioxdist import NoParallelXDist
