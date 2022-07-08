@@ -17,6 +17,7 @@ from datetime import datetime
 import json
 import logging
 import traceback
+from collections.abc import Iterable
 from io import StringIO
 from re import match
 from typing import Any, Dict, Optional, Sequence
@@ -25,7 +26,7 @@ import sqlalchemy
 import sqlalchemy.orm
 from dogpile.cache.api import NO_VALUE
 from sqlalchemy.exc import DatabaseError, IntegrityError, OperationalError
-from sqlalchemy.orm import aliased, Session
+from sqlalchemy.orm import aliased, Session, Query
 from sqlalchemy.orm.exc import FlushError
 from sqlalchemy.sql.expression import or_, false, func, case
 
@@ -33,7 +34,7 @@ import rucio.core.account_counter
 from rucio.common import exception, utils
 from rucio.common.cache import make_region_memcached
 from rucio.common.config import get_lfn2pfn_algorithm_default
-from rucio.common.utils import CHECKSUM_KEY, GLOBALLY_SUPPORTED_CHECKSUMS, Availability
+from rucio.common.utils import CHECKSUM_KEY, GLOBALLY_SUPPORTED_CHECKSUMS, Availability, sqlalchemy_query_to_list_of_dicts
 from rucio.core.rse_counter import add_counter, get_counter
 from rucio.db.sqla import models
 from rucio.db.sqla.constants import (RSEType, ReplicaState)
@@ -471,89 +472,109 @@ def get_rse_vo(rse_id, session=None, include_deleted=True):
     return result
 
 
-@read_session
-def list_rses(filters={}, session=None):
-    query = session.query(models.RSE).filter_by(deleted=False).order_by(models.RSE.rse)
-    rse_list = []
-    for row in query:
-        dic = {}
-        for column in row.__table__.columns:
-            dic[column.name] = getattr(row, column.name)
-        rse_list.append(dic)
-
-    return rse_list
-
-
-@read_session
-def list_rses_with_attributes(filters={}, session=None):
+def _rse_query_filter_construct_availability(filters: Dict[str, Any] = {}) -> Dict[str, Any]:
     """
-    Returns a list of all RSEs.
+    Constructs the valid availablity values from the availablity_* values, if
+    they are present.
 
-    :param filters: dictionary of attributes by which the results should be filtered.
+    :param filters: Dictionary of rse properties filters.
+    :returns: The updated filter dictionary.
+    """
+    if 'availability' in filters and ('availability_read' in filters or 'availability_write' in filters or 'availability_delete' in filters):
+        raise exception.InvalidObject('Cannot use availability and read, write, delete filter at the same time.')
+
+    if 'availability_read' in filters or 'availability_write' in filters or 'availability_delete' in filters:
+        filters = filters.copy()
+        filters['_availability_values'] = {0, 1, 2, 3, 4, 5, 6, 7}
+        if 'availability_read' in filters:
+            filters['_availability_values'] &= ({4, 5, 6, 7} if filters['availability_read'] else {0, 1, 2, 3})
+        if 'availability_write' in filters:
+            filters['_availability_values'] &= ({2, 3, 6, 7} if filters['availability_write'] else {0, 1, 4, 5})
+        if 'availability_delete' in filters:
+            filters['_availability_values'] &= ({1, 3, 5, 7} if filters['availability_delete'] else {0, 2, 4, 6})
+
+    return filters
+
+
+def _rse_query_apply_rse_filters(query: Query, filters: Dict[str, Any] = {}) -> Query:
+    """
+    Constructs a new query and applies the filter conditions to the RSE
+    properties.
+
+    :param query: The query to apply the filters to.
+    :param filters: Dictionary of rse properties by which the results should be
+                    filtered.
+    :returns: A new query with the filters applied.
+    """
+    filters = _rse_query_filter_construct_availability(filters)
+
+    for (k, v) in filters.items():
+        if k == 'rse_type':
+            query = query.filter(getattr(models.RSE, k) == RSEType[v])
+        elif k == '_availability_values':
+            query = query.filter(models.RSE.availability.in_(v if isinstance(v, Iterable) else [v]))
+        elif hasattr(models.RSE, k):
+            query = query.filter(getattr(models.RSE, k) == v)
+
+    return query
+
+
+def _rse_query_apply_rse_attribute_filters(query: Query, filters: Dict[str, Any] = {}) -> Query:
+    """
+    Constructs a new query and applies the filter conditions to the RSE
+    attributes.
+
+    :param query: The query to apply the filters to.
+    :param filters: Dictionary of rse attributes by which the results should be
+                    filtered.
+    :returns: A new query with the filters applied.
+    """
+    t = aliased(models.RSEAttrAssociation)
+    query = query.join(t, t.rse_id == models.RSEAttrAssociation.rse_id)
+
+    for key in set(filters.keys()) - set(models.RSE.__table__.columns.keys()):
+        query = query.filter(t.key == key, t.value == filters[key])
+
+    return query
+
+
+@read_session
+def list_rses(filters: Dict[str, Any] = {}, session: Session = None) -> Dict[str, Any]:
+    """
+    Returns a list of all RSEs, filtered by the values provided in
+    :param:filter:.
+
+    :param filters: Dictionary of attributes by which the results should be filtered.
     :param session: The database session in use.
-
     :returns: a list of dictionaries.
     """
 
-    rse_list = []
-    availability_mask1 = 0
-    availability_mask2 = 7
-    availability_mapping = {'availability_read': 4, 'availability_write': 2, 'availability_delete': 1}
-    false_value = False  # To make pep8 checker happy ...
+    query = session.query(models.RSE).filter_by(deleted=False).order_by(models.RSE.rse)
 
-    if filters and filters.get('vo'):
-        filters = filters.copy()  # Make a copy so we can pop('vo') without affecting the object `filters` outside this function
-        vo = filters.pop('vo')
-    else:
-        vo = None
+    query = _rse_query_apply_rse_filters(query, filters)
 
-    if filters:
-        if 'availability' in filters and ('availability_read' in filters or 'availability_write' in filters or 'availability_delete' in filters):
-            raise exception.InvalidObject('Cannot use availability and read, write, delete filter at the same time.')
-        query = session.query(models.RSE).\
-            join(models.RSEAttrAssociation, models.RSE.id == models.RSEAttrAssociation.rse_id).\
-            filter(models.RSE.deleted == false_value).group_by(models.RSE)
+    return list(sqlalchemy_query_to_list_of_dicts(query))
 
-        for (k, v) in filters.items():
-            if hasattr(models.RSE, k):
-                if k == 'rse_type':
-                    query = query.filter(getattr(models.RSE, k) == RSEType[v])
-                else:
-                    query = query.filter(getattr(models.RSE, k) == v)
-            elif k in ['availability_read', 'availability_write', 'availability_delete']:
-                if v:
-                    availability_mask1 = availability_mask1 | availability_mapping[k]
-                else:
-                    availability_mask2 = availability_mask2 & ~availability_mapping[k]
-            else:
-                t = aliased(models.RSEAttrAssociation)
-                query = query.join(t, t.rse_id == models.RSEAttrAssociation.rse_id)
-                query = query.filter(t.key == k,
-                                     t.value == v)
 
-        condition1, condition2 = [], []
-        for i in range(0, 8):
-            if i | availability_mask1 == i:
-                condition1.append(models.RSE.availability == i)
-            if i & availability_mask2 == i:
-                condition2.append(models.RSE.availability == i)
+@read_session
+def list_rses_with_attributes(filters: Dict[str, Any] = {}, session: Session = None) -> Dict[str, Any]:
+    """
+    Returns a list of all RSEs with their respective attributes, filtered by the
+    values provided in :param:filter:.
 
-        if 'availability' not in filters:
-            query = query.filter(sqlalchemy.and_(sqlalchemy.or_(*condition1), sqlalchemy.or_(*condition2)))
-    else:
+    :param filters: Dictionary of attributes by which the results should be filtered.
+    :param session: The database session in use.
+    :returns: a list of dictionaries.
+    """
 
-        query = session.query(models.RSE).filter_by(deleted=False).order_by(models.RSE.rse)
+    query = session.query(models.RSE).\
+        join(models.RSEAttrAssociation, models.RSE.id == models.RSEAttrAssociation.rse_id).\
+        filter(models.RSE.deleted == false()).group_by(models.RSE)
 
-    if vo:
-        query = query.filter(getattr(models.RSE, 'vo') == vo)
+    query = _rse_query_apply_rse_filters(query, filters)
+    query = _rse_query_apply_rse_attribute_filters(query, filters)
 
-    for row in query:
-        dic = {}
-        for column in row.__table__.columns:
-            dic[column.name] = getattr(row, column.name)
-        rse_list.append(dic)
-
-    return rse_list
+    return list(sqlalchemy_query_to_list_of_dicts(query))
 
 
 @transactional_session

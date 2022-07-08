@@ -32,6 +32,7 @@ import subprocess
 import tempfile
 import threading
 import time
+from typing import Any, Dict, List
 import zlib
 from collections import OrderedDict
 from enum import Enum
@@ -1894,3 +1895,14 @@ class Availability:
         delete_value = (self.delete or self.delete is None) * 1
 
         return read_value + write_value + delete_value
+
+
+def sqlalchemy_result_to_dict(res) -> Dict[str, Any]:
+    dic = {}
+    for column in res.__table__.columns:
+        dic[column.name] = getattr(res, column.name)
+    return dic
+
+
+def sqlalchemy_query_to_list_of_dicts(query) -> List[Dict[str, Any]]:
+    yield from map(sqlalchemy_result_to_dict, query)
