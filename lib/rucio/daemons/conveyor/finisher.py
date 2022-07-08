@@ -37,7 +37,7 @@ from rucio.common.utils import chunks
 from rucio.core import request as request_core, replica as replica_core
 from rucio.core.config import items
 from rucio.core.monitor import record_timer, record_counter
-from rucio.core.rse import list_rses_with_attributes
+from rucio.core.rse import list_rses
 from rucio.daemons.common import run_daemon
 from rucio.db.sqla.constants import RequestState, RequestType, ReplicaState, BadFilesStatus
 from rucio.db.sqla.session import transactional_session
@@ -290,7 +290,7 @@ def __get_undeterministic_rses(logger=logging.log):
     key = 'undeterministic_rses'
     result = region.get(key)
     if isinstance(result, NoValue):
-        rses_list = list_rses_with_attributes(filters={'deterministic': False})
+        rses_list = list_rses(filters={'deterministic': False})
         result = [rse['id'] for rse in rses_list]
         try:
             region.set(key, result)

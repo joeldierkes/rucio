@@ -48,7 +48,7 @@ def create_counters_for_new_account(account, session=None):
     """
 
     vo = account.vo
-    for rse in rucio.core.rse.list_rses_with_attributes(session=session):
+    for rse in rucio.core.rse.list_rses(session=session):
         if rse['vo'] == vo:
             add_counter(rse_id=rse['id'], account=account, session=session)
 

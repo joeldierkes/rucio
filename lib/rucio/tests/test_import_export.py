@@ -30,7 +30,7 @@ from rucio.core.exporter import export_data, export_rses
 from rucio.core.identity import add_identity, list_identities, add_account_identity, list_accounts_for_identity
 from rucio.core.importer import import_data, import_rses
 from rucio.core.rse import get_rse_id, get_rse_name, add_rse, get_rse, add_protocol, get_rse_protocols, \
-    list_rse_attributes, get_rse_limits, set_rse_limits, add_rse_attribute, list_rses_with_attributes, export_rse, get_rse_attribute, \
+    list_rse_attributes, get_rse_limits, set_rse_limits, add_rse_attribute, list_rses, export_rse, get_rse_attribute, \
     del_rse
 from rucio.db.sqla import session, models
 from rucio.db.sqla.constants import RSEType, AccountType, IdentityType, AccountStatus
@@ -1231,7 +1231,7 @@ def test_export_client(vo, distances_data):
     export_client = ExportClient()
     data = export_client.export_data()
     rses = {}
-    for rse in list_rses_with_attributes(filters={'vo': vo}):
+    for rse in list_rses(filters={'vo': vo}):
         rse_name = rse['rse']
         rse_id = rse['id']
         rses[rse_name] = export_rse(rse_id=rse_id)

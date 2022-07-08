@@ -472,6 +472,19 @@ def get_rse_vo(rse_id, session=None, include_deleted=True):
 
 
 @read_session
+def list_rses(filters={}, session=None):
+    query = session.query(models.RSE).filter_by(deleted=False).order_by(models.RSE.rse)
+    rse_list = []
+    for row in query:
+        dic = {}
+        for column in row.__table__.columns:
+            dic[column.name] = getattr(row, column.name)
+        rse_list.append(dic)
+
+    return rse_list
+
+
+@read_session
 def list_rses_with_attributes(filters={}, session=None):
     """
     Returns a list of all RSEs.

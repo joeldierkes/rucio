@@ -41,7 +41,7 @@ from rucio.core.account import list_accounts
 from rucio.core.config import get as core_config_get
 from rucio.core.monitor import record_counter
 from rucio.core.request import set_request_state, RequestWithSources, RequestSource
-from rucio.core.rse import list_rses_with_attributes, RseData
+from rucio.core.rse import list_rses, RseData
 from rucio.core.rse_expression_parser import parse_expression
 from rucio.db.sqla import models
 from rucio.db.sqla.constants import DIDType, RequestState, RequestType
@@ -1232,7 +1232,7 @@ def __get_unavailable_rse_ids(operation, session=None, logger=logging.log):
         try:
             logger(logging.DEBUG, "Refresh unavailable %s rses" % operation)
             availability_key = 'availability_%s' % operation
-            unavailable_rses = list_rses_with_attributes(filters={availability_key: False}, session=session)
+            unavailable_rses = list_rses(filters={availability_key: False}, session=session)
             unavailable_rse_ids = [rse['id'] for rse in unavailable_rses]
             REGION_SHORT.set(key, unavailable_rse_ids)
             return unavailable_rse_ids
