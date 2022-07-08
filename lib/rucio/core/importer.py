@@ -119,7 +119,7 @@ def import_rses(rses, rse_sync_method='edit', attr_sync_method='edit', protocol_
                     rse_module.del_rse_attribute(rse_id=rse_id, key=attr, session=session)
 
     # set deleted flag to RSEs that are missing in the import data
-    old_rses = [old_rse['id'] for old_rse in rse_module.list_rses(session=session)]
+    old_rses = [old_rse['id'] for old_rse in rse_module.list_rses_with_attributes(session=session)]
     if rse_sync_method == 'hard':
         for old_rse in old_rses:
             if old_rse not in new_rses:

@@ -26,7 +26,7 @@ from rucio.common.exception import (Duplicate, RSENotFound, RSEProtocolNotSuppor
                                     RSEAttributeNotFound, RSEOperationNotSupported,
                                     InputValidationError)
 from rucio.common.utils import generate_uuid
-from rucio.core.rse import (add_rse, get_rse_id, del_rse, restore_rse, list_rses,
+from rucio.core.rse import (add_rse, get_rse_id, del_rse, restore_rse, list_rses_with_attributes,
                             rse_exists, add_rse_attribute, list_rse_attributes,
                             set_rse_transfer_limits, get_rse_transfer_limits,
                             delete_rse_transfer_limits, get_rse_protocols,
@@ -99,11 +99,11 @@ class TestRSECoreApi(unittest.TestCase):
         rse_id = add_rse(rse, **self.vo)
         assert rse_exists(rse=rse, **self.vo)
         add_rse_attribute(rse_id=rse_id, key='tier', value='1')
-        rses = list_rses(filters={'tier': '1'})
+        rses = list_rses_with_attributes(filters={'tier': '1'})
         assert (rse_id, rse) in [(r['id'], r['rse']) for r in rses]
         add_rse_attribute(rse_id=rse_id, key='country', value='us')
 
-        rses = list_rses(filters={'tier': '1', 'country': 'us'})
+        rses = list_rses_with_attributes(filters={'tier': '1', 'country': 'us'})
         assert (rse_id, rse) in [(r['id'], r['rse']) for r in rses]
 
         del_rse(rse_id)

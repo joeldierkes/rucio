@@ -30,7 +30,7 @@ from rucio.core import request as request_core, transfer as transfer_core
 from rucio.core.monitor import record_counter, record_timer
 from rucio.core.replica import add_replicas, tombstone_from_delay, update_replica_state
 from rucio.core.request import set_request_state, queue_requests
-from rucio.core.rse import list_rses
+from rucio.core.rse import list_rses_with_attributes
 from rucio.core.rse_expression_parser import parse_expression
 from rucio.core.vo import list_vos
 from rucio.db.sqla import models
@@ -471,7 +471,7 @@ def get_conveyor_rses(rses=None, include_rses=None, exclude_rses=None, vos=None,
     working_rses = []
     rses_list = []
     for vo in vos:
-        rses_list.extend(list_rses(filters={'vo': vo}))
+        rses_list.extend(list_rses_with_attributes(filters={'vo': vo}))
     if rses:
         working_rses = [rse for rse in rses_list if rse['rse'] in rses]
 

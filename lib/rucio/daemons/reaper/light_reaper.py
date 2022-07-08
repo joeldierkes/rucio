@@ -211,7 +211,7 @@ def run(total_workers=1, chunk_size=100, once=False, rses=[], scheme=None,
 
     all_rses = []
     for vo in vos:
-        all_rses.extend(rse_core.list_rses(filters={'vo': vo}))
+        all_rses.extend(rse_core.list_rses_with_attributes(filters={'vo': vo}))
 
     if rses:
         invalid = set(rses) - set([rse['rse'] for rse in all_rses])

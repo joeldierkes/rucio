@@ -38,7 +38,7 @@ from rucio.core.heartbeat import live, die, sanity_check
 from rucio.core.monitor import record_gauge, record_counter
 from rucio.core.quarantined_replica import add_quarantined_replicas
 from rucio.core.replica import __exist_replicas, update_replicas_states
-from rucio.core.rse import list_rses, get_rse_id
+from rucio.core.rse import list_rses_with_attributes, get_rse_id
 from rucio.rse.rsemanager import lfns2pfns, get_rse_info, parse_pfns
 
 # FIXME: these are needed by local version of declare_bad_file_replicas()
@@ -722,7 +722,7 @@ def run(once=False, scope=None, rses=None, sleep_time=60, default_dark_min_age=2
     if rses == []:
         logger(logging.INFO, 'NO RSEs passed. Will loop over all writable RSEs.')
 
-        rses = [rse['rse'] for rse in list_rses({'availability_write': True})]
+        rses = [rse['rse'] for rse in list_rses_with_attributes({'availability_write': True})]
 
 # Could limit it only to Tier-2s:
 #        rses = [rse['rse'] for rse in list_rses({'tier': 2, 'availability_write': True})]

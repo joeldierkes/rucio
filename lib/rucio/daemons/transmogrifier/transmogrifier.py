@@ -49,7 +49,7 @@ from rucio.common.schema import validate_schema
 from rucio.common.utils import chunks
 from rucio.core import monitor
 from rucio.core.did import list_new_dids, set_new_dids, get_metadata
-from rucio.core.rse import list_rses, rse_exists, get_rse_id, list_rse_attributes
+from rucio.core.rse import list_rses_with_attributes, rse_exists, get_rse_id, list_rse_attributes
 from rucio.core.rse_expression_parser import parse_expression
 from rucio.core.rse_selector import resolve_rse_expression
 from rucio.core.rule import add_rule, list_rules, get_rule
@@ -311,7 +311,7 @@ def run_once(heartbeat_handler: "HeartbeatHandler", bulk: int, **_kwargs) -> boo
 
     results = {}
     start_time = time.time()
-    blocklisted_rse_id = [rse["id"] for rse in list_rses({"availability_write": False})]
+    blocklisted_rse_id = [rse["id"] for rse in list_rses_with_attributes({"availability_write": False})]
     identifiers = []
     #  Loop over all the new dids
     for did in dids:

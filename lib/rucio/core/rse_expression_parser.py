@@ -21,7 +21,7 @@ from hashlib import sha256
 
 from rucio.common.cache import make_region_memcached
 from rucio.common.exception import InvalidRSEExpression, RSEWriteBlocked
-from rucio.core.rse import list_rses, get_rses_with_attribute, get_rse_attribute
+from rucio.core.rse import list_rses_with_attributes, get_rses_with_attribute, get_rse_attribute
 from rucio.db.sqla.session import transactional_session
 
 
@@ -227,7 +227,7 @@ class RSEAll(BaseExpressionElement):
         """
         Inherited from :py:func:`BaseExpressionElement.resolve_elements`
         """
-        output = list_rses(session=session)
+        output = list_rses_with_attributes(session=session)
         if not output:
             return (set(), {})
         rse_dict = {}
@@ -255,7 +255,7 @@ class RSEAttributeEqualCheck(BaseExpressionElement):
         """
         Inherited from :py:func:`BaseExpressionElement.resolve_elements`
         """
-        output = list_rses({self.key: self.value}, session=session)
+        output = list_rses_with_attributes({self.key: self.value}, session=session)
         if not output:
             return (set(), {})
         rse_dict = {}

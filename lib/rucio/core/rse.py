@@ -472,7 +472,7 @@ def get_rse_vo(rse_id, session=None, include_deleted=True):
 
 
 @read_session
-def list_rses(filters={}, session=None):
+def list_rses_with_attributes(filters={}, session=None):
     """
     Returns a list of all RSEs.
 

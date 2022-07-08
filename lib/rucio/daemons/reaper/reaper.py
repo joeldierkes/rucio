@@ -48,7 +48,7 @@ from rucio.core.heartbeat import list_payload_counts
 from rucio.core.message import add_message
 from rucio.core.oidc import get_token_for_account_operation
 from rucio.core.replica import list_and_mark_unlocked_replicas, list_and_mark_unlocked_replicas_no_temp_table, delete_replicas
-from rucio.core.rse import list_rses, RseData
+from rucio.core.rse import list_rses_with_attributes, RseData
 from rucio.core.rse_expression_parser import parse_expression
 from rucio.core.rule import get_evaluation_backlog
 from rucio.core.vo import list_vos
@@ -107,7 +107,7 @@ def get_rses_to_process(rses, include_rses, exclude_rses, vos):
 
     all_rses = []
     for vo in vos:
-        all_rses.extend(list_rses(filters={'vo': vo}))
+        all_rses.extend(list_rses_with_attributes(filters={'vo': vo}))
 
     if rses:
         invalid = set(rses) - set([rse['rse'] for rse in all_rses])

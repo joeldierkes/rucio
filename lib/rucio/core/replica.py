@@ -46,7 +46,7 @@ from rucio.common.utils import chunks, clean_surls, str_to_date, add_url_query
 from rucio.common.constants import SuspiciousAvailability
 from rucio.core.credential import get_signed_url
 from rucio.core import config as config_core
-from rucio.core.rse import get_rse, get_rse_name, get_rse_attribute, get_rse_vo, list_rses
+from rucio.core.rse import get_rse, get_rse_name, get_rse_attribute, get_rse_vo, list_rses_with_attributes
 from rucio.core.rse_counter import decrease, increase
 from rucio.core.rse_expression_parser import parse_expression
 from rucio.db.sqla import models, filter_thread_work
@@ -82,7 +82,7 @@ def get_bad_replicas_summary(rse_expression=None, from_date=None, to_date=None, 
             rse_clause.append(models.BadReplicas.rse_id == rse['id'])
     elif filter_:
         # Ensure we limit results to current VO even if we don't specify an RSE expression
-        for rse in list_rses(filters=filter_, session=session):
+        for rse in list_rses_with_attributes(filters=filter_, session=session):
             rse_clause.append(models.BadReplicas.rse_id == rse['id'])
 
     if session.bind.dialect.name == 'oracle':

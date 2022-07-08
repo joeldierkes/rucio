@@ -116,7 +116,7 @@ class TestRSEExpressionParserCore(unittest.TestCase):
 
     def test_all_rse(self):
         """ RSE_EXPRESSION_PARSER (CORE) Test reference on all RSE """
-        all_rses = rse.list_rses(filters=self.filter['filter_'])
+        all_rses = rse.list_rses_with_attributes(filters=self.filter['filter_'])
         value = sorted(rse_expression_parser.parse_expression("*", **self.filter), key=lambda rse: rse['rse'])
         expected = sorted(all_rses, key=lambda rse: rse['rse'])
         assert value == expected

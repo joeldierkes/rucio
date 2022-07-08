@@ -116,7 +116,7 @@ def list_rses(filters={}, vo='def', session=None):
 
     filters['vo'] = vo
 
-    return rse_module.list_rses(filters=filters, session=session)
+    return rse_module.list_rses_with_attributes(filters=filters, session=session)
 
 
 @transactional_session
