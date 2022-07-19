@@ -79,6 +79,11 @@ jobs:
       INITIAL_PYRIGHT_REPORT_FILE: ../initial_pyright_report.json
     steps:
       - uses: actions/checkout@v3
+      - name: Install dependencies
+        shell: bash
+        run: |
+          apt-get install -yy npm
+          npm install --global pyright
       - name: Make pyright report of current commit
         shell: bash
         run: |
