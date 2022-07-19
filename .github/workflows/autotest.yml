@@ -71,6 +71,36 @@ jobs:
             echo "[2] https://codimd.web.cern.ch/6-SU3cTpQSWRK6FHkM7mAA#"
             exit 1
           fi
+  python_pyright:
+    name: Check Pyright
+    runs-on: ubuntu-latest
+    env:
+      UPDATED_PYRIGHT_REPORT_FILE: ../updated_pyright_report.json
+      INITIAL_PYRIGHT_REPORT_FILE: ../initial_pyright_report.json
+    steps:
+      - uses: actions/checkout@v3
+      - name: Make pyright report of current commit
+        shell: bash
+        run: |
+          tools/run_pyright.sh generate \
+            ${{ env.UPDATED_PYRIGHT_REPORT_FILE }}
+      - name: Checkout ancestor commit with rucio/master
+        uses: ./.github/actions/checkout_ancestor_commit
+        with:
+          files_to_copy: |
+            tools/run_pyright.sh
+            tools/run_pyright/*.py
+      - name: Make pyright report of ancestor commit
+        shell: bash
+        run: |
+          tools/run_pyright.sh generate \
+            ${{ env.INITIAL_PYRIGHT_REPORT_FILE }}
+      - name: Compare reports
+        shell: bash
+        run: |
+          tools/run_pyright.sh compare \
+            ${{ env.INITIAL_PYRIGHT_REPORT_FILE }} \
+            ${{ env.UPDATED_PYRIGHT_REPORT_FILE }}
   setup:
     if: github.repository_owner == 'rucio' || github.event_name != 'schedule'
     runs-on: ubuntu-latest
