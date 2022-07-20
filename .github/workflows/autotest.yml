@@ -72,7 +72,7 @@ jobs:
             exit 1
           fi
   python_pyright:
-    name: Check Pyright
+    name: Python type check (Pyright)
     runs-on: ubuntu-latest
     env:
       PYRIGHT_CURRENT_REPORT: ../pyright_current_report.json
