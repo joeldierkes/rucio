@@ -33,15 +33,21 @@ def compare(args: Namespace) -> int:
     """Compares two reports to find new warnings and errors."""
     old_report = Report.from_dict(load_json(args.old))
     new_report = Report.from_dict(load_json(args.new))
-    new_errors = _compare_reports(new_report, old_report)
+    new_diagnostics = _compare_reports(new_report, old_report)
 
-    print_regressions(new_errors, new_report)
+    print_regressions(new_diagnostics, new_report)
 
-    any_errors = any(err.severity == 'error' for err, _ in new_errors)
-    any_warnings = any(err.severity == 'warning' for err, _ in new_errors)
+    num_errors = sum(count for err, count in new_diagnostics if err.severity == 'error')
+    num_warnings = sum(count for err, count in new_diagnostics if err.severity == 'warning')
+
+    print('Summary:')
+    print(f'    {num_errors} new errors.')
+    print(f'    {num_warnings} new warnings.')
+
     if args.werror:
-        any_errors |= any_warnings
-    return 1 if any_errors else 0
+        num_errors += num_warnings
+
+    return 1 if num_errors else 0
 
 
 def _compare_reports(new_report: Report, old_report: Report):
