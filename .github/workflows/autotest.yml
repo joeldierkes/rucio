@@ -95,7 +95,8 @@ jobs:
         with:
           files_to_copy: |
             tools/run_pyright.sh
-            tools/run_pyright/*.py
+          directories_to_copy: |
+            tools/run_pyright
       - name: Make pyright report of ancestor commit
         shell: bash
         run: |

@@ -53,6 +53,12 @@ runs:
           cp $f ../tmp/$f
         done
 
+        DIRECTORIES_TO_COPY=$'.github/actions/checkout_ancestor_commit/action.yaml\n${{ inputs.directories_to_copy }}'
+        for f in $DIRECTORIES_TO_COPY; do
+          mkdir -p ../tmp/$(dirname $f)
+          cp -r $f ../tmp/$f
+        done
+
         echo "Checking out the fork point"
         git checkout $FORK_POINT
 
@@ -60,4 +66,10 @@ runs:
         for f in $FILES_TO_COPY; do
           mkdir -p $(dirname $f)
           cp ../tmp/$f $f
+        done
+
+        echo "Restore backed up directories."
+        for f in $DIRECTORIES_TO_COPY; do
+          mkdir -p $(dirname $f)
+          cp -r ../tmp/$f $f
         done
