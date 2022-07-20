@@ -50,7 +50,7 @@ class ReportDiagnostic:
             range_start_char=obj['range']['start']['character'],
             range_end_line=obj['range']['end']['line'],
             range_end_char=obj['range']['end']['character'],
-        )   # type: ignore
+        )  # type: ignore
 
     def without_range(self) -> ReportDiagnosticWithoutRange:
         return ReportDiagnosticWithoutRange(
