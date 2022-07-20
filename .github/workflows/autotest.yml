@@ -82,7 +82,7 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
-          apt-get install -yy npm
+          sudo apt-get install -y npm
           npm install --global pyright
       - name: Make pyright report of current commit
         shell: bash
