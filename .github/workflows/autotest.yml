@@ -75,8 +75,8 @@ jobs:
     name: Check Pyright
     runs-on: ubuntu-latest
     env:
-      UPDATED_PYRIGHT_REPORT_FILE: ../updated_pyright_report.json
-      INITIAL_PYRIGHT_REPORT_FILE: ../initial_pyright_report.json
+      PYRIGHT_CURRENT_REPORT: ../pyright_current_report.json
+      PYRIGHT_ANCESTOR_REPORT: ../pyright_ancestor_report.json
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
@@ -88,8 +88,14 @@ jobs:
         shell: bash
         run: |
           tools/run_pyright.sh generate \
-            ${{ env.UPDATED_PYRIGHT_REPORT_FILE }} \
+            ${{ env.PYRIGHT_CURRENT_REPORT }} \
             || true
+          cat ${{ env.PYRIGHT_CURRENT_REPORT }}
+      - name: Upload current Pyright report
+        uses: actions/upload-artifact@v3
+        with:
+          name: pyright-current-report
+          path: ${{ env.PYRIGHT_CURRENT_REPORT }}
       - name: Checkout ancestor commit with rucio/master
         uses: ./.github/actions/checkout_ancestor_commit
         with:
@@ -102,14 +108,20 @@ jobs:
         shell: bash
         run: |
           tools/run_pyright.sh generate \
-            ${{ env.INITIAL_PYRIGHT_REPORT_FILE }} \
+            ${{ env.PYRIGHT_ANCESTOR_REPORT }} \
             || true
+          cat ${{ env.PYRIGHT_ANCESTOR_REPORT }}
+      - name: Upload ancestor Pyright report
+        uses: actions/upload-artifact@v3
+        with:
+          name: pyright-ancestor-report
+          path: ${{ env.PYRIGHT_ANCESTOR_REPORT }}
       - name: Compare reports
         shell: bash
         run: |
           tools/run_pyright.sh compare \
-            ${{ env.INITIAL_PYRIGHT_REPORT_FILE }} \
-            ${{ env.UPDATED_PYRIGHT_REPORT_FILE }}
+            ${{ env.PYRIGHT_ANCESTOR_REPORT }} \
+            ${{ env.PYRIGHT_CURRENT_REPORT }}
   setup:
     if: github.repository_owner == 'rucio' || github.event_name != 'schedule'
     runs-on: ubuntu-latest
