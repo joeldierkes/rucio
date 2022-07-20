@@ -18,6 +18,7 @@ from pathlib import Path
 import copy
 import json
 import subprocess
+import sys
 from typing import Any, Callable, Dict
 
 from .models import ReportDict, Report
@@ -59,8 +60,21 @@ def generate(args: Namespace) -> int:
 def _run_pyright() -> ReportDict:
     """Runs the pyright type-checker and returns its output as json."""
     cmdline = ['pyright', '--outputjson', *PATHS]
-    process = subprocess.run(cmdline, stdout=subprocess.PIPE)
-    return json.loads(process.stdout)
+    try:
+        process = subprocess.run(cmdline, stdout=subprocess.PIPE)
+        return json.loads(process.stdout)
+    except FileNotFoundError as ex:
+        print('Error running pyright.'
+              ' This could be due to pyright not being installed on your system,'
+              ' in which case it may be installed using `npm install --global pyright`.\n'
+              'Additional details:', ex,
+              file=sys.stderr)
+        sys.exit(1)
+    except OSError as ex:
+        print('Unknown error running pyright.\n'
+              'Additional details:', ex,
+              file=sys.stderr)
+        raise
 
 
 def _strip_dict(data: ReportDict, strip_mode: str) -> ReportDict:
