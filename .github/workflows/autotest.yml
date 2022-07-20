@@ -88,7 +88,8 @@ jobs:
         shell: bash
         run: |
           tools/run_pyright.sh generate \
-            ${{ env.UPDATED_PYRIGHT_REPORT_FILE }}
+            ${{ env.UPDATED_PYRIGHT_REPORT_FILE }} \
+            || true
       - name: Checkout ancestor commit with rucio/master
         uses: ./.github/actions/checkout_ancestor_commit
         with:
@@ -99,7 +100,8 @@ jobs:
         shell: bash
         run: |
           tools/run_pyright.sh generate \
-            ${{ env.INITIAL_PYRIGHT_REPORT_FILE }}
+            ${{ env.INITIAL_PYRIGHT_REPORT_FILE }} \
+            || true
       - name: Compare reports
         shell: bash
         run: |
