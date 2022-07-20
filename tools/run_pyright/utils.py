@@ -15,7 +15,7 @@
 
 import json
 from pathlib import Path
-from typing import IO, Any, TypeVar, Iterable, Callable, Dict, List, Union
+from typing import Any, TypeVar, Iterable, Callable, Dict, List
 
 from .models import ReportDict
 
@@ -37,10 +37,7 @@ def load_json(path: Path) -> ReportDict:
         return json.load(f)
 
 
-def save_json(out: Union[Path, IO[str]], data: Dict[str, Any]) -> None:
-    if isinstance(out, Path):
-        with open(out, 'w') as f:
-            save_json(f, data)
-    else:
-        json.dump(data, out, indent=4)
-        out.write('\n')
+def save_json(path: Path, data: Dict[str, Any]) -> None:
+    with open(path, 'w') as file:
+        json.dump(data, file, indent=4)
+        file.write('\n')
