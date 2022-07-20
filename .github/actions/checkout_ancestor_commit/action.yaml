@@ -24,6 +24,12 @@ inputs:
 
       New line character as delimiter of items.
     required: false
+  directories_to_copy:
+    description: >-
+      Similar to `files_to_copy`, but for recursively copying directories.
+
+      New line character as delimiter of items.
+    required: false
 
 runs:
   using: "composite"
