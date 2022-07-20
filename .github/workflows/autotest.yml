@@ -80,22 +80,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
-        shell: bash
         run: |
           sudo apt-get install -y npm
           npm install --global pyright
       - name: Make pyright report of current commit
-        shell: bash
         run: |
           tools/run_pyright.sh generate \
             ${{ env.PYRIGHT_CURRENT_REPORT }} \
             || true
-          cat ${{ env.PYRIGHT_CURRENT_REPORT }}
-      - name: Upload current Pyright report
-        uses: actions/upload-artifact@v3
-        with:
-          name: pyright-current-report
-          path: ${{ env.PYRIGHT_CURRENT_REPORT }}
+      - name: Show the current Pyright report
+        run: cat ${{ env.PYRIGHT_CURRENT_REPORT }}
       - name: Checkout ancestor commit with rucio/master
         uses: ./.github/actions/checkout_ancestor_commit
         with:
@@ -105,19 +99,13 @@ jobs:
           directories_to_copy: |
             tools/run_pyright
       - name: Make pyright report of ancestor commit
-        shell: bash
         run: |
           tools/run_pyright.sh generate \
             ${{ env.PYRIGHT_ANCESTOR_REPORT }} \
             || true
-          cat ${{ env.PYRIGHT_ANCESTOR_REPORT }}
-      - name: Upload ancestor Pyright report
-        uses: actions/upload-artifact@v3
-        with:
-          name: pyright-ancestor-report
-          path: ${{ env.PYRIGHT_ANCESTOR_REPORT }}
+      - name: Show the ancestor Pyright report
+        run: cat ${{ env.PYRIGHT_ANCESTOR_REPORT }}
       - name: Compare reports
-        shell: bash
         run: |
           tools/run_pyright.sh compare \
             ${{ env.PYRIGHT_ANCESTOR_REPORT }} \
