@@ -47,7 +47,7 @@ def compare(args: Namespace) -> int:
     if args.Werror:
         num_errors += num_warnings
 
-    return 1 if num_errors else 0
+    return 2 if num_errors else 0
 
 
 def _compare_reports(new_report: Report, old_report: Report):
