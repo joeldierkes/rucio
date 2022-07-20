@@ -94,7 +94,7 @@ jobs:
         uses: ./.github/actions/checkout_ancestor_commit
         with:
           files_to_copy: |
-            pyproject.toml
+            pyrightconfig.json
             tools/run_pyright.sh
           directories_to_copy: |
             tools/run_pyright

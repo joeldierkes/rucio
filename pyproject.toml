@@ -1,9 +1,3 @@
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
-
-[tool.pyright]
-include = ["lib"]
-pythonVersion = "3.6"
-typeCheckingMode = "basic"
-useLibraryCodeForTypes = true
