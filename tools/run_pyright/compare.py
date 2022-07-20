@@ -18,7 +18,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Callable, List, Tuple
 
-from .models import Report, ReportDiagnostic, ReportDiagnosticWithoutRange
+from .models import Report, ReportDiagnostic, ReportDiagnosticWithoutRange, Severity
 from .utils import group_by, load_json
 
 
@@ -37,8 +37,8 @@ def compare(args: Namespace) -> int:
 
     print_regressions(new_diagnostics, new_report)
 
-    num_errors = sum(count for err, count in new_diagnostics if err.severity == 'error')
-    num_warnings = sum(count for err, count in new_diagnostics if err.severity == 'warning')
+    num_errors = sum(count for err, count in new_diagnostics if err.severity == Severity.ERROR)
+    num_warnings = sum(count for err, count in new_diagnostics if err.severity == Severity.WARNING)
 
     print('Summary:')
     print(f'    {num_errors} new errors.')
@@ -91,7 +91,7 @@ def print_regressions(collection: List[Tuple[ReportDiagnosticWithoutRange, int]]
                 else:
                     candidate_line_list.append(f'{candidate.range_start_line+1}-{candidate.range_end_line+1}')
 
-            prefix = f'  - {count} {diag.severity}s with message'
+            prefix = f'  - {count} {diag.severity.value}s with message'
             message = _indent(diag.message, ' ' * (len(prefix) + 4))
             candidate_lines = ', '.join(candidate_line_list)
 

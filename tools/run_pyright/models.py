@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from enum import Enum
 from typing import Any, Dict, List
 from dataclasses import dataclass
 
@@ -20,9 +21,15 @@ from dataclasses import dataclass
 ReportDict = Dict[str, Any]
 
 
+class Severity(Enum):
+    INFORMATION = 'information'
+    WARNING = 'warning'
+    ERROR = 'error'
+
+
 @dataclass(frozen=True)
 class ReportDiagnosticWithoutRange:
-    severity: str
+    severity: Severity
     file: str
     rule: str
     message: str
@@ -30,7 +37,7 @@ class ReportDiagnosticWithoutRange:
 
 @dataclass(frozen=True)
 class ReportDiagnostic:
-    severity: str
+    severity: Severity
     file: str
     rule: str
     message: str
@@ -42,7 +49,7 @@ class ReportDiagnostic:
     @classmethod
     def from_dict(cls, obj: Dict[str, Any]):
         return cls(
-            severity=obj['severity'],
+            severity=Severity(obj['severity']),
             file=obj['file'],
             rule=obj['rule'],
             message=obj['message'],
