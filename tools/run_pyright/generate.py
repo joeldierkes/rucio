@@ -32,7 +32,6 @@ PATHS = (
 def setup_parser(parser: ArgumentParser) -> Callable[[Namespace], int]:
     parser.add_argument('out', type=Path, help='Store Pyright report at this path.')
     parser.add_argument('--strip', choices=['line', 'character', 'range'], help='Strip certain attributes from the output.')
-    parser.add_argument('--Werror', action='store_true', help='Treat warnings as errors.')
     return generate
 
 
@@ -47,11 +46,14 @@ def generate(args: Namespace) -> int:
 
     report = Report.from_dict(reportdict)
 
-    num_errors = report.summary.num_errors
-    if args.Werror:
-        num_errors += report.summary.num_warnings
+    print('Summary:')
+    print(f'    {report.summary.num_files} files checked.')
+    print(f'    {report.summary.num_errors} errors.')
+    print(f'    {report.summary.num_warnings} warnings.')
+    print(f'    {report.summary.num_information} notes.')
+    print(f'    Duration: {report.summary.time_seconds:.1f} seconds.')
 
-    return 1 if num_errors > 0 else 0
+    return 0
 
 
 def _run_pyright() -> ReportDict:
