@@ -25,7 +25,7 @@ from .utils import group_by, load_json
 def setup_parser(parser: ArgumentParser) -> Callable[[Namespace], int]:
     parser.add_argument('old', type=Path, help='First report of comparison.')
     parser.add_argument('new', type=Path, help='Second report of comparison.')
-    parser.add_argument('--werror', action='store_true', help='Treat warnings as errors.')
+    parser.add_argument('--Werror', action='store_true', help='Treat warnings as errors.')
     return compare
 
 
@@ -44,7 +44,7 @@ def compare(args: Namespace) -> int:
     print(f'    {num_errors} new errors.')
     print(f'    {num_warnings} new warnings.')
 
-    if args.werror:
+    if args.Werror:
         num_errors += num_warnings
 
     return 1 if num_errors else 0
