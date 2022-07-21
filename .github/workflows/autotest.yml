@@ -7,6 +7,21 @@ on:
     - cron: '0 3 * * *'
 
 jobs:
+  pytype:
+    name: Python type checking (PyType)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        shell: bash
+        run: |
+          sudo apt install heimdal-dev xmlsec1
+          sudo pip install -r requirements.txt
+          sudo pip install pytype
+      - name: Run PyType
+        shell: bash
+        run: |
+          pytype . --disable=pyi-error,import-error --keep-going --jobs auto
   add_header:
     if: github.repository_owner == 'rucio' || github.event_name != 'schedule'
     name: Add header lint
