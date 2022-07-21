@@ -587,7 +587,7 @@ def del_rse_attribute(rse_id, key, session=None):
 
 
 @read_session
-def list_rse_attributes(rse_id, session=None):
+def list_rse_attributes(rse_id, session: Session = None):
     """
     List RSE attributes for a RSE.
 
