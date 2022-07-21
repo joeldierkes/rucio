@@ -1894,3 +1894,12 @@ class Availability:
         delete_value = (self.delete or self.delete is None) * 1
 
         return read_value + write_value + delete_value
+
+
+def type_test(x: int) -> int:
+    return x
+
+
+type_test("test")
+type_test(2)
+type_test(2.1)
