@@ -549,8 +549,7 @@ def construct_surl_T0(dsn: str, scope: str, filename: str) -> str:
         return '/%s/%s/%s/%s/%s' % (fields[0], 'other', 'other', dsn, filename)
     elif nfields == 2:
         return '/%s/%s/%s/%s/%s' % (fields[0], fields[2], 'other', dsn, filename)
-    elif nfields == 0:
-        return '/other/other/other/other/%s' % (filename)
+    return '/other/other/other/other/%s' % (filename)
 
 
 def construct_surl_BelleII(dsn: str, scope: str, filename: str) -> str:
