@@ -26,7 +26,7 @@ import configparser as ConfigParser
 from rucio.common import exception
 
 
-def config_get(section, option, raise_exception=True, default=None, clean_cached=False, check_config_table=True,
+def config_get(section: str, option: str, raise_exception=True, default=None, clean_cached=False, check_config_table=True,
                session=None, use_cache=True, expiration_time=900, extract_function=ConfigParser.ConfigParser.get):
     """
     Return the string value for a given option in a section
@@ -452,3 +452,7 @@ class Config:
             raise RuntimeError('Could not load Rucio configuration file. '
                                'Rucio tried loading the following configuration file:'
                                '\n\t' + self.configfile)
+
+
+SOME_CONFIG = config_get("test", "test", expiration_time="200s")  # Ohh no I used a string instead of an integer
+SOME_CONFIG = config_get("test", 2)  # Ohh no I used an integer instead of a string
