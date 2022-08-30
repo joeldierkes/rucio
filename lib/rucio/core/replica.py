@@ -3821,7 +3821,8 @@ def get_replicas_state(scope=None, name=None, session=None):
 
 
 @read_session
-def get_suspicious_files(rse_expression, available_elsewhere, filter_=None, logger=logging.log, younger_than=10, nattempts=0, nattempts_exact=False, session=None, exclude_states=['B', 'R', 'D'], is_suspicious=False):
+def get_suspicious_files(rse_expression, available_elsewhere, filter_=None, logger=logging.log, younger_than: datetime = datetime.utcnow() + timedelta(days=10),
+                         nattempts=0, nattempts_exact=False, session=None, exclude_states=['B', 'R', 'D'], is_suspicious=False):
     """
     Gets a list of replicas from bad_replicas table which are: declared more than <nattempts> times since <younger_than> date,
     present on the RSE specified by the <rse_expression> and do not have a state in <exclude_states> list.
@@ -3860,8 +3861,6 @@ def get_suspicious_files(rse_expression, available_elsewhere, filter_=None, logg
     # only for the 2 web api used parameters, checking value types and assigning the default values
     if not isinstance(nattempts, int):
         nattempts = 0
-    if not isinstance(younger_than, datetime):
-        younger_than = datetime.now() - timedelta(days=10)
 
     # assembling exclude_states_clause
     exclude_states_clause = []
