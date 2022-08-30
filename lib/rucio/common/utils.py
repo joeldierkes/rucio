@@ -38,6 +38,7 @@ from enum import Enum
 from functools import partial
 from uuid import uuid4 as uuid
 from xml.etree import ElementTree
+from typing import Optional
 
 import requests
 from io import StringIO
@@ -585,7 +586,7 @@ register_surl_algorithm(construct_surl_DQ2, 'DQ2')
 register_surl_algorithm(construct_surl_BelleII, 'BelleII')
 
 
-def construct_surl(dsn: str, scope: str, filename: str, naming_convention: str = None) -> str:
+def construct_surl(dsn: str, scope: str, filename: str, naming_convention: Optional[str] = None) -> str:
     """
     Applies non-deterministic source url convention to the given replica.
     use the naming_convention to call the actual function which will do the job.
