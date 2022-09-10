@@ -25,8 +25,7 @@ from rucio.api.account_limit import get_local_account_limits, get_local_account_
 from rucio.api.identity import add_account_identity, del_account_identity
 from rucio.api.rule import list_replication_rules
 from rucio.api.scope import add_scope, get_scopes
-from rucio.common.exception import AccountNotFound, Duplicate, AccessDenied, RuleNotFound, RSENotFound, \
-    IdentityError, CounterNotFound, ScopeNotFound, InvalidObject
+from rucio.common.exception import ScopeNotFound
 from rucio.common.utils import APIEncoder, render_json
 from rucio.web.rest.flaskapi.v1.common import request_auth_env, response_headers, check_accept_header_wrapper_flask, \
     try_stream, generate_http_error_flask, ErrorHandlingMethodView, json_parameters, param_get
@@ -73,11 +72,7 @@ class Attributes(ErrorHandlingMethodView):
           406:
             description: Not acceptable.
         """
-        try:
-            attribs = list_account_attributes(account, vo=request.environ.get('vo'))
-        except AccountNotFound as error:
-            return generate_http_error_flask(404, error)
-
+        attribs = list_account_attributes(account, vo=request.environ.get('vo'))
         return jsonify(attribs)
 
     def post(self, account, key):
@@ -132,15 +127,7 @@ class Attributes(ErrorHandlingMethodView):
         parameters = json_parameters()
         key = param_get(parameters, 'key', default=key)
         value = param_get(parameters, 'value')
-        try:
-            add_account_attribute(key=key, value=value, account=account, issuer=request.environ.get('issuer'), vo=request.environ.get('vo'))
-        except AccessDenied as error:
-            return generate_http_error_flask(401, error)
-        except Duplicate as error:
-            return generate_http_error_flask(409, error)
-        except AccountNotFound as error:
-            return generate_http_error_flask(404, error)
-
+        add_account_attribute(key=key, value=value, account=account, issuer=request.environ.get('issuer'), vo=request.environ.get('vo'))
         return 'Created', 201
 
     def delete(self, account, key):
@@ -171,13 +158,7 @@ class Attributes(ErrorHandlingMethodView):
           404:
             description: No account found for the given id.
         """
-        try:
-            del_account_attribute(account=account, key=key, issuer=request.environ.get('issuer'), vo=request.environ.get('vo'))
-        except AccessDenied as error:
-            return generate_http_error_flask(401, error)
-        except AccountNotFound as error:
-            return generate_http_error_flask(404, error)
-
+        del_account_attribute(account=account, key=key, issuer=request.environ.get('issuer'), vo=request.environ.get('vo'))
         return '', 200
 
 
@@ -215,10 +196,7 @@ class Scopes(ErrorHandlingMethodView):
           406:
             description: Not acceptable
         """
-        try:
-            scopes = get_scopes(account, vo=request.environ.get('vo'))
-        except AccountNotFound as error:
-            return generate_http_error_flask(404, error)
+        scopes = get_scopes(account, vo=request.environ.get('vo'))
 
         if not len(scopes):
             return generate_http_error_flask(404, ScopeNotFound.__name__, f"no scopes found for account ID '{account}'")
@@ -262,17 +240,7 @@ class Scopes(ErrorHandlingMethodView):
           409:
             description: Scope already exists.
         """
-        try:
-            add_scope(scope, account, issuer=request.environ.get('issuer'), vo=request.environ.get('vo'))
-        except InvalidObject as error:
-            return generate_http_error_flask(400, error)
-        except AccessDenied as error:
-            return generate_http_error_flask(401, error)
-        except Duplicate as error:
-            return generate_http_error_flask(409, error)
-        except AccountNotFound as error:
-            return generate_http_error_flask(404, error)
-
+        add_scope(scope, account, issuer=request.environ.get('issuer'), vo=request.environ.get('vo'))
         return 'Created', 201
 
 
@@ -334,13 +302,7 @@ class AccountParameter(ErrorHandlingMethodView):
                 return redirect(f'{frontend}/accounts/{request.environ.get("issuer")}', code=302)
             return redirect(request.environ.get('issuer'), code=303)
 
-        try:
-            acc = get_account_info(account, vo=request.environ.get('vo'))
-        except AccountNotFound as error:
-            return generate_http_error_flask(404, error)
-        except AccessDenied as error:
-            return generate_http_error_flask(401, error)
-
+        acc = get_account_info(account, vo=request.environ.get('vo'))
         accdict = acc.to_dict()
 
         for key, value in accdict.items():
@@ -387,10 +349,6 @@ class AccountParameter(ErrorHandlingMethodView):
                 update_account(account, key=key, value=value, issuer=request.environ.get('issuer'), vo=request.environ.get('vo'))
             except ValueError:
                 return generate_http_error_flask(400, ValueError.__name__, f'Unknown value {value}')
-            except AccessDenied as error:
-                return generate_http_error_flask(401, error)
-            except AccountNotFound as error:
-                return generate_http_error_flask(404, error)
 
         return '', 200
 
@@ -442,15 +400,7 @@ class AccountParameter(ErrorHandlingMethodView):
         parameters = json_parameters()
         type_param = param_get(parameters, 'type')
         email = param_get(parameters, 'email')
-        try:
-            add_account(account, type_param, email, issuer=request.environ.get('issuer'), vo=request.environ.get('vo'))
-        except Duplicate as error:
-            return generate_http_error_flask(409, error)
-        except AccessDenied as error:
-            return generate_http_error_flask(401, error)
-        except InvalidObject as error:
-            return generate_http_error_flask(400, error)
-
+        add_account(account, type_param, email, issuer=request.environ.get('issuer'), vo=request.environ.get('vo'))
         return 'Created', 201
 
     def delete(self, account):
@@ -475,13 +425,7 @@ class AccountParameter(ErrorHandlingMethodView):
           404:
             description: Account not found
         """
-        try:
-            del_account(account, issuer=request.environ.get('issuer'), vo=request.environ.get('vo'))
-        except AccessDenied as error:
-            return generate_http_error_flask(401, error)
-        except AccountNotFound as error:
-            return generate_http_error_flask(404, error)
-
+        del_account(account, issuer=request.environ.get('issuer'), vo=request.environ.get('vo'))
         return '', 200
 
 
@@ -561,13 +505,10 @@ class LocalAccountLimits(ErrorHandlingMethodView):
           406:
             description: Not Acceptable
         """
-        try:
-            if rse:
-                limits = get_local_account_limit(account=account, rse=rse, vo=request.environ.get('vo'))
-            else:
-                limits = get_local_account_limits(account=account, vo=request.environ.get('vo'))
-        except RSENotFound as error:
-            return generate_http_error_flask(404, error)
+        if rse:
+            limits = get_local_account_limit(account=account, rse=rse, vo=request.environ.get('vo'))
+        else:
+            limits = get_local_account_limits(account=account, vo=request.environ.get('vo'))
 
         return Response(render_json(**limits), content_type="application/json")
 
@@ -609,13 +550,10 @@ class GlobalAccountLimits(ErrorHandlingMethodView):
           406:
             description: Not Acceptable
         """
-        try:
-            if rse_expression:
-                limits = get_global_account_limit(account=account, rse_expression=rse_expression, vo=request.environ.get('vo'))
-            else:
-                limits = get_global_account_limits(account=account, vo=request.environ.get('vo'))
-        except RSENotFound as error:
-            return generate_http_error_flask(404, error)
+        if rse_expression:
+            limits = get_global_account_limit(account=account, rse_expression=rse_expression, vo=request.environ.get('vo'))
+        else:
+            limits = get_global_account_limits(account=account, vo=request.environ.get('vo'))
 
         return Response(render_json(**limits), content_type="application/json")
 
@@ -683,25 +621,17 @@ class Identities(ErrorHandlingMethodView):
         identity = param_get(parameters, 'identity')
         authtype = param_get(parameters, 'authtype')
         email = param_get(parameters, 'email')
-        try:
-            add_account_identity(
-                identity_key=identity,
-                id_type=authtype,
-                account=account,
-                email=email,
-                password=param_get(parameters, 'password', default=None),
-                issuer=request.environ.get('issuer'),
-                default=param_get(parameters, 'default', default=False),
-                vo=request.environ.get('vo'),
-            )
-        except AccessDenied as error:
-            return generate_http_error_flask(401, error)
-        except Duplicate as error:
-            return generate_http_error_flask(409, error)
-        except AccountNotFound as error:
-            return generate_http_error_flask(404, error)
-        except IdentityError as error:
-            return generate_http_error_flask(400, error)
+
+        add_account_identity(
+            identity_key=identity,
+            id_type=authtype,
+            account=account,
+            email=email,
+            password=param_get(parameters, 'password', default=None),
+            issuer=request.environ.get('issuer'),
+            default=param_get(parameters, 'default', default=False),
+            vo=request.environ.get('vo'),
+        )
 
         return 'Created', 201
 
@@ -740,14 +670,11 @@ class Identities(ErrorHandlingMethodView):
           406:
             description: Not acceptable
         """
-        try:
-            def generate(vo):
-                for identity in list_identities(account, vo=vo):
-                    yield render_json(**identity) + "\n"
+        def generate(vo):
+            for identity in list_identities(account, vo=vo):
+                yield render_json(**identity) + "\n"
 
-            return try_stream(generate(request.environ.get('vo')))
-        except AccountNotFound as error:
-            return generate_http_error_flask(404, error)
+        return try_stream(generate(request.environ.get('vo')))
 
     def delete(self, account):
         """
@@ -789,13 +716,7 @@ class Identities(ErrorHandlingMethodView):
         parameters = json_parameters()
         identity = param_get(parameters, 'identity')
         authtype = param_get(parameters, 'authtype')
-        try:
-            del_account_identity(identity, authtype, account, request.environ.get('issuer'), vo=request.environ.get('vo'))
-        except AccessDenied as error:
-            return generate_http_error_flask(401, error)
-        except (AccountNotFound, IdentityError) as error:
-            return generate_http_error_flask(404, error)
-
+        del_account_identity(identity, authtype, account, request.environ.get('issuer'), vo=request.environ.get('vo'))
         return '', 200
 
 
@@ -834,14 +755,12 @@ class Rules(ErrorHandlingMethodView):
         """
         filters = {'account': account}
         filters.update(request.args)
-        try:
-            def generate(vo):
-                for rule in list_replication_rules(filters=filters, vo=vo):
-                    yield dumps(rule, cls=APIEncoder) + '\n'
 
-            return try_stream(generate(vo=request.environ.get('vo')))
-        except RuleNotFound as error:
-            return generate_http_error_flask(404, error)
+        def generate(vo):
+            for rule in list_replication_rules(filters=filters, vo=vo):
+                yield dumps(rule, cls=APIEncoder) + '\n'
+
+        return try_stream(generate(vo=request.environ.get('vo')))
 
 
 class UsageHistory(ErrorHandlingMethodView):
@@ -893,12 +812,7 @@ class UsageHistory(ErrorHandlingMethodView):
           406:
             description: Not acceptable
         """
-        try:
-            usage = get_usage_history(account=account, rse=rse, issuer=request.environ.get('issuer'), vo=request.environ.get('vo'))
-        except (AccountNotFound, CounterNotFound) as error:
-            return generate_http_error_flask(404, error)
-        except AccessDenied as error:
-            return generate_http_error_flask(401, error)
+        usage = get_usage_history(account=account, rse=rse, issuer=request.environ.get('issuer'), vo=request.environ.get('vo'))
 
         for entry in usage:
             for key, value in entry.items():
@@ -960,16 +874,11 @@ class LocalUsage(ErrorHandlingMethodView):
           406:
             description: Not acceptable
         """
-        try:
-            def generate(issuer, vo):
-                for usage in get_local_account_usage(account=account, rse=rse, issuer=issuer, vo=vo):
-                    yield dumps(usage, cls=APIEncoder) + '\n'
+        def generate(issuer, vo):
+            for usage in get_local_account_usage(account=account, rse=rse, issuer=issuer, vo=vo):
+                yield dumps(usage, cls=APIEncoder) + '\n'
 
-            return try_stream(generate(issuer=request.environ.get('issuer'), vo=request.environ.get('vo')))
-        except (AccountNotFound, RSENotFound) as error:
-            return generate_http_error_flask(404, error)
-        except AccessDenied as error:
-            return generate_http_error_flask(401, error)
+        return try_stream(generate(issuer=request.environ.get('issuer'), vo=request.environ.get('vo')))
 
 
 class GlobalUsage(ErrorHandlingMethodView):
@@ -1024,16 +933,11 @@ class GlobalUsage(ErrorHandlingMethodView):
           406:
             description: Not acceptable
         """
-        try:
-            def generate(vo, issuer):
-                for usage in get_global_account_usage(account=account, rse_expression=rse_expression, issuer=issuer, vo=vo):
-                    yield dumps(usage, cls=APIEncoder) + '\n'
+        def generate(vo, issuer):
+            for usage in get_global_account_usage(account=account, rse_expression=rse_expression, issuer=issuer, vo=vo):
+                yield dumps(usage, cls=APIEncoder) + '\n'
 
-            return try_stream(generate(vo=request.environ.get('vo'), issuer=request.environ.get('issuer')))
-        except (AccountNotFound, RSENotFound) as error:
-            return generate_http_error_flask(404, error)
-        except AccessDenied as error:
-            return generate_http_error_flask(401, error)
+        return try_stream(generate(vo=request.environ.get('vo'), issuer=request.environ.get('issuer')))
 
 
 def blueprint(with_doc=False):

@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import inspect
 import itertools
 import json
 import logging
@@ -28,6 +29,7 @@ from werkzeug.datastructures import Headers
 from werkzeug.exceptions import HTTPException
 from werkzeug.wrappers import Request, Response
 
+import rucio.common.exception
 from rucio.api.authentication import validate_auth_token
 from rucio.common.exception import RucioException, CannotAuthenticate, UnsupportedRequestedContentType
 from rucio.common.schema import get_schema_value
@@ -92,6 +94,15 @@ class ErrorHandlingMethodView(MethodView):
         except HTTPException:
             raise
         except RucioException as error:
+            for _, exception in inspect.getmembers(rucio.common.exception):
+                if inspect.isclass(exception) and exception != RucioException and isinstance(error, exception):
+                    return generate_http_error_flask(
+                        status_code=error.status_code,
+                        exc=error.__class__.__name__,
+                        exc_msg=error.args[0],
+                        headers=headers
+                    )
+
             # should be caught in the flask view and generate_http_error_flask with a proper HTTP status code returned
             msg = f'Uncaught RucioException in {self.__class__.__module__} {self.__class__.__name__} {flask.request.method}'
             # logged, because this should be the __exception__

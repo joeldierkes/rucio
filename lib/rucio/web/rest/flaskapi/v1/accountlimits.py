@@ -17,9 +17,8 @@ from flask import Flask, Blueprint, request
 
 from rucio.api.account_limit import set_local_account_limit, delete_local_account_limit, set_global_account_limit, \
     delete_global_account_limit
-from rucio.common.exception import RSENotFound, AccessDenied, AccountNotFound
 from rucio.web.rest.flaskapi.v1.common import request_auth_env, response_headers, ErrorHandlingMethodView, \
-    generate_http_error_flask, json_parameters, param_get
+    json_parameters, param_get
 
 
 class LocalAccountLimit(ErrorHandlingMethodView):
@@ -68,12 +67,7 @@ class LocalAccountLimit(ErrorHandlingMethodView):
         """
         parameters = json_parameters()
         bytes_param = param_get(parameters, 'bytes')
-        try:
-            set_local_account_limit(account=account, rse=rse, bytes_=bytes_param, issuer=request.environ.get('issuer'), vo=request.environ.get('vo'))
-        except AccessDenied as error:
-            return generate_http_error_flask(401, error)
-        except (RSENotFound, AccountNotFound) as error:
-            return generate_http_error_flask(404, error)
+        set_local_account_limit(account=account, rse=rse, bytes_=bytes_param, issuer=request.environ.get('issuer'), vo=request.environ.get('vo'))
 
         return 'Created', 201
 
@@ -104,13 +98,7 @@ class LocalAccountLimit(ErrorHandlingMethodView):
           404:
             description: No RSE or account found for the given id.
         """
-        try:
-            delete_local_account_limit(account=account, rse=rse, issuer=request.environ.get('issuer'), vo=request.environ.get('vo'))
-        except AccessDenied as error:
-            return generate_http_error_flask(401, error)
-        except (AccountNotFound, RSENotFound) as error:
-            return generate_http_error_flask(404, error)
-
+        delete_local_account_limit(account=account, rse=rse, issuer=request.environ.get('issuer'), vo=request.environ.get('vo'))
         return '', 200
 
 
@@ -160,19 +148,13 @@ class GlobalAccountLimit(ErrorHandlingMethodView):
         """
         parameters = json_parameters()
         bytes_param = param_get(parameters, 'bytes')
-        try:
-            set_global_account_limit(
-                account=account,
-                rse_expression=rse_expression,
-                bytes_=bytes_param,
-                issuer=request.environ.get('issuer'),
-                vo=request.environ.get('vo'),
-            )
-        except AccessDenied as error:
-            return generate_http_error_flask(401, error)
-        except (RSENotFound, AccountNotFound) as error:
-            return generate_http_error_flask(404, error)
-
+        set_global_account_limit(
+            account=account,
+            rse_expression=rse_expression,
+            bytes_=bytes_param,
+            issuer=request.environ.get('issuer'),
+            vo=request.environ.get('vo'),
+        )
         return 'Created', 201
 
     def delete(self, account, rse_expression):
@@ -202,13 +184,7 @@ class GlobalAccountLimit(ErrorHandlingMethodView):
           404:
             description: No RSE or account found for the given id.
         """
-        try:
-            delete_global_account_limit(account=account, rse_expression=rse_expression, issuer=request.environ.get('issuer'), vo=request.environ.get('vo'))
-        except AccessDenied as error:
-            return generate_http_error_flask(401, error)
-        except (AccountNotFound, RSENotFound) as error:
-            return generate_http_error_flask(404, error)
-
+        delete_global_account_limit(account=account, rse_expression=rse_expression, issuer=request.environ.get('issuer'), vo=request.environ.get('vo'))
         return '', 200
 
 

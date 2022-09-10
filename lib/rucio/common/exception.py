@@ -38,6 +38,7 @@ class RucioException(Exception):
         self.kwargs = kwargs
         self.error_code = 1
         self._error_string = None
+        self.status_code = 500
 
     def __str__(self):
         try:
@@ -65,6 +66,7 @@ class AccessDenied(RucioException):
         super(AccessDenied, self).__init__(*args, **kwargs)
         self._message = "Access to the requested resource denied."
         self.error_code = 2
+        self.status_code = 401
 
 
 class AccountNotFound(RucioException):
@@ -75,6 +77,7 @@ class AccountNotFound(RucioException):
         super(AccountNotFound, self).__init__(*args, **kwargs)
         self._message = "Account does not exist."
         self.error_code = 3
+        self.status_code = 404
 
 
 class CannotAuthenticate(RucioException):
@@ -135,6 +138,7 @@ class CounterNotFound(RucioException):
         super(CounterNotFound, self).__init__(*args, **kwargs)
         self._message = "The requested counter does not exist."
         self.error_code = 9
+        self.status_code = 404
 
 
 class DatabaseException(RucioException):
@@ -165,6 +169,7 @@ class DataIdentifierNotFound(RucioException):
         super(DataIdentifierNotFound, self).__init__(*args, **kwargs)
         self._message = "Data identifier not found."
         self.error_code = 12
+        self.status_code = 404
 
 
 class DestinationNotAccessible(RucioException):
@@ -185,6 +190,7 @@ class Duplicate(RucioException):
         super(Duplicate, self).__init__(*args, **kwargs)
         self._message = "An object with the same identifier already exists."
         self.error_code = 14
+        self.status_code = 409
 
 
 class DuplicateContent(RucioException):
@@ -285,6 +291,7 @@ class IdentityError(RucioException):
         super(IdentityError, self).__init__(*args, **kwargs)
         self._message = "Identity error."
         self.error_code = 24
+        self.status_code = 400
 
 
 class IdentityNotFound(RucioException):
@@ -342,6 +349,7 @@ class InvalidObject(RucioException):
         super(InvalidObject, self).__init__(*args, **kwargs)
         self._message = "Provided object does not match schema."
         self.error_code = 30
+        self.status_code = 400
 
 
 class InvalidReplicationRule(RucioException):
@@ -422,6 +430,7 @@ class KeyNotFound(RucioException):
         super(KeyNotFound, self).__init__(*args, **kwargs)
         self._message = "Key does not exist."
         self.error_code = 38
+        self.status_code = 404
 
 
 class LifetimeExceptionDuplicate(RucioException):
@@ -579,6 +588,7 @@ class RSENotFound(RucioException):
         super(RSENotFound, self).__init__(*args, **kwargs)
         self._message = "RSE does not exist."
         self.error_code = 52
+        self.status_code = 404
 
 
 class RSEProtocolNotSupported(RucioException):
@@ -659,6 +669,7 @@ class RuleNotFound(RucioException):
         super(RuleNotFound, self).__init__(*args, **kwargs)
         self._message = "No replication rule found."
         self.error_code = 60
+        self.status_code = 404
 
 
 class RuleReplaceFailed(RucioException):
@@ -779,6 +790,7 @@ class UnsupportedOperation(RucioException):
         super(UnsupportedOperation, self).__init__(*args, **kwargs)
         self._message = "The resource doesn't support the requested operation."
         self.error_code = 72
+        self.status_code = 409
 
 
 class UnsupportedStatus(RucioException):

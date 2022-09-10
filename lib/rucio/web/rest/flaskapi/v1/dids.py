@@ -98,22 +98,19 @@ class Scope(ErrorHandlingMethodView):
           406:
             description: Not acceptable
         """
-        try:
-            def generate(name, recursive, vo):
-                for did in scope_list(scope=scope, name=name, recursive=recursive, vo=vo):
-                    yield render_json(**did) + '\n'
+        def generate(name, recursive, vo):
+            for did in scope_list(scope=scope, name=name, recursive=recursive, vo=vo):
+                yield render_json(**did) + '\n'
 
-            recursive = 'recursive' in request.args
+        recursive = 'recursive' in request.args
 
-            return try_stream(
-                generate(
-                    name=request.args.get('name', default=None),
-                    recursive=recursive,
-                    vo=request.environ.get('vo')
-                )
+        return try_stream(
+            generate(
+                name=request.args.get('name', default=None),
+                recursive=recursive,
+                vo=request.environ.get('vo')
             )
-        except DataIdentifierNotFound as error:
-            return generate_http_error_flask(404, error)
+        )
 
 
 class Search(ErrorHandlingMethodView):
@@ -231,15 +228,11 @@ class Search(ErrorHandlingMethodView):
         limit = request.args.get('limit', default=None)
         long = request.args.get('long', type=['True', '1'].__contains__, default=False)
         recursive = request.args.get('recursive', type='True'.__eq__, default=False)
-        try:
-            def generate(vo):
-                for did in list_dids(scope=scope, filters=filters, did_type=did_type, limit=limit, long=long, recursive=recursive, vo=vo):
-                    yield dumps(did) + '\n'
-            return try_stream(generate(vo=request.environ.get('vo')))
-        except UnsupportedOperation as error:
-            return generate_http_error_flask(409, error)
-        except KeyNotFound as error:
-            return generate_http_error_flask(404, error)
+
+        def generate(vo):
+            for did in list_dids(scope=scope, filters=filters, did_type=did_type, limit=limit, long=long, recursive=recursive, vo=vo):
+                yield dumps(did) + '\n'
+        return try_stream(generate(vo=request.environ.get('vo')))
 
 
 class SearchExtended(ErrorHandlingMethodView):
