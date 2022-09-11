@@ -20,13 +20,12 @@ import tempfile
 import pytest
 
 from rucio.common.config import config_add_section, config_has_section, config_set, config_remove_option
-from rucio.common.utils import generate_uuid
 from rucio.common.types import InternalScope
 from rucio.core.did import list_dids, list_files
 from rucio.core.scope import add_scope
 from rucio.daemons.automatix.automatix import automatix
 from rucio.rse import rsemanager as rsemgr
-from rucio.tests.common import scope_name_generator
+from rucio.tests.common import rse_name_generator, scope_name_generator
 
 
 @pytest.mark.noparallel(reason='changes global configuration value')
@@ -49,8 +48,7 @@ def test_automatix(vo, root_account, rse_factory):
         config_set("automatix", "did_prefix", "/belle/ddm/tests")
         config_set("automatix", "separator", "/")
 
-    project = generate_uuid()
-    project = project[:8]
+    project = rse_name_generator(size=8)
     test_dict = {
         "type1": {
             "probability": 100,
