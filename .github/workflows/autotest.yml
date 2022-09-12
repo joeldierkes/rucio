@@ -104,7 +104,7 @@ jobs:
         run: |
           tools/run_pyright.sh compare --Werror \
             ${{ env.PYRIGHT_ANCESTOR_REPORT }} \
-            ${{ env.PYRIGHT_CURRENT_REPORT }}
+            ${{ env.PYRIGHT_CURRENT_REPORT }} || echo "::warning::The Typechecker found some errors."
   setup:
     if: github.repository_owner == 'rucio' || github.event_name != 'schedule'
     runs-on: ubuntu-latest
