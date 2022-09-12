@@ -2829,7 +2829,7 @@ def set_status(scope, name, session=None, **kwargs):
 
 @stream_session
 def list_dids(scope, filters, did_type='collection', ignore_case=False, limit=None,
-              offset=None, long=False, recursive=False, ignore_dids=None, session=None):
+              offset=None, long=False, recursive: str = False, ignore_dids=None, session=None):
     """
     Search data identifiers.
 
