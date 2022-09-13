@@ -20,8 +20,9 @@ from configparser import NoSectionError
 from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
+from lib.rucio.core.config import has_option
 
-from rucio.common.config import config_get
+from rucio.common.config import config_get, config_get_float, config_get_list
 from rucio.common.exception import RucioException, LifetimeExceptionDuplicate, LifetimeExceptionNotFound, UnsupportedOperation, ConfigNotFound
 from rucio.common.utils import generate_uuid, str_to_date
 import rucio.common.policy
@@ -80,7 +81,7 @@ def add_exception(dids, account, pattern, comments, expires_at, session=None):
     result = dict()
     result['exceptions'] = dict()
     try:
-        max_extension = config_get('lifetime_model', 'max_extension', default=None, session=session)
+        max_extension = config_get_float('lifetime_model', 'max_extension', session=session) or 0.0
         if max_extension:
             if not expires_at:
                 expires_at = datetime.utcnow() + timedelta(days=max_extension)
@@ -92,10 +93,10 @@ def add_exception(dids, account, pattern, comments, expires_at, session=None):
     except (ConfigNotFound, ValueError, NoSectionError):
         max_extension = None
 
-    try:
-        cutoff_date = config_get('lifetime_model', 'cutoff_date', default=None, session=session)
-    except (ConfigNotFound, NoSectionError):
+    if not has_option('lifetime_model', 'cutoff_date'):
         raise UnsupportedOperation('Cannot submit exception at that date.')
+    cutoff_date = config_get('lifetime_model', 'cutoff_date', session=session) or ""
+
     try:
         cutoff_date = datetime.strptime(cutoff_date, '%Y-%m-%d')
     except ValueError:
@@ -195,9 +196,7 @@ def __add_exception(dids, account, pattern, comments, expires_at, estimated_volu
     text += '\n'
     text += 'Approve:   https://rucio-ui.cern.ch/lifetime_exception?id=%s&action=approve\n' % str(exception_id)
     text += 'Deny:      https://rucio-ui.cern.ch/lifetime_exception?id=%s&action=deny\n' % str(exception_id)
-    approvers_email = config_get('lifetime_model', 'approvers_email', default=[], session=session)
-    if approvers_email:
-        approvers_email = approvers_email.split(',')  # pylint: disable=no-member
+    approvers_email = config_get_list('lifetime_model', 'approvers_email', session=session) or []
 
     add_message(event_type='email',
                 payload={'body': text, 'to': approvers_email,

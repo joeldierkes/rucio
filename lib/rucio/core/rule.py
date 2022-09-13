@@ -2418,7 +2418,7 @@ def __evaluate_did_detach(eval_did, session=None, logger=logging.log):
     """
 
     logger(logging.INFO, "Re-Evaluating did %s:%s for DETACH", eval_did.scope, eval_did.name)
-    force_epoch = config_get('rules', 'force_epoch_when_detach', default=False, session=session)
+    force_epoch = config_get('rules', 'force_epoch_when_detach', session=session) or False
 
     with Timer('rule.evaluate_did_detach'):
         # Get all parent DID's
@@ -3108,7 +3108,7 @@ def __create_recipents_list(rse_expression, filter_=None, session=None):
 
     # DDMADMIN as default
     if not recipents:
-        default_mail_from = config_get('core', 'default_mail_from', raise_exception=False, default=None)
+        default_mail_from = config_get('core', 'default_mail_from')
         if default_mail_from:
             recipents = [(default_mail_from, 'ddmadmin')]
 

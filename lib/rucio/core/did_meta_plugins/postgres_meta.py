@@ -47,19 +47,19 @@ class ExternalPostgresJSONDidMeta(DidMetaPlugin):
         if password is None:
             password = config.config_get('metadata', 'postgres_password')
         if db_schema is None:
-            db_schema = config.config_get('metadata', 'postgres_db_schema', default='public')
+            db_schema = config.config_get('metadata', 'postgres_db_schema') or 'public'
         if table is None:
-            table = config.config_get('metadata', 'postgres_table', default='dids')
+            table = config.config_get('metadata', 'postgres_table') or 'dids'
         if table_is_managed is None:
-            table_is_managed = config.config_get_bool('metadata', 'postgres_table_is_managed', default=False)
+            table_is_managed = config.config_get_bool('metadata', 'postgres_table_is_managed') or False
         if table_column_vo is None:
-            table_column_vo = config.config_get('metadata', 'postgres_table_column_vo', default='vo')
+            table_column_vo = config.config_get('metadata', 'postgres_table_column_vo') or 'vo'
         if table_column_scope is None:
-            table_column_scope = config.config_get('metadata', 'postgres_table_column_scope', default='scope')
+            table_column_scope = config.config_get('metadata', 'postgres_table_column_scope') or 'scope'
         if table_column_name is None:
-            table_column_name = config.config_get('metadata', 'postgres_table_column_name', default='name')
+            table_column_name = config.config_get('metadata', 'postgres_table_column_name') or 'name'
         if table_column_data is None:
-            table_column_data = config.config_get('metadata', 'postgres_table_column_data', default='data')
+            table_column_data = config.config_get('metadata', 'postgres_table_column_data') or 'data'
 
         self.fixed_table_columns = {
             'vo': table_column_vo,

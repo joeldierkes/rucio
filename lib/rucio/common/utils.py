@@ -1449,8 +1449,7 @@ def setup_logger(module_name=None, logger_name=None, logger_level=None, verbose=
     '''
     # helper method for cfg check
     def _force_cfg_log_level(cfg_option):
-        cfg_forced_modules = config_get('logging', cfg_option, raise_exception=False, default=None, clean_cached=True,
-                                        check_config_table=False)
+        cfg_forced_modules = config_get('logging', cfg_option, clean_cached=True, check_config_table=False)
         if cfg_forced_modules:
             if re.match(str(cfg_forced_modules), module_name):
                 return True

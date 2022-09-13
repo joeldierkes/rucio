@@ -32,13 +32,15 @@ from rucio.common.logging import rucio_log_formatter
 from rucio.common.schema.generic import UUID, TIME_ENTRY, IPv4orIPv6
 from rucio.core.monitor import record_counter
 
-CONFIG_COMMON_LOGLEVEL = getattr(logging, config_get('common', 'loglevel', raise_exception=False, default='DEBUG').upper())
+CONFIG_COMMON_LOGLEVEL = getattr(logging, (config_get('common', 'loglevel') or 'DEBUG').upper())
 
-CONFIG_TRACE_LOGLEVEL = getattr(logging, config_get('trace', 'loglevel', raise_exception=False, default='DEBUG').upper())
-CONFIG_TRACE_LOGFORMAT = config_get('trace', 'logformat', raise_exception=False, default='%(message)s')
-CONFIG_TRACE_TRACEDIR = config_get('trace', 'tracedir', raise_exception=False, default='/var/log/rucio')
-CONFIG_TRACE_MAXBYTES = config_get_int('trace', 'maxbytes', raise_exception=False, default=1000000000)
-CONFIG_TRACE_BACKUPCOUNT = config_get_int('trace', 'backupCount', raise_exception=False, default=10)
+CONFIG_TRACE_LOGLEVEL = getattr(logging, (config_get('trace', 'loglevel') or 'DEBUG').upper())
+CONFIG_TRACE_LOGFORMAT = config_get('trace', 'logformat') or '%(message)s'
+CONFIG_TRACE_TRACEDIR = config_get('trace', 'tracedir') or '/var/log/rucio'
+CONFIG_TRACE_MAXBYTES = config_get_int('trace', 'maxbytes') or 1000000000
+CONFIG_TRACE_BACKUPCOUNT = config_get_int('trace', 'backupCount')
+if CONFIG_TRACE_BACKUPCOUNT is None:
+    CONFIG_TRACE_BACKUPCOUNT = 10
 
 # reset root logger handlers. Otherwise everything from ROTATING_LOGGER will also end up in the apache logs.
 logging.getLogger().handlers = []

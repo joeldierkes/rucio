@@ -63,10 +63,10 @@ def extract_file_from_tar_gz(archive_file_obj, file_name, destination):
 
 def __download_geoip_db(destination):
     edition_id = GEOIP_DB_EDITION
-    download_url = config_get('core', 'geoip_download_url', raise_exception=False, default=None)
-    verify_tls = config_get_bool('core', 'geoip_download_verify_tls', raise_exception=False, default=True)
+    download_url = config_get('core', 'geoip_download_url')
+    verify_tls = config_get_bool('core', 'geoip_download_verify_tls')
     if not download_url:
-        licence_key = config_get('core', 'geoip_licence_key', raise_exception=False, default=None)
+        licence_key = config_get('core', 'geoip_licence_key')
         if not licence_key:
             raise Exception('Cannot download GeoIP database: licence key not provided')
         download_url = 'https://download.maxmind.com/app/geoip_download?edition_id=%s&license_key=%s&suffix=tar.gz' % (edition_id, licence_key)
@@ -87,7 +87,7 @@ def __download_geoip_db(destination):
 
 def __geoip_db():
     db_path = Path(f'/tmp/{GEOIP_DB_EDITION}.mmdb')
-    db_expire_delay = timedelta(days=config_get_int('core', 'geoip_expire_delay', raise_exception=False, default=30))
+    db_expire_delay = timedelta(days=config_get_int('core', 'geoip_expire_delay') or 30)
 
     must_download = False
     if not db_path.is_file():

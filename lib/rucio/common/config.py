@@ -15,6 +15,7 @@
 
 """Provides functions to access the local configuration. The configuration locations are provided by get_config_dirs."""
 
+from typing import Callable, List, Optional, TypeVar, Union
 import os
 import json
 import sys
@@ -25,9 +26,18 @@ import configparser as ConfigParser
 
 from rucio.common import exception
 
+T = TypeVar("T")
 
-def config_get(section, option, raise_exception=True, default=None, clean_cached=False, check_config_table=True,
-               session=None, use_cache=True, expiration_time=900, extract_function=ConfigParser.ConfigParser.get):
+
+def config_get(
+        section: str,
+        option: str,
+        clean_cached=False,
+        check_config_table=True,
+        session=None,
+        use_cache=True,
+        expiration_time=900,
+        extract_function: Callable[..., T] = ConfigParser.ConfigParser.get) -> Union[None, str, T]:
     """
     Return the string value for a given option in a section
 
@@ -36,8 +46,6 @@ def config_get(section, option, raise_exception=True, default=None, clean_cached
 
     :param section: the named section.
     :param option: the named option.
-    :param raise_exception: Boolean to raise or not NoOptionError, NoSectionError or RuntimeError.
-    :param default: the default value if not found.
     :param clean_cached: Deletes the cached config singleton instance if no config value is found
     :param check_config_table: if not set, avoid looking at config table even if it is called from server/daemon
     :param session: The database session in use. Only used if not found in config file and if it is called from
@@ -56,30 +64,30 @@ def config_get(section, option, raise_exception=True, default=None, clean_cached
     """
     try:
         return extract_function(get_config(), section, option)
-    except (ConfigParser.NoOptionError, ConfigParser.NoSectionError, RuntimeError) as err:
+    except (ConfigParser.NoOptionError, ConfigParser.NoSectionError, RuntimeError):
+        pass
+
+    try:
+        legacy_config = get_legacy_config(section, option, extract_function)
+        if legacy_config is not None:
+            return legacy_config
+    except RuntimeError:
+        pass
+
+    from rucio.common.utils import is_client
+    client_mode = is_client()
+
+    if not client_mode and check_config_table:
         try:
-            legacy_config = get_legacy_config(section, option, extract_function)
-            if legacy_config is not None:
-                return legacy_config
-        except RuntimeError:
-            pass
+            return __config_get_table(section=section, option=option, clean_cached=clean_cached, session=session,  # type: ignore
+                                      use_cache=use_cache, expiration_time=expiration_time)
+        except (ConfigNotFound, DatabaseException, ImportError):
+            return None
 
-        from rucio.common.utils import is_client
-        client_mode = is_client()
+    if clean_cached:
+        clean_cached_config()
 
-        if not client_mode and check_config_table:
-            try:
-                return __config_get_table(section=section, option=option, raise_exception=raise_exception,
-                                          default=default, clean_cached=clean_cached, session=session,
-                                          use_cache=use_cache, expiration_time=expiration_time)
-            except (ConfigNotFound, DatabaseException, ImportError):
-                raise err
-        else:
-            if raise_exception and default is None:
-                raise err
-            if clean_cached:
-                clean_cached_config()
-            return default
+    return None
 
 
 def get_legacy_config(section, option, extract_function):
@@ -134,15 +142,13 @@ def config_add_section(section):
     return get_config().add_section(section)
 
 
-def config_get_int(section, option, raise_exception=True, default=None, check_config_table=True, session=None,
-                   use_cache=True, expiration_time=900):
+def config_get_int(section: str, option: str, check_config_table: bool = True, session=None,
+                   use_cache: bool = True, expiration_time: int = 900) -> Optional[int]:
     """
-    Return the integer value for a given option in a section
+    Return the integer value for a given option in a section.
 
     :param section: the named section.
     :param option: the named option.
-    :param raise_exception: Boolean to raise or not NoOptionError, NoSectionError or RuntimeError.
-    :param default: the default value if not found.
     :param check_config_table: if not set, avoid looking at config table even if it is called from server/daemon
     :param session: The database session in use. Only used if not found in config file and if it is called from
                     server/daemon
@@ -150,35 +156,31 @@ def config_get_int(section, option, raise_exception=True, default=None, check_co
                       from server/daemon
     :param expiration_time: Time after that the cached value gets ignored. Only used if not found in config file and if
                             it is called from server/daemon
-    :returns: the configuration value.
-
-    :raises NoOptionError
-    :raises NoSectionError
-    :raises RuntimeError
-    :raises ValueError
+    :returns: The integer configuration value or None if no is found.
     """
-    return int(config_get(
+    ret = config_get(
         section,
         option,
-        raise_exception=raise_exception,
-        default=default,
         check_config_table=check_config_table,
         session=session,
-        use_cache=True,
+        use_cache=use_cache,
         expiration_time=expiration_time,
         extract_function=ConfigParser.ConfigParser.getint
-    ))
+    )
+
+    if ret is None:
+        return ret
+
+    return int(ret)
 
 
-def config_get_float(section, option, raise_exception=True, default=None, check_config_table=True, session=None,
-                     use_cache=True, expiration_time=900):
+def config_get_float(section: str, option: str, check_config_table: bool = True, session=None,
+                     use_cache: bool = True, expiration_time: int = 900) -> Optional[float]:
     """
-    Return the floating point value for a given option in a section
+    Return the floating point value for a given option in a section.
 
     :param section: the named section.
     :param option: the named option.
-    :param raise_exception: Boolean to raise or not NoOptionError, NoSectionError or RuntimeError.
-    :param default: the default value if not found.
     :param check_config_table: if not set, avoid looking at config table even if it is called from server/daemon
     :param session: The database session in use. Only used if not found in config file and if it is called from
                     server/daemon
@@ -187,35 +189,31 @@ def config_get_float(section, option, raise_exception=True, default=None, check_
     :param expiration_time: Time after that the cached value gets ignored. Only used if not found in config file and if
                             it is called from server/daemon
 
-    :returns: the configuration value.
-
-    :raises NoOptionError
-    :raises NoSectionError
-    :raises RuntimeError
-    :raises ValueError
+    :returns: The float configuration value or None if no is found.
     """
-    return float(config_get(
+    ret = config_get(
         section,
         option,
-        raise_exception=raise_exception,
-        default=default,
         check_config_table=check_config_table,
         session=session,
-        use_cache=True,
+        use_cache=use_cache,
         expiration_time=expiration_time,
         extract_function=ConfigParser.ConfigParser.getfloat
-    ))
+    )
+
+    if ret is None:
+        return None
+
+    return float(ret)
 
 
-def config_get_bool(section, option, raise_exception=True, default=None, check_config_table=True, session=None,
-                    use_cache=True, expiration_time=900):
+def config_get_bool(section: str, option: str, check_config_table: bool = True, session=None,
+                    use_cache=True, expiration_time: int = 900) -> Optional[bool]:
     """
     Return the boolean value for a given option in a section
 
     :param section: the named section.
     :param option: the named option.
-    :param raise_exception: Boolean to raise or not NoOptionError, NoSectionError or RuntimeError.
-    :param default: the default value if not found.
     :param check_config_table: if not set, avoid looking at config table even if it is called from server/daemon
     :param session: The database session in use. Only used if not found in config file and if it is called from
                     server/daemon
@@ -224,35 +222,31 @@ def config_get_bool(section, option, raise_exception=True, default=None, check_c
     :param expiration_time: Time after that the cached value gets ignored. Only used if not found in config file and if
                             it is called from server/daemon
 .
-    :returns: the configuration value.
-
-    :raises NoOptionError
-    :raises NoSectionError
-    :raises RuntimeError
-    :raises ValueError
+    :returns: The boolean configuration value or None if no is found.
     """
-    return bool(config_get(
+    ret = config_get(
         section,
         option,
-        raise_exception=raise_exception,
-        default=default,
         check_config_table=check_config_table,
         session=session,
-        use_cache=True,
+        use_cache=use_cache,
         expiration_time=expiration_time,
         extract_function=ConfigParser.ConfigParser.getboolean
-    ))
+    )
+
+    if ret is None:
+        return None
+
+    return bool(ret)
 
 
-def config_get_list(section, option, raise_exception=True, default=None, check_config_table=True, session=None,
-                    use_cache=True, expiration_time=900):
+def config_get_list(section: str, option: str, check_config_table: bool = True, session=None,
+                    use_cache: bool = True, expiration_time: int = 900) -> Optional[List[str]]:
     """
     Return a list for a given option in a section
 
     :param section: the named section.
     :param option: the named option.
-    :param raise_exception: Boolean to raise or not NoOptionError, NoSectionError or RuntimeError.
-    :param default: the default value if not found.
     :param check_config_table: if not set, avoid looking at config table even if it is called from server/daemon
     :param session: The database session in use. Only used if not found in config file and if it is called from
                     server/daemon
@@ -261,28 +255,25 @@ def config_get_list(section, option, raise_exception=True, default=None, check_c
     :param expiration_time: Time after that the cached value gets ignored. Only used if not found in config file and if
                             it is called from server/daemon
 .
-    :returns: the configuration value.
-
-    :raises NoOptionError
-    :raises NoSectionError
-    :raises RuntimeError
-    :raises ValueError
+    :returns: The list configuration values or None if no is found.
     """
-    string = config_get(
+    ret = config_get(
         section,
         option,
-        raise_exception=raise_exception,
-        default=default,
         check_config_table=check_config_table,
         session=session,
         use_cache=True,
         expiration_time=expiration_time,
         extract_function=ConfigParser.ConfigParser.get
     )
-    return __convert_string_to_list(string)
+
+    if ret is None:
+        return None
+
+    return __convert_string_to_list(ret)
 
 
-def __convert_string_to_list(string):
+def __convert_string_to_list(string: str) -> List[str]:
     """
     Convert a comma separated string to a list
     :param string: The input string.
@@ -291,8 +282,8 @@ def __convert_string_to_list(string):
     """
     if not string or not string.strip():
         return []
-    string = string.split(',')
-    return [item.strip(' ') for item in string]
+    ret = string.split(',')
+    return [item.strip(' ') for item in ret]
 
 
 def __config_get_table(section, option, raise_exception=True, default=None, clean_cached=False, session=None,

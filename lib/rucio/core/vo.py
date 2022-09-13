@@ -53,7 +53,7 @@ def add_vo(vo, description, email, session=None):
     :param email: Contact email for the VO.
     :param session: The db session in use.
     """
-    if not config_get_bool('common', 'multi_vo', raise_exception=False, default=False):
+    if not config_get_bool('common', 'multi_vo'):
         raise exception.UnsupportedOperation('VO operations cannot be performed in single VO mode.')
 
     if len(vo) != 3:
@@ -92,7 +92,7 @@ def list_vos(session=None):
     :param session: The db session in use.
     :returns: List of VO dictionaries.
     """
-    if not config_get_bool('common', 'multi_vo', raise_exception=False, default=False):
+    if not config_get_bool('common', 'multi_vo'):
         raise exception.UnsupportedOperation('VO operations cannot be performed in single VO mode.')
 
     query = session.query(models.VO)
@@ -118,7 +118,7 @@ def update_vo(vo, parameters, session=None):
     :param parameters: A dictionary with the new properties.
     :param session: The db session in use.
     """
-    if not config_get_bool('common', 'multi_vo', raise_exception=False, default=False):
+    if not config_get_bool('common', 'multi_vo'):
         raise exception.UnsupportedOperation('VO operations cannot be performed in single VO mode.')
 
     try:

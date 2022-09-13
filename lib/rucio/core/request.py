@@ -203,7 +203,7 @@ def queue_requests(requests, session=None, logger=logging.log):
 
     request_clause = []
     rses = {}
-    preparer_enabled = config_get_bool('conveyor', 'use_preparer', raise_exception=False, default=False)
+    preparer_enabled = config_get_bool('conveyor', 'use_preparer') or False
     for req in requests:
 
         if isinstance(req['attributes'], str):
@@ -419,7 +419,7 @@ def list_transfer_requests_and_source_replicas(
     else:
         sub_requests = sub_requests.with_hint(models.Request, "INDEX(REQUESTS REQUESTS_TYP_STA_UPD_IDX)", 'oracle')
 
-    use_temp_tables = config_get_bool('core', 'use_temp_tables', default=False, session=session)
+    use_temp_tables = config_get_bool('core', 'use_temp_tables', session=session)
     if rses and use_temp_tables:
         temp_table_cls = temp_table_mngr(session).create_id_table()
 
@@ -1978,7 +1978,7 @@ def __throttler_request_state(activity, source_rse_id, dest_rse_id, session: "Op
     if the throttler mode is not set.
     """
     try:
-        throttler_mode = config_get('throttler', 'mode', default=None, use_cache=False, session=session)
+        throttler_mode = config_get('throttler', 'mode', use_cache=False, session=session)
     except (NoOptionError, NoSectionError, RuntimeError):
         throttler_mode = None
 

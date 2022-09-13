@@ -344,8 +344,8 @@ class RucioFormatter(logging.Formatter):
 
 
 def rucio_log_formatter():
-    config_logformat = config_get('common', 'logformat', raise_exception=False, default='%(asctime)s\t%(name)s\t%(process)d\t%(levelname)s\t%(message)s')
-    output_json = config_get_bool('common', 'logjson', default=False)
+    config_logformat = config_get('common', 'logformat') or '%(asctime)s\t%(name)s\t%(process)d\t%(levelname)s\t%(message)s'
+    output_json = config_get_bool('common', 'logjson') or False
     return RucioFormatter(fmt=config_logformat, output_json=output_json)
 
 
@@ -354,7 +354,7 @@ def setup_logging(application=None):
     Configures the logging by setting the output stream to stdout and
     configures log level and log format.
     """
-    config_loglevel = getattr(logging, config_get('common', 'loglevel', raise_exception=False, default='DEBUG').upper())
+    config_loglevel = getattr(logging, (config_get('common', 'loglevel') or 'DEBUG').upper())
 
     stdouthandler = logging.StreamHandler(stream=sys.stdout)
     stdouthandler.setFormatter(rucio_log_formatter())

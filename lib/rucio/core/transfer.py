@@ -637,7 +637,9 @@ def __search_shortest_paths(
     The inbound links retrieved from the database can be accumulated into the inbound_links_by_node, passed
     from the calling context. To be able to reuse them.
     """
-    HOP_PENALTY = config_get_int('transfers', 'hop_penalty', default=10, session=session)  # Penalty to be applied to each further hop
+    HOP_PENALTY = config_get_int('transfers', 'hop_penalty', session=session)  # Penalty to be applied to each further hop
+    if HOP_PENALTY is None:
+        HOP_PENALTY = 10
 
     if multihop_rses:
         # Filter out island source RSEs
@@ -975,7 +977,7 @@ def get_transfer_paths(total_workers=0, worker_number=0, partition_hash_var=None
     Workflow:
     """
 
-    include_multihop = core_config_get('transfers', 'use_multihop', default=False, expiration_time=600, session=session)
+    include_multihop = core_config_get('transfers', 'use_multihop', expiration_time=600, session=session)
 
     multihop_rses = []
     if include_multihop:

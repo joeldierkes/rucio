@@ -29,7 +29,7 @@ def is_multi_vo(session=None):
     Check whether this instance is configured for multi-VO
     returns: Boolean True if running in multi-VO
     """
-    return config_get_bool('common', 'multi_vo', raise_exception=False, default=False, session=session)
+    return config_get_bool('common', 'multi_vo', session=session) or False
 
 
 @transactional_session
